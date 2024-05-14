@@ -29,7 +29,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True, blank=False, null=False, error_messages={
         'message' : _('이미 email이 존재합니다')
     },)
-    username = models.CharField(unique=False, null=False, max_length=20, validators=[UnicodeUsernameValidator])
+    username = models.CharField(unique=False, null=False, max_length=20, validators=[UnicodeUsernameValidator], error_messages={'message': '한글로만 입력해주세요'})
     birthday = models.DateField(null=True)
     location = models.CharField(null=False, max_length=100, help_text={'message' : '사는 곳을 꼭 입력해주세요'})
     numberRegex = RegexValidator(regex=r'^01([0|1|6|7|8|9]?)-?([0-9]{3,4})-?([0-9]{4})$')
