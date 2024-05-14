@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 from django.utils import timezone
+from django.core.validators import RegexValidator
 
 from .validators import UnicodeUsernameValidator
 from .manager import UserManager
@@ -31,7 +32,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(unique=False, null=False, max_length=20, validators=[UnicodeUsernameValidator])
     birthday = models.DateField(null=True)
     location = models.CharField(null=False, max_length=100, help_text={'message' : '사는 곳을 꼭 입력해주세요'})
-    number = PhoneNumberField(region='KR', blank=False, null=False, help_text={'message' : '휴대전화 번호를 입력해주세요('-' 붙여서 적어주세요)'})
+    numberRegex = RegexValidator(regex=r'^01([0|1|6|7|8|9]?)-?([0-9]{3,4})-?([0-9]{4})$')
+    number = models.CharField(validators=[numberRegex], blank=False, null=False, max_length=20, help_text={'message' : '휴대전화 번호를 정확히 입력해주세요'}, error_messages={'message': '정확한 휴대전화 번호를 입력해주세요'})
     point = models.PositiveIntegerField(null=True, blank=True)
     created_at = models.DateTimeField(default=timezone.now)
     
