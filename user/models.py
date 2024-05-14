@@ -7,6 +7,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 from django.utils import timezone
 
 from .validators import UnicodeUsernameValidator
+from .manager import UserManager
 
 # Create your models here.
 class User(AbstractBaseUser, PermissionsMixin):
@@ -34,8 +35,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     point = models.PositiveIntegerField(null=True, blank=True)
     created_at = models.DateTimeField(default=timezone.now)
     
-    is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     
     Role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, blank=True, null=True, default=0)
+    
+    objects = UserManager()
+    
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["username", 'location', 'birthday','number']
+    
