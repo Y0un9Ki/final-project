@@ -9,17 +9,18 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = User
-        fields = ['email', 'username', 'location', 'birthday','number']
+        fields = ['email', 'password', 'password2', 'username', 'location', 'birthday','number']
         
     def validate(self, attrs):
-        email = User.objects.filter(email=attrs['email']).first
+        email = User.objects.filter(email=attrs['email'])
         
         if email.exists():
+            print(email.exists())
             raise serializers.ValidationError(
                 {'message': '이미 존재하는 이메일 입니다'}
             )
-        
-        if attrs['password']==attrs['password2']:
+
+        if attrs['password']!=attrs['password2']:
             raise serializers.ValidationError(
                 {'message': '비밀번호가 일치하지 않습니다.'}
             )
