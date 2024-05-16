@@ -32,7 +32,7 @@ class UserLoginView(APIView):
     
     def post(self, request):
         # 로그인 기능
-        serializer = self.serializer_class(request.data)
+        serializer = self.serializer_class(data=request.data)
         valid = serializer.is_valid(raise_exception=True)
         
         if valid:
@@ -41,6 +41,7 @@ class UserLoginView(APIView):
                 'access' : serializer.data['access'],
                 'refresh': serializer.data['refresh'],
                 'authenticateUser': {
+                    'id': serializer.data['id'],
                     'email': serializer.data['email'],
                     'username': serializer.data['username'],
                     'birthday': serializer.data['birthday'],

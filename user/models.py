@@ -28,7 +28,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     number_validator = UnicodeNumberValidator()
 
     
-    uid = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4, verbose_name='Public identifier')
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4, verbose_name='Public identifier')
     email = models.EmailField(unique=True, error_messages={'unique': '이미 존재하는 이메일 입니다. 다른 이메일을 작성해주세요'}, blank=False, null=False)
     username = models.CharField(unique=False, null=False, max_length=20, validators=[username_validator])
     birthday = models.DateField(null=True)
@@ -41,7 +41,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     
-    Role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, blank=True, null=True, default=0)
+    role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, blank=True, null=True, default=0)
     
     objects = UserManager()
     

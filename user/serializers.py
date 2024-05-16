@@ -33,6 +33,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return user
     
 class UserLoginSerializer(serializers.Serializer):
+    id = serializers.UUIDField(read_only=True)
     email = serializers.EmailField()
     username = serializers.CharField(read_only=True)
     password = serializers.CharField(max_length=100, write_only=True)
@@ -69,6 +70,7 @@ class UserLoginSerializer(serializers.Serializer):
         validation = {
             'access' : access_token,
             'refresh' : refresh_token,
+            'id' : user.id,
             'email' : user.email,
             'username' : user.username,
             'role' : user.role,
