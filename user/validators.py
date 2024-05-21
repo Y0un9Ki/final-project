@@ -1,5 +1,6 @@
+# 파이썬 내부 라이브러리
 import re
-
+# django
 from django.core import validators
 from django.utils.deconstruct import deconstructible
 from django.utils.translation import gettext_lazy as _

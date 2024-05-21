@@ -1,11 +1,11 @@
-from django.shortcuts import render
-from .models import User
+# 외부 라이브러리
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
-
+# 앱내에 import
+from .models import User
 from .serializers import UserLoginSerializer, UserRegistrationSerializer
 # Create your views here.
 
@@ -48,7 +48,8 @@ class UserLoginView(APIView):
                     'location': serializer.data['location'],
                     'number': serializer.data['number'],
                     'point': serializer.data['point'],
-                    'role': serializer.data['role'],
+                    'is_staff': serializer.data['is_staff'],
+                    'is_superuser': serializer.data['is_superuser'],
                 }
             }
             

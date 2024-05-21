@@ -1,6 +1,8 @@
+# django
 from django.urls import path, include
+# 외부라이브러리
 from rest_framework_simplejwt import views as jwt_views
-
+# 앱내 import
 from .views import UserLoginView, UserRegistrationView
 
 urlpatterns = [

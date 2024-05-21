@@ -1,5 +1,4 @@
 from django.apps import apps
-
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.hashers import make_password
 from django.db import models
@@ -32,23 +31,14 @@ class UserManager(BaseUserManager):
                           point=point,
                           **extra_fields)
         user.password = make_password(password)
-        user.save()
+        user.save(using=self._db)
         return user
 
     def create_user(self, username, email, birthday, location, number, point=None, password=None, **extra_fields):
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
         return self._create_user(username, email, birthday, location, number, point, password, **extra_fields)
-
-    def create_staff(self, username, email, birthday, location, number, point=None, password=None, **extra_fields):
-        extra_fields.setdefault("is_staff", True)
-        extra_fields.setdefault("is_superuser", False)
-        
-        if extra_fields.get("is_staff") is not True:
-            raise ValueError("staff must have is_staff=True.")
-        
-        return self._create_user(username, email, birthday, location, number, point, password, **extra_fields)
-    
+ 
     def create_superuser(self, username, email, birthday, location, number, point=None, password=None, **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
