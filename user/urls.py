@@ -10,4 +10,5 @@ urlpatterns = [
     path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     path('register/', UserRegistrationView.as_view(), name='회원가입'),
     path('login/',UserLoginView.as_view(), name='로그인/로그아웃'),
+    path('api-auth/', include('rest_framework.urls')),
 ]

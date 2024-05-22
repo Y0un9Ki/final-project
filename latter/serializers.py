@@ -4,17 +4,22 @@ from user.models import User
 from .models import Answer, Question
 from user.serializers import UserSerializer
 
-class QuestionSerializer(serializers.ModelSerializer): 
-
-    class Meta:
-        model = Question
-        fields = ['id', 'content', 'created_at', 'user_id']
-
 class AnswerSerializer(serializers.ModelSerializer):
-    question = QuestionSerializer(many=True, read_only=True)
+    user = serializers.EmailField(source='user.email', read_only=True)
     class Meta:
         model = Answer
-        fields = ['id', 'question_id', 'user_id', 'comment']
+        fields = ['id', 'question', 'user', 'comment', 'update_date']
+
+class QuestionSerializer(serializers.ModelSerializer): 
+    answer = AnswerSerializer(read_only=True) # ==> 여기서 answer에 여러 필드중에 특정 필드만을 가지고 오고 싶다면 위에 AnswerSerializer의 fields를 내가 원하는 필드만 넣어주어야 한다.
+                                              #     django의 Serializer에서는 동작을 하지 않는듯 싶다.
+    class Meta:
+        model = Question
+        fields = ['id', 'content', 'answer', 'update_date']
+
+
+        
+
 
 
 
