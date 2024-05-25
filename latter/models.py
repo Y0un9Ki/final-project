@@ -17,7 +17,7 @@ class Question(models.Model):
 class Answer(models.Model):
     id = models.AutoField(primary_key=True, unique=True, null=False)
     user = models.ForeignKey(User, related_name='answer', on_delete=models.CASCADE)
-    question = models.OneToOneField(Question, related_name='answer', on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, related_name='answer', on_delete=models.CASCADE)
     comment = models.TextField(null=True, blank=True)
     update_date = models.DateTimeField(auto_now=True)
     
