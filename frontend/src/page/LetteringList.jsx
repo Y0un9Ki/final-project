@@ -66,7 +66,7 @@ const Container = styled.div`
   flex-direction: column;
   margin: auto;
   padding-top: 80px;
-  padding-bottom: 20px;
+  padding-bottom: 80px;
   max-width: 600px;
   min-height: 90vh;
   background-color: #f4f4f4;

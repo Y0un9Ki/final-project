@@ -39,14 +39,21 @@ const LifeDetail = () => {
           라이프
         </LetteringTitle>
         <LetteringTitle ref={(el) => (infoTitleRefs.current[1] = el)}>
-          당신을 위한 공연입니다!
+          포인트를 통해 문화공연을 즐겨봐요!
         </LetteringTitle>
       </ContentSection>
       <Body>
-        <LetterTextField text="👋 만나서 반가워요" />
-        <LetterTextField text="매일 당신에게 편지를 보내려해요" />
-        <LetterTextField text="앞으로 만들어나갈 우리 이야기를 위해" />
-        <LetterTextField text="다짐하는 글을 부탁해요!" />
+        <LetterTextField text="당신을 위한 공연을 준비했어요 👏" />
+        <LetterTextField text="공연 제목" />
+        <LetterTextField />
+        <LetterTextField text="등장인물 및 배우" />
+        <LetterTextField />
+        <LetterTextField text="포인트" />
+        <LetterTextField />
+        <LetterTextField text="상영날짜" />
+        <LetterTextField />
+        <LetterTextField text="장소 및 위치" />
+        <LetterTextField />
         {[...Array(4)].map((value, index) => {
           return <LetterTextField key={index} />;
         })}
@@ -56,8 +63,11 @@ const LifeDetail = () => {
             <LetterModal show={showModal} onClose={closeModal} />
           </Response>
         </BottomSection>
+        <SubmitButton>
+          <Iconlogo src="/assets/ticketicon.png" />
+          <BtnText>공연 예약하기</BtnText>
+        </SubmitButton>
         <LetterImage src="/assets/char4.png" />
-        <LetterTextField text="👋 만나서 반가워요" />
       </Body>
     </Container>
   );
@@ -71,7 +81,7 @@ const Container = styled.div`
   align-items: center;
   margin: auto;
   padding-top: 80px;
-  padding-bottom: 20px;
+  padding-bottom: 80px;
   max-width: 600px;
   min-height: 90vh;
   background-color: #f4f4f4;
@@ -104,7 +114,7 @@ const Response = styled.div`
 const LetterImage = styled.img`
   position: absolute;
   right: 28px;
-  bottom: 58px;
+  bottom: 78px;
   height: 160px;
 `;
 
@@ -124,4 +134,31 @@ const LetteringTitle = styled.p`
 const ContentLogo = styled.img`
   width: 24px;
   margin-right: 10px;
+`;
+
+const SubmitButton = styled.button`
+  width: 300px;
+  padding: 8px 28px;
+  margin-top: 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #e6e1e1;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #d1cdcd;
+  }
+`;
+
+const Iconlogo = styled.img`
+  width: 20px;
+`;
+
+const BtnText = styled.section`
+  width: 100%;
 `;

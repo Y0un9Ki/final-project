@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { gsap } from "gsap";
 import LetterTextField from "./LetterTextField";
 
-const LetterModal = ({ show, onClose }) => {
+const LifeReserveModal = ({ show, onClose }) => {
   const modalRef = useRef(null);
   const overlayRef = useRef(null);
 
@@ -58,7 +58,7 @@ const LetterModal = ({ show, onClose }) => {
   );
 };
 
-export default LetterModal;
+export default LifeReserveModal;
 
 const Overlay = styled.div`
   display: ${({ show }) => (show ? "block" : "none")};
