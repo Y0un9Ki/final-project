@@ -8,6 +8,7 @@ import Mypage from "./page/Mypage";
 import Lettering from "./page/Lettering";
 import LetteringList from "./page/LetteringList";
 import LifeList from "./page/LifeList";
+import LifeDetail from "./page/LifeDetail";
 
 const Router = () => {
   return (
@@ -20,6 +21,7 @@ const Router = () => {
         <Route path="/letterlist" element={<LetteringList />} />
         <Route path="/lettering" element={<Lettering />} />
         <Route path="/lifelist" element={<LifeList />} />
+        <Route path="/lifedetail" element={<LifeDetail />} />
       </Routes>
       <Footer />
     </BrowserRouter>
