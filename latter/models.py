@@ -20,6 +20,7 @@ class Answer(models.Model):
     question = models.ForeignKey(Question, related_name='answer', on_delete=models.CASCADE)
     comment = models.TextField(null=True, blank=True)
     update_date = models.DateTimeField(auto_now=True)
+    receive_point = models.BooleanField(default=False)
     
     def __str__(self):
         return str(self.comment)

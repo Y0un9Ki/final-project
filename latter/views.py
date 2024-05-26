@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from django.http import Http404
+from django.contrib.auth import get_user_model
+from django.utils import timezone
 # 외부 라이브러리
+from datetime import timedelta
 from rest_framework import mixins, status, generics
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
@@ -20,6 +23,8 @@ class QuestionList(mixins.ListModelMixin,
                    generics.GenericAPIView):
     permission_classes = (AllowAny,)
     authentication_classes = [JWTAuthentication]
+    # permission_classes = (IsAuthenticated,)
+    # authentication_classes = [BasicAuthentication, SessionAuthentication]
     serializer_class = QuestionSerializer
     queryset = Question.objects.all()
     
@@ -59,20 +64,48 @@ class QuestionDetail(mixins.UpdateModelMixin,
     
 class AnswerCreate(mixins.CreateModelMixin,
                    generics.GenericAPIView):
-    permission_classes=(IsAuthenticated,)
-    authentication_classes = [JWTAuthentication]
+    # permission_classes=(IsAuthenticated,)
+    # authentication_classes = [JWTAuthentication]
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = [BasicAuthentication, SessionAuthentication]
     serializer_class = AnswerSerializer
     queryset = Answer.objects.all()
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
     
+# 그래서 답장을 작성한 후에 포인트를 받았다면 다시 포인트를 받기 위해서는 하루뒤에 작성을 해야만 포인트를 다시 받을 수 있게 로직을 짯다.
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        user=self.request.user
+        last_received_answer = Answer.objects.filter(user=user, receive_point=True).order_by('-update_date').first()
+        if last_received_answer is None or last_received_answer.update_date < timezone.now() - timedelta(days=1):
+            if user.point is None:
+                user.point = 0
+            user.point += 100
+            user.save()
+            answer = serializer.save(user=user)
+            if answer.receive_point==False:
+                answer.receive_point=True
+                answer.save()
+                
+        serializer.save(user=user)
+        
+    # def perform_create(self, serializer):
+    #     serializer.save(user=self.request.user)
+    #     # 사용자가 answer를 만들면은 사용자의 point가 자동으로 증가하는 로직을 구현한 것
+    #     # 하지만 이것의 문제는 답장을 계속 만들면 무조건 포인트가 증가한다는 것이다.
+    #     user = self.request.user
+    #     if user.point is None:
+    #         user.point=0
+    #     user.point += 100
+    #     user.save()
+        
         
 class AnswerDetailQuestion(APIView):
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    # permission_classes = [IsAuthenticated]
+    # authentication_classes = [JWTAuthentication]
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = [BasicAuthentication, SessionAuthentication]
     
     def get_object(self, pk):
         try:
@@ -107,8 +140,10 @@ class AnswerDetailQuestion(APIView):
 # 그렇기에 쿼리셋으로 가지고 오게 될때에는 get_queryset을 정의해주어야 한다.
 # 밑에 코드는 APIView를 이용해서 만든 코드
 class AnswerList(APIView):
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    # permission_classes = [IsAuthenticated]
+    # authentication_classes = [JWTAuthentication]
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = [BasicAuthentication, SessionAuthentication]
     
     def get_queryset(self):
         user = self.request.user
@@ -125,32 +160,32 @@ class AnswerList(APIView):
         return Response(serializer.data)
 
 # 밑에 코드는 mixins를 이용해서 만든 코드 
-class AnswerList(mixins.ListModelMixin,
-                generics.GenericAPIView):
-    permission_classes = (IsAuthenticated,)
-    serializer_class = AnswerSerializer
+# class AnswerList(mixins.ListModelMixin,
+#                 generics.GenericAPIView):
+#     permission_classes = (IsAuthenticated,)
+#     serializer_class = AnswerSerializer
     
-    def get_queryset(self):
-        user = self.request.user
-        answer = Answer.objects.filter(user=user)
-        if answer.exists():
-            return answer
-        else:
-            raise NotFound({'message': '해당하는 데이터가 존재하지 않습니다.'})
+#     def get_queryset(self):
+#         user = self.request.user
+#         answer = Answer.objects.filter(user=user)
+#         if answer.exists():
+#             return answer
+#         else:
+#             raise NotFound({'message': '해당하는 데이터가 존재하지 않습니다.'})
     
-    def get(self, request, *args, **kwargs):
-        return self.list(request,*args, **kwargs)
+#     def get(self, request, *args, **kwargs):
+#         return self.list(request,*args, **kwargs)
 
 
-# 필요없다.  
-class AnswerList(mixins.ListModelMixin,
-                generics.GenericAPIView):
-    permission_classes = (IsAuthenticated,)
-    serializer_class = AnswerSerializer
-    queryset = Answer.objects.all()
+# # 필요없다.  
+# class AnswerList(mixins.ListModelMixin,
+#                 generics.GenericAPIView):
+#     permission_classes = (IsAuthenticated,)
+#     serializer_class = AnswerSerializer
+#     queryset = Answer.objects.all()
     
-    def get(self, request, *args, **kwargs):
-        return self.list(request,*args, **kwargs)
+#     def get(self, request, *args, **kwargs):
+#         return self.list(request,*args, **kwargs)
 
 # 필요없다.
 class AnswerOwnerList(APIView):

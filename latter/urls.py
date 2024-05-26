@@ -3,7 +3,7 @@ from django.urls import path, include
 # 외부라이브러리
 
 # 앱내 import
-from .views import QuestionList, QuestionDetail, AnswerCreate, QuestionCreate, AnswerList, AnswerOwnerList, AnswerDetailQuestion
+from .views import QuestionList, QuestionDetail, AnswerCreate, QuestionCreate, AnswerOwnerList, AnswerDetailQuestion, AnswerList
 
 urlpatterns = [
     path('question/', QuestionList.as_view(), name='질문지'),

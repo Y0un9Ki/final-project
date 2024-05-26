@@ -1,14 +1,47 @@
 # 외부 라이브러리
 from rest_framework import status
+from rest_framework.exceptions import NotFound
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 # 앱내에 import
 from .models import User
-from .serializers import UserLoginSerializer, UserRegistrationSerializer
+from .serializers import UserLoginSerializer, UserRegistrationSerializer, UserSerializer
 # Create your views here.
 
+class UserOwnList(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    # authentication_classes = [JWTAuthentication]
+        
+    def get(self, request, format=None):
+        user = self.request.user
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+# 마이페이지를 불러오는 view를 짠건데 이렇게 짤 필요가 없다.
+# 왜냐하면 User 모델은 이미 인증된 사용자의 정보를 제공하기에 굳이 get_object()써서 사용자를 조회해서 가져 올 필요가 없다.
+# 그렇기에 위에 코드처럼 간단하게 써도 된다. 
+# 그리고 많은 User를 들고오는 것이 아니기에 many=True도 안써도 된다.
+# class UserOwnList(APIView):
+#     permission_classes = [IsAuthenticated]
+#     authentication_classes = [JWTAuthentication]
+    
+#     def get_object(self):
+#         try:
+#             request_user = self.request.user
+#             user = User.objects.get(user=request_user)
+#             return user
+#         except User.DoesNotExist:
+#             raise NotFound({'message' : '요청하신 사용자는 존재하지 않습니다. 로그인을 해주세요.'})
+        
+#     def get(self, request, format=None):
+#         user = self.get_object()
+#         serializer = UserSerializer(user, many=True)
+#         return Response(serializer.data)
+       
 
 class UserRegistrationView(APIView):
     serializer_class = UserRegistrationSerializer
