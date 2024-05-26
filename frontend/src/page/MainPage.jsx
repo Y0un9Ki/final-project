@@ -42,7 +42,7 @@ const MainPage = () => {
             당신의 이야기가 듣고싶어요!
           </InfoText>
           <InfoText ref={(el) => (infoTextRefs.current[2] = el)}>
-            다양한 이야기를 들려주세요!
+            다양한 이야기를 들려주세요! 🤙
           </InfoText>
         </InfoTextSection>
       </Info>
@@ -52,7 +52,7 @@ const MainPage = () => {
           레터링
         </LetteringTitle>
         <LetteringTitle ref={(el) => (infoTitleRefs.current[1] = el)}>
-          여러분의 오늘이 궁금해요!
+          여러분의 오늘이 궁금해요! 🙌
         </LetteringTitle>
       </ContentSection>
       <LetteringInfo />
@@ -62,7 +62,7 @@ const MainPage = () => {
           라이프
         </LetteringTitle>
         <LetteringTitle ref={(el) => (infoTitleRefs.current[3] = el)}>
-          우리 같이 만나요!
+          우리 같이 만나요! 👊
         </LetteringTitle>
       </ContentSection>
       <LifeInfo />

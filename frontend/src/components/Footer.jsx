@@ -25,7 +25,11 @@ const Footer = () => {
           <NavIcon src="/assets/letteringicon.png" />
           <NavTitle>레터링</NavTitle>
         </StyledButton>
-        <StyledButton onClick={() => {}}>
+        <StyledButton
+          onClick={() => {
+            navigate("/lifelist");
+          }}
+        >
           <NavIcon src="/assets/lifeicon.png" />
           <NavTitle>라이프</NavTitle>
         </StyledButton>

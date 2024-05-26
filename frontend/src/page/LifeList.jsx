@@ -1,14 +1,22 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import Topbar from "../components/Topbar";
-import LetterListContainer from "../components/LetterListContainer";
 import { gsap } from "gsap";
 import Pagination from "@mui/material/Pagination";
 import Grow from "@mui/material/Grow";
+import LifeListContainer from "../components/LifeListContainer";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import { styled as muiStyled } from "@mui/material/styles";
 
-const LetteringList = () => {
+const LifeList = () => {
+  const [value, setValue] = useState(0);
   const infoTextRefs = useRef([]);
   const infoTitleRefs = useRef([]);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   useEffect(() => {
     gsap.from(infoTextRefs.current, {
@@ -32,14 +40,28 @@ const LetteringList = () => {
       <ContentSection>
         <LetteringTitle ref={(el) => (infoTitleRefs.current[0] = el)}>
           <ContentLogo src="/assets/letteringIcon.png" />
-          레터링
+          라이프
         </LetteringTitle>
         <LetteringTitle ref={(el) => (infoTitleRefs.current[1] = el)}>
-          여러분의 오늘이 궁금해요! 🙌
+          우리 같이 만나요! 👊
         </LetteringTitle>
       </ContentSection>
+      <Tapbar>
+        <StyleTabs
+          value={value}
+          onChange={handleChange}
+          variant="scrollable"
+          scrollButtons={false}
+          aria-label="scrollable prevent tabs example"
+          TabIndicatorProps={{ style: { backgroundColor: "#493d26" } }}
+        >
+          <StyleTab label="공연" />
+          <StyleTab label="뮤지컬" />
+          <StyleTab label="영화" />
+        </StyleTabs>
+      </Tapbar>
       <ListSection>
-        {[...Array(7)].map((_, index) => (
+        {[...Array(5)].map((_, index) => (
           <Grow
             key={index}
             in={true}
@@ -47,7 +69,7 @@ const LetteringList = () => {
             timeout={1000}
           >
             <div>
-              <LetterListContainer />
+              <LifeListContainer />
             </div>
           </Grow>
         ))}
@@ -59,7 +81,7 @@ const LetteringList = () => {
   );
 };
 
-export default LetteringList;
+export default LifeList;
 
 const Container = styled.div`
   display: flex;
@@ -101,3 +123,20 @@ const PageSection = styled.div`
   justify-content: center;
   margin-top: 10px;
 `;
+
+const Tapbar = styled.div`
+  width: 90%;
+  margin: 0 auto;
+`;
+
+const StyleTabs = muiStyled(Tabs)(() => ({
+  color: "black",
+}));
+
+const StyleTab = muiStyled(Tab)(() => ({
+  color: "#aaa",
+  borderBottomColor: "#aaa",
+  "&.Mui-selected": {
+    color: "#493d26",
+  },
+}));

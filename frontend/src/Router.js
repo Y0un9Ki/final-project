@@ -7,6 +7,7 @@ import Footer from "./components/Footer";
 import Mypage from "./page/Mypage";
 import Lettering from "./page/Lettering";
 import LetteringList from "./page/LetteringList";
+import LifeList from "./page/LifeList";
 
 const Router = () => {
   return (
@@ -18,6 +19,7 @@ const Router = () => {
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/letterlist" element={<LetteringList />} />
         <Route path="/lettering" element={<Lettering />} />
+        <Route path="/lifelist" element={<LifeList />} />
       </Routes>
       <Footer />
     </BrowserRouter>
