@@ -67,7 +67,7 @@ const MainPage = () => {
           우리 같이 만나요! 👊
         </LetteringTitle>
       </ContentSection>
-      {[...Array(7)].map((_, index) => (
+      {[...Array(3)].map((_, index) => (
         <Grow
           key={index}
           in={true}
