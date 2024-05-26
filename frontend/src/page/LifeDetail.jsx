@@ -4,6 +4,7 @@ import Topbar from "../components/Topbar";
 import LetterTextField from "../components/LetterTextField";
 import { gsap } from "gsap";
 import LetterModal from "../components/LetterModal";
+import LifeReserveModal from "../components/LifeReserveModal";
 
 const LifeDetail = () => {
   const infoTextRefs = useRef([]);
@@ -59,13 +60,11 @@ const LifeDetail = () => {
         })}
         <BottomSection>
           <LetterTextField />
-          <Response>
-            <LetterModal show={showModal} onClose={closeModal} />
-          </Response>
         </BottomSection>
         <SubmitButton>
           <Iconlogo src="/assets/ticketicon.png" />
-          <BtnText>공연 예약하기</BtnText>
+          <BtnText onClick={openModal}>공연 예약하기</BtnText>
+          <LifeReserveModal show={showModal} onClose={closeModal} />
         </SubmitButton>
         <LetterImage src="/assets/char4.png" />
       </Body>
@@ -137,7 +136,7 @@ const ContentLogo = styled.img`
 `;
 
 const SubmitButton = styled.button`
-  width: 300px;
+  width: 320px;
   padding: 8px 28px;
   margin-top: 20px;
   border: none;

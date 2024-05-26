@@ -19,6 +19,8 @@ const LifeReserveModal = ({ show, onClose }) => {
         { opacity: 0 },
         { opacity: 1, duration: 0.5, ease: "power3.out" }
       );
+      // Disable scroll
+      document.body.style.overflow = "hidden";
     } else {
       gsap.to(modalRef.current, {
         y: 50,
@@ -32,7 +34,14 @@ const LifeReserveModal = ({ show, onClose }) => {
         duration: 0.5,
         ease: "power3.in",
       });
+      // Enable scroll
+      document.body.style.overflow = "auto";
     }
+
+    // Cleanup on component unmount
+    return () => {
+      document.body.style.overflow = "auto";
+    };
   }, [show, onClose]);
 
   return (
@@ -40,15 +49,25 @@ const LifeReserveModal = ({ show, onClose }) => {
       <Overlay ref={overlayRef} show={show} onClick={onClose} />
       <ModalContainer ref={modalRef} show={show}>
         <ModalContent>
-          <h2>👋 당신의 이야기를 들려주세요!</h2>
-          {[...Array(10)].map((value, index) => {
-            return <LetterTextField key={index} />;
-          })}
-          <TextInput maxLength="200" placeholder="답장 내용을 입력해주세요!" />
+          <h2>👋 예약전 확인할 정보입니다!</h2>
+          <LetterTextField />
+          <LetterTextField text="본 티켓은 양도 및 판매가 불가능 합니다." />
+          <LetterTextField text="예약 취소 방침을 미리 확인해 주세요." />
+          <LetterTextField />
+          <LetterTextField text="좌석은 임의로 배정됩니다." />
+          <LetterTextField text="예약 확정 시 보유 포인트 만큼 차감됩니다." />
+          <LetterTextField text="티켓 구매 내역은 1년간 보관됩니다." />
+          <LetterTextField />
+          <LetterTextField text="공연 시작 10분 전 부터 입장 가능합니다." />
+          <LetterTextField text="입장 시 본 티켓을 보여주세요." />
+          <LetterTextField text="공연 중 소음을 자제해 주세요." />
+          <LetterTextField text="식음료 여부는 각 공연장 방침을 확인해주세요." />
+          <LetterTextField />
+          <LetterTextField text="즐거운 공연관람 되세요." />
           <ButtonSection>
             <SubmitButton>
-              <Iconlogo src="/assets/editicon.png" />
-              <BtnText>제출하기</BtnText>
+              <Iconlogo src="/assets/ticketicon.png" />
+              <BtnText>예약 확정하기</BtnText>
             </SubmitButton>
             <CloseButton onClick={onClose}>닫기</CloseButton>
           </ButtonSection>
@@ -75,9 +94,10 @@ const Overlay = styled.div`
 const ModalContainer = styled.div`
   display: ${({ show }) => (show ? "block" : "none")};
   position: fixed;
+  top: 20%;
   left: 50%;
   width: 400px;
-  height: 500px;
+  height: 640px;
   background: white;
   transform: translate(-50%, -50%);
   z-index: 1100;
@@ -88,26 +108,6 @@ const ModalContainer = styled.div`
 const ModalContent = styled.div`
   position: relative;
   padding: 20px;
-`;
-
-const TextInput = styled.textarea`
-  position: absolute;
-  top: 30px;
-  width: 360px;
-  height: 380px;
-  padding: 10px;
-  font-size: 16px;
-  border: none;
-  resize: none;
-  outline: none;
-  box-sizing: border-box;
-  background-color: transparent;
-  color: black;
-  line-height: 2.3;
-
-  &:focus {
-    outline: none;
-  }
 `;
 
 const ButtonSection = styled.div`
