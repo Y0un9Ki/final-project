@@ -3,6 +3,8 @@ import styled from "styled-components";
 import Topbar from "../components/Topbar";
 import LetterListContainer from "../components/LetterListContainer";
 import { gsap } from "gsap";
+import Pagination from "@mui/material/Pagination";
+import Grow from "@mui/material/Grow";
 
 const LetteringList = () => {
   const infoTextRefs = useRef([]);
@@ -37,11 +39,22 @@ const LetteringList = () => {
         </LetteringTitle>
       </ContentSection>
       <ListSection>
-        <LetterListContainer />
-        <LetterListContainer />
-        <LetterListContainer />
-        <LetterListContainer />
+        {[...Array(4)].map((_, index) => (
+          <Grow
+            key={index}
+            in={true}
+            style={{ transformOrigin: "0 0 0" }}
+            timeout={1000}
+          >
+            <div>
+              <LetterListContainer />
+            </div>
+          </Grow>
+        ))}
       </ListSection>
+      <PageSection>
+        <Pagination count={10} shape="rounded" />
+      </PageSection>
     </Container>
   );
 };
@@ -80,4 +93,10 @@ const ContentLogo = styled.img`
 
 const ListSection = styled.div`
   width: 100%;
+`;
+
+const PageSection = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
 `;

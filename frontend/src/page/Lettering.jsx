@@ -47,10 +47,9 @@ const Lettering = () => {
         <LetterTextField text="매일 당신에게 편지를 보내려해요" />
         <LetterTextField text="앞으로 만들어나갈 우리 이야기를 위해" />
         <LetterTextField text="다짐하는 글을 부탁해요!" />
-        <LetterTextField />
-        <LetterTextField />
-        <LetterTextField />
-        <LetterTextField />
+        {[...Array(4)].map((value, index) => {
+          return <LetterTextField key={index} />;
+        })}
         <BottomSection>
           <LetterTextField />
           <Response>

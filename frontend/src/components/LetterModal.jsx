@@ -46,7 +46,10 @@ const LetterModal = ({ show, onClose }) => {
           })}
           <TextInput maxLength="200" placeholder="답장 내용을 입력해주세요!" />
           <ButtonSection>
-            <SubmitButton>제출하기</SubmitButton>
+            <LoginButton>
+              <Iconlogo src="/assets/editicon.png" />
+              <BtnText>제출하기</BtnText>
+            </LoginButton>
             <CloseButton onClick={onClose}>닫기</CloseButton>
           </ButtonSection>
         </ModalContent>
@@ -87,21 +90,6 @@ const ModalContent = styled.div`
   padding: 20px;
 `;
 
-const CloseButton = styled.button`
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #e6e1e1;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  color: black;
-
-  &:hover {
-    color: white;
-    background-color: #d2b48c;
-  }
-`;
-
 const TextInput = styled.textarea`
   position: absolute;
   top: 30px;
@@ -127,17 +115,46 @@ const ButtonSection = styled.div`
   justify-content: space-between;
 `;
 
-const SubmitButton = styled.button`
+const LoginButton = styled.button`
+  width: 250px;
+  padding: 8px 28px;
+  margin-top: 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #e6e1e1;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #d1cdcd;
+  }
+`;
+
+const CloseButton = styled.button`
+  width: 100px;
   margin-top: 20px;
   padding: 10px 20px;
   background-color: #e6e1e1;
   border: none;
+  font-size: 16px;
   border-radius: 5px;
   cursor: pointer;
   color: black;
-
+  transition: background-color 0.3s ease;
   &:hover {
     color: white;
-    background-color: #d2b48c;
+    background-color: #f43d39;
   }
+`;
+
+const Iconlogo = styled.img`
+  width: 20px;
+`;
+
+const BtnText = styled.section`
+  width: 100%;
 `;

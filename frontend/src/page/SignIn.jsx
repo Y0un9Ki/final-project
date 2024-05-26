@@ -36,7 +36,7 @@ const SignIn = () => {
           로그인
         </LetteringTitle>
         <LetteringTitle ref={(el) => (infoTitleRefs.current[1] = el)}>
-          How Are You에 오신걸 환영해요!
+          How Are You에 오신 것을 환영해요!
         </LetteringTitle>
       </ContentSection>
       <Body>
@@ -77,7 +77,7 @@ const Container = styled.div`
 
 const Body = styled.div`
   width: 320px;
-  margin: 50px auto;
+  margin: 0 auto;
   padding: 20px;
   border-radius: 10px;
   background-color: #fff;
@@ -122,8 +122,8 @@ const BtnText = styled.section`
 const ContentSection = styled.section`
   display: flex;
   flex-direction: column;
-
-  height: 30px;
+  height: 80px;
+  margin-top: 100px;
 `;
 
 const LetteringTitle = styled.p`
