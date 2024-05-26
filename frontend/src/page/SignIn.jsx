@@ -6,6 +6,7 @@ import InputField from "../components/InputField";
 import { gsap } from "gsap";
 import Topbar from "../components/Topbar";
 import LetterModal from "../components/LetterModal";
+import Grow from "@mui/material/Grow";
 
 const SignIn = () => {
   const infoTextRefs = useRef([]);
@@ -39,24 +40,28 @@ const SignIn = () => {
           How Are You에 오신 것을 환영해요!
         </LetteringTitle>
       </ContentSection>
-      <Body>
-        <LetterTextField text="👋 만나서 반가워요" />
-        <LetterTextField text="🙌 오늘 하루도 화이팅!" />
-        <LetterTextField />
-        <LetterTextField text="아이디를 입력해주세요" />
-        <InputField placeholder="HowAreYou@email.com" type="text" />
-        <LetterTextField text="비밀번호를 입력해주세요" />
-        <InputField placeholder="************" type="password" />
-        <LetterTextField />
-        <LoginButton>
-          <Iconlogo src="/assets/signicon.png" alt="hand icon" />
-          <BtnText>로그인</BtnText>
-        </LoginButton>
-        <KakaoLoginButton>
-          <Iconlogo src="/assets/kakaoicon.png" alt="Kakao logo" />
-          <BtnText>카카오 로그인</BtnText>
-        </KakaoLoginButton>
-      </Body>
+      <Grow in={true} style={{ transformOrigin: "0 2 2" }} timeout={700}>
+        <div>
+          <Body>
+            <LetterTextField text="👋 만나서 반가워요" />
+            <LetterTextField text="🙌 오늘 하루도 화이팅!" />
+            <LetterTextField />
+            <LetterTextField text="아이디를 입력해주세요" />
+            <InputField placeholder="HowAreYou@email.com" type="text" />
+            <LetterTextField text="비밀번호를 입력해주세요" />
+            <InputField placeholder="************" type="password" />
+            <LetterTextField />
+            <LoginButton>
+              <Iconlogo src="/assets/signicon.png" alt="hand icon" />
+              <BtnText>로그인</BtnText>
+            </LoginButton>
+            <KakaoLoginButton>
+              <Iconlogo src="/assets/kakaoicon.png" alt="Kakao logo" />
+              <BtnText>카카오 로그인</BtnText>
+            </KakaoLoginButton>
+          </Body>
+        </div>
+      </Grow>
     </Container>
   );
 };

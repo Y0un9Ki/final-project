@@ -1,22 +1,27 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
+import Grow from "@mui/material/Grow";
 
 const LetteringInfo = () => {
   return (
-    <Container>
-      <ImageSection>
-        <Image src="/assets/char2.png" />
-      </ImageSection>
-      <LetteringSection>
-        <>
-          <Text delay="0.5s">편지가 도착했어요!</Text>
-          <Text delay="1.5s">당신의 이야기를 들려주세요!</Text>
-          <Text delay="2.5s">행복한 하루가 되길 응원할게요!</Text>
-          <Text delay="3.5s">화이팅! 😄</Text>
-        </>
-        <Response>답장하기</Response>
-      </LetteringSection>
-    </Container>
+    <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+      <div>
+        <Container>
+          <ImageSection>
+            <Image src="/assets/char2.png" />
+          </ImageSection>
+          <LetteringSection>
+            <>
+              <Text delay="0.5s">편지가 도착했어요!</Text>
+              <Text delay="1.5s">당신의 이야기를 들려주세요!</Text>
+              <Text delay="2.5s">행복한 하루가 되길 응원할게요!</Text>
+              <Text delay="3.5s">화이팅! 😄</Text>
+            </>
+            <Response>답장하기</Response>
+          </LetteringSection>
+        </Container>
+      </div>
+    </Grow>
   );
 };
 

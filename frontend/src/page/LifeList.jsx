@@ -65,8 +65,8 @@ const LifeList = () => {
           <Grow
             key={index}
             in={true}
-            style={{ transformOrigin: "0 0 0" }}
-            timeout={1000}
+            style={{ transformOrigin: "0 0 2" }}
+            timeout={700}
           >
             <div>
               <LifeListContainer />

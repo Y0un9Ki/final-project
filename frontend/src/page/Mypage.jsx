@@ -4,6 +4,7 @@ import DaumPostcode from "react-daum-postcode";
 import Topbar from "../components/Topbar";
 import LetterTextField from "../components/LetterTextField";
 import { gsap } from "gsap";
+import Grow from "@mui/material/Grow";
 
 const Mypage = () => {
   const infoTextRefs = useRef([]);
@@ -37,39 +38,43 @@ const Mypage = () => {
           How Are You에 오신걸 환영해요!
         </LetteringTitle>
       </ContentSection>
-      <Body>
-        <TopSection>
-          <LetterSection>
-            <LetterTextField text="👋 만나서 반가워요" />
-            <LetterTextField text="🙌 오늘 하루도 화이팅!" />
+      <Grow in={true} style={{ transformOrigin: "0 0 2" }} timeout={700}>
+        <div>
+          <Body>
+            <TopSection>
+              <LetterSection>
+                <LetterTextField text="👋 만나서 반가워요" />
+                <LetterTextField text="🙌 오늘 하루도 화이팅!" />
+                <LetterTextField />
+              </LetterSection>
+              <ImageSection>
+                <ProfileImg src="/assets/defaultprofile.png" />
+              </ImageSection>
+            </TopSection>
             <LetterTextField />
-          </LetterSection>
-          <ImageSection>
-            <ProfileImg src="/assets/defaultprofile.png" />
-          </ImageSection>
-        </TopSection>
-        <LetterTextField />
-        <TopSection>
-          <LetterTextField text="보유 포인트" />
-          <LetterTextField text="15,000" />
-        </TopSection>
-        <LetterTextField />
-        <LetterTextField text="아이디" />
-        <LetterTextField />
-        <LetterTextField text="이름" />
-        <LetterTextField />
-        <LetterTextField text="생년월일" />
-        <LetterTextField />
-        <LetterTextField text="전화번호" />
-        <LetterTextField />
-        <LetterTextField text="주소" />
-        <LetterTextField />
-        <LetterTextField />
-        <EditButton>
-          <Iconlogo src="/assets/editicon.png" alt="hand icon" />
-          <BtnText>회원정보 변경</BtnText>
-        </EditButton>
-      </Body>
+            <TopSection>
+              <LetterTextField text="보유 포인트" />
+              <LetterTextField text="15,000" />
+            </TopSection>
+            <LetterTextField />
+            <LetterTextField text="아이디" />
+            <LetterTextField />
+            <LetterTextField text="이름" />
+            <LetterTextField />
+            <LetterTextField text="생년월일" />
+            <LetterTextField />
+            <LetterTextField text="전화번호" />
+            <LetterTextField />
+            <LetterTextField text="주소" />
+            <LetterTextField />
+            <LetterTextField />
+            <EditButton>
+              <Iconlogo src="/assets/editicon.png" alt="hand icon" />
+              <BtnText>회원정보 변경</BtnText>
+            </EditButton>
+          </Body>
+        </div>
+      </Grow>
     </Container>
   );
 };

@@ -3,8 +3,8 @@ import styled from "styled-components";
 import Topbar from "../components/Topbar";
 import LetterTextField from "../components/LetterTextField";
 import { gsap } from "gsap";
-import LetterModal from "../components/LetterModal";
 import LifeReserveModal from "../components/LifeReserveModal";
+import Grow from "@mui/material/Grow";
 
 const LifeDetail = () => {
   const infoTextRefs = useRef([]);

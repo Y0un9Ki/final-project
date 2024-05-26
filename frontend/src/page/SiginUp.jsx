@@ -5,6 +5,7 @@ import LetterTextField from "../components/LetterTextField";
 import InputField from "../components/InputField";
 import { gsap } from "gsap";
 import Topbar from "../components/Topbar";
+import Grow from "@mui/material/Grow";
 
 const SignUp = () => {
   const infoTextRefs = useRef([]);
@@ -38,28 +39,35 @@ const SignUp = () => {
           How Are You에 오신걸 환영해요!
         </LetteringTitle>
       </ContentSection>
-      <Body>
-        <LetterTextField text="👋 만나서 반가워요" />
-        <LetterTextField text="🙌 오늘 하루도 화이팅!" />
-        <LetterTextField />
-        <LetterTextField text="사용하실 아이디를 입력해주세요" />
-        <InputField placeholder="HowAreYou@email.com" type="text" />
-        <LetterTextField text="사용하실 비밀번호를 입력해주세요" />
-        <InputField placeholder="************" type="password" />
-        <LetterTextField text="비밀번호를 확인해주세요" />
-        <InputField placeholder="************" type="password" />
-        <LetterTextField text="생년월일을 입력해주세요" />
-        <InputField placeholder="2024-01-01" type="text" />
-        <LetterTextField text="전화번호를 입력해주세요" />
-        <InputField placeholder="01012345678" type="text" />
-        <LetterTextField text="주소를 입력해주세요" />
-        <InputField placeholder="서울특별시 영등포구 영등포로" type="text" />
-        <LetterTextField />
-        <LoginButton>
-          <Iconlogo src="/assets/signicon.png" alt="hand icon" />
-          <BtnText>회원가입</BtnText>
-        </LoginButton>
-      </Body>
+      <Grow in={true} style={{ transformOrigin: "0 0 2" }} timeout={500}>
+        <div>
+          <Body>
+            <LetterTextField text="👋 만나서 반가워요" />
+            <LetterTextField text="🙌 오늘 하루도 화이팅!" />
+            <LetterTextField />
+            <LetterTextField text="사용하실 아이디를 입력해주세요" />
+            <InputField placeholder="HowAreYou@email.com" type="text" />
+            <LetterTextField text="사용하실 비밀번호를 입력해주세요" />
+            <InputField placeholder="************" type="password" />
+            <LetterTextField text="비밀번호를 확인해주세요" />
+            <InputField placeholder="************" type="password" />
+            <LetterTextField text="생년월일을 입력해주세요" />
+            <InputField placeholder="2024-01-01" type="text" />
+            <LetterTextField text="전화번호를 입력해주세요" />
+            <InputField placeholder="01012345678" type="text" />
+            <LetterTextField text="주소를 입력해주세요" />
+            <InputField
+              placeholder="서울특별시 영등포구 영등포로"
+              type="text"
+            />
+            <LetterTextField />
+            <LoginButton>
+              <Iconlogo src="/assets/signicon.png" alt="hand icon" />
+              <BtnText>회원가입</BtnText>
+            </LoginButton>
+          </Body>
+        </div>
+      </Grow>
     </Container>
   );
 };

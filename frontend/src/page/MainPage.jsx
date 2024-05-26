@@ -5,6 +5,8 @@ import Topbar from "../components/Topbar";
 import LetteringInfo from "../components/LetteringInfo";
 import LifeInfo from "../components/LifeInfo";
 import Header from "../components/Header";
+import LifeListContainer from "../components/LifeListContainer";
+import Grow from "@mui/material/Grow";
 
 const MainPage = () => {
   const infoTextRefs = useRef([]);
@@ -65,9 +67,18 @@ const MainPage = () => {
           우리 같이 만나요! 👊
         </LetteringTitle>
       </ContentSection>
-      <LifeInfo />
-      <LifeInfo />
-      <LifeInfo />
+      {[...Array(7)].map((_, index) => (
+        <Grow
+          key={index}
+          in={true}
+          style={{ transformOrigin: "0 0 0" }}
+          timeout={1000}
+        >
+          <div>
+            <LifeListContainer />
+          </div>
+        </Grow>
+      ))}
     </Container>
   );
 };
