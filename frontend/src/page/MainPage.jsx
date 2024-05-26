@@ -4,6 +4,7 @@ import { gsap } from "gsap";
 import Topbar from "../components/Topbar";
 import LetteringInfo from "../components/LetteringInfo";
 import LifeInfo from "../components/LifeInfo";
+import Header from "../components/Haeder";
 
 const MainPage = () => {
   const infoTextRefs = useRef([]);
@@ -89,7 +90,7 @@ const Info = styled.section`
 
 const InfoTextSection = styled.section`
   width: 50%;
-  height: 100%;
+  padding-top: 56px;
   display: flex;
   flex-direction: column;
 `;
