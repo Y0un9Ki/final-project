@@ -1,14 +1,27 @@
 import React from "react";
 import styled from "styled-components";
+import Button from "@mui/material/Button";
 
 const Footer = () => {
   return (
     <FooterContainer>
       <Nav>
-        <NavItem>Home</NavItem>
-        <NavItem>About</NavItem>
-        <NavItem>Services</NavItem>
-        <NavItem>Contact</NavItem>
+        <StyledButton>
+          <NavIcon src="assets/homeicon.png" />
+          <NavTitle>메인</NavTitle>
+        </StyledButton>
+        <StyledButton>
+          <NavIcon src="assets/letteringicon.png" />
+          <NavTitle>레터링</NavTitle>
+        </StyledButton>
+        <StyledButton>
+          <NavIcon src="assets/lifeicon.png" />
+          <NavTitle>라이프</NavTitle>
+        </StyledButton>
+        <StyledButton>
+          <NavIcon src="assets/usericon.png" />
+          <NavTitle>로그인</NavTitle>
+        </StyledButton>
       </Nav>
     </FooterContainer>
   );
@@ -25,10 +38,8 @@ const FooterContainer = styled.footer`
   max-width: 600px;
   background-color: #e6e1e1;
   text-align: center;
-  padding: 10px 0;
   box-sizing: border-box;
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* 상단에 옅은 그림자 추가 */
-
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
   @media (max-width: 600px) {
     padding: 10px 5px;
   }
@@ -39,12 +50,26 @@ const Nav = styled.nav`
   justify-content: space-around;
 `;
 
-const NavItem = styled.div`
-  flex: 1;
-  padding: 10px;
+const StyledButton = styled(Button)`
+  display: flex;
+  align-items: center;
   cursor: pointer;
-
+  background-color: transparent;
+  color: black;
+  width: 150px;
+  height: 50px;
   &:hover {
-    background-color: #444;
   }
+  .MuiTouchRipple-root {
+    color: #553830;
+  }
+`;
+
+const NavIcon = styled.img`
+  width: 20px;
+`;
+
+const NavTitle = styled.p`
+  padding-left: 10px;
+  color: black;
 `;

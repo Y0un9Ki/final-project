@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import DaumPostcode from "react-daum-postcode";
 import Topbar from "../components/Topbar";
-import Header from "../components/Haeder";
+import Header from "../components/Header";
 import LetterTextField from "../components/LetterTextField";
 import InputField from "../components/InputField";
 
@@ -21,7 +21,12 @@ const Mypage = () => {
             <ProfileImg src="assets/defaultprofile.png" />
           </ImageSection>
         </TopSection>
-
+        <LetterTextField />
+        <TopSection>
+          <LetterTextField text="보유 포인트" />
+          <LetterTextField text="15,000" />
+        </TopSection>
+        <LetterTextField />
         <LetterTextField text="아이디" />
         <LetterTextField />
         <LetterTextField text="이름" />
@@ -77,7 +82,6 @@ const ImageSection = styled.div`
   justify-content: center;
   width: 45%;
 `;
-
 const ProfileImg = styled.img`
   width: 100px;
 `;

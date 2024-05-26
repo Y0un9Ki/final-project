@@ -4,7 +4,7 @@ import { gsap } from "gsap";
 import Topbar from "../components/Topbar";
 import LetteringInfo from "../components/LetteringInfo";
 import LifeInfo from "../components/LifeInfo";
-import Header from "../components/Haeder";
+import Header from "../components/Header";
 
 const MainPage = () => {
   const infoTextRefs = useRef([]);

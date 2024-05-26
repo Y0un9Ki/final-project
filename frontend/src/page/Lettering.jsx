@@ -1,12 +1,10 @@
-import React, { useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import Header from "../components/Header";
-import LetterTextField from "../components/LetterTextField";
-import InputField from "../components/InputField";
-import { gsap } from "gsap";
 import Topbar from "../components/Topbar";
+import LetterTextField from "../components/LetterTextField";
+import { gsap } from "gsap";
 
-const SignIn = () => {
+const Lettering = () => {
   const infoTextRefs = useRef([]);
   const infoTitleRefs = useRef([]);
 
@@ -26,41 +24,41 @@ const SignIn = () => {
       ease: "power3.out",
     });
   }, []);
+
   return (
     <Container>
       <Topbar />
       <ContentSection>
         <LetteringTitle ref={(el) => (infoTitleRefs.current[0] = el)}>
-          <ContentLogo src="assets/usericon.png" />
-          로그인
+          <ContentLogo src="assets/letteringIcon.png" />
+          레터링
         </LetteringTitle>
         <LetteringTitle ref={(el) => (infoTitleRefs.current[1] = el)}>
-          How Are You에 오신걸 환영해요!
+          여러분의 오늘이 궁금해요!
         </LetteringTitle>
       </ContentSection>
       <Body>
         <LetterTextField text="👋 만나서 반가워요" />
-        <LetterTextField text="🙌 오늘 하루도 화이팅!" />
+        <LetterTextField text="매일 당신에게 편지를 보내려해요" />
+        <LetterTextField text="앞으로 만들어나갈 우리 이야기를 위해" />
+        <LetterTextField text="다짐하는 글을 부탁해요!" />
         <LetterTextField />
-        <LetterTextField text="아이디를 입력해주세요" />
-        <InputField placeholder="HowAreYou@email.com" type="text" />
-        <LetterTextField text="비밀번호를 입력해주세요" />
-        <InputField placeholder="************" type="password" />
         <LetterTextField />
-        <LoginButton>
-          <Iconlogo src="assets/signicon.png" alt="hand icon" />
-          <BtnText>로그인</BtnText>
-        </LoginButton>
-        <KakaoLoginButton>
-          <Iconlogo src="assets/kakaoicon.png" alt="Kakao logo" />
-          <BtnText>카카오 로그인</BtnText>
-        </KakaoLoginButton>
+        <LetterTextField />
+        <LetterTextField />
+        <BottomSection>
+          <LetterTextField />
+          <Response>
+            <ResText>답장하기</ResText>
+          </Response>
+        </BottomSection>
+        <LetterImage src="assets/char3.png" />
       </Body>
     </Container>
   );
 };
 
-export default SignIn;
+export default Lettering;
 
 const Container = styled.div`
   display: flex;
@@ -75,6 +73,7 @@ const Container = styled.div`
 `;
 
 const Body = styled.div`
+  position: relative;
   width: 320px;
   margin: 50px auto;
   padding: 20px;
@@ -83,39 +82,36 @@ const Body = styled.div`
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
-const LoginButton = styled.button`
-  width: 100%;
-  padding: 8px 28px;
-  margin: 10px 0;
-  border: none;
-  border-radius: 5px;
-  background-color: #e6e1e1;
-  font-size: 16px;
-  cursor: pointer;
+const BottomSection = styled.div`
   display: flex;
+`;
+
+const Response = styled.div`
+  display: flex;
+  justify-content: flex-end;
   align-items: center;
-  justify-content: space-between;
-  transition: background-color 0.3s ease;
-
-  &:hover {
-    background-color: #d1cdcd;
-  }
-`;
-
-const KakaoLoginButton = styled(LoginButton)`
-  background-color: #ffe812;
-  &:hover {
-    background-color: #ffd900;
-  }
-`;
-
-const Iconlogo = styled.img`
-  width: 28px;
-`;
-
-const BtnText = styled.section`
-  font-size: 20px;
   width: 100%;
+  margin-top: 4px;
+  border-bottom: 1px solid #ddd;
+  min-height: 32px;
+`;
+
+const ResText = styled.p`
+  margin: 4px 20px;
+  align-self: flex-end;
+  cursor: pointer;
+  font-size: 20px;
+  color: #aaa;
+  transition: color 0.3s ease;
+  &:hover {
+    color: #000;
+  }
+`;
+
+const LetterImage = styled.img`
+  position: absolute;
+  bottom: 20px;
+  height: 160px;
 `;
 
 const ContentSection = styled.section`

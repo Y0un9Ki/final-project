@@ -1,15 +1,43 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import DaumPostcode from "react-daum-postcode";
-import Topbar from "../components/Topbar";
-import Header from "../components/Haeder";
+import Header from "../components/Header";
 import LetterTextField from "../components/LetterTextField";
 import InputField from "../components/InputField";
+import { gsap } from "gsap";
+import Topbar from "../components/Topbar";
 
 const SignUp = () => {
+  const infoTextRefs = useRef([]);
+  const infoTitleRefs = useRef([]);
+
+  useEffect(() => {
+    gsap.from(infoTextRefs.current, {
+      duration: 1,
+      y: 20,
+      opacity: 0,
+      stagger: 0.7,
+      ease: "power3.out",
+    });
+    gsap.from(infoTitleRefs.current, {
+      duration: 1,
+      y: 20,
+      opacity: 0,
+      stagger: 0.7,
+      ease: "power3.out",
+    });
+  }, []);
   return (
     <Container>
-      <Header />
+      <Topbar />
+      <ContentSection>
+        <LetteringTitle ref={(el) => (infoTitleRefs.current[0] = el)}>
+          <ContentLogo src="assets/usericon.png" />
+          회원가입
+        </LetteringTitle>
+        <LetteringTitle ref={(el) => (infoTitleRefs.current[1] = el)}>
+          How Are You에 오신걸 환영해요!
+        </LetteringTitle>
+      </ContentSection>
       <Body>
         <LetterTextField text="👋 만나서 반가워요" />
         <LetterTextField text="🙌 오늘 하루도 화이팅!" />
@@ -39,10 +67,14 @@ const SignUp = () => {
 export default SignUp;
 
 const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin: auto;
+  padding-top: 80px;
   padding-bottom: 20px;
   max-width: 600px;
-  min-height: 100vh;
+  min-height: 90vh;
   background-color: #f4f4f4;
 `;
 
@@ -81,4 +113,23 @@ const Iconlogo = styled.img`
 const BtnText = styled.section`
   font-size: 20px;
   width: 100%;
+`;
+
+const ContentSection = styled.section`
+  display: flex;
+  flex-direction: column;
+
+  height: 30px;
+`;
+
+const LetteringTitle = styled.p`
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  margin-bottom: 12px;
+`;
+
+const ContentLogo = styled.img`
+  width: 24px;
+  margin-right: 10px;
 `;
