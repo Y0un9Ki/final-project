@@ -18,7 +18,6 @@ const SignIn = () => {
         <LetterTextField text="비밀번호를 입력해주세요" />
         <InputField placeholder="************" type="password" />
         <LetterTextField />
-        <LetterTextField />
         <LoginButton>
           <Iconlogo src="assets/signicon.png" alt="hand icon" />
           <BtnText>로그인</BtnText>
