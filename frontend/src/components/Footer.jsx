@@ -1,24 +1,39 @@
 import React from "react";
 import styled from "styled-components";
 import Button from "@mui/material/Button";
+import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
+  const navigate = useNavigate();
+
   return (
     <FooterContainer>
       <Nav>
-        <StyledButton>
+        <StyledButton
+          onClick={() => {
+            navigate("/");
+          }}
+        >
           <NavIcon src="/assets/homeicon.png" />
           <NavTitle>메인</NavTitle>
         </StyledButton>
-        <StyledButton>
+        <StyledButton
+          onClick={() => {
+            navigate("/letterlist");
+          }}
+        >
           <NavIcon src="/assets/letteringicon.png" />
           <NavTitle>레터링</NavTitle>
         </StyledButton>
-        <StyledButton>
+        <StyledButton onClick={() => {}}>
           <NavIcon src="/assets/lifeicon.png" />
           <NavTitle>라이프</NavTitle>
         </StyledButton>
-        <StyledButton>
+        <StyledButton
+          onClick={() => {
+            navigate("/signin");
+          }}
+        >
           <NavIcon src="/assets/usericon.png" />
           <NavTitle>로그인</NavTitle>
         </StyledButton>

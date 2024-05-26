@@ -3,10 +3,15 @@ import styled from "styled-components";
 import Topbar from "../components/Topbar";
 import LetterTextField from "../components/LetterTextField";
 import { gsap } from "gsap";
+import LetterModal from "../components/LetterModal";
 
 const Lettering = () => {
   const infoTextRefs = useRef([]);
   const infoTitleRefs = useRef([]);
+  const [showModal, setShowModal] = useState(false);
+
+  const openModal = () => setShowModal(true);
+  const closeModal = () => setShowModal(false);
 
   useEffect(() => {
     gsap.from(infoTextRefs.current, {
@@ -34,7 +39,7 @@ const Lettering = () => {
           레터링
         </LetteringTitle>
         <LetteringTitle ref={(el) => (infoTitleRefs.current[1] = el)}>
-          여러분의 오늘이 궁금해요!
+          당신을 위한 편지가 도착했어요!
         </LetteringTitle>
       </ContentSection>
       <Body>
@@ -49,7 +54,8 @@ const Lettering = () => {
         <BottomSection>
           <LetterTextField />
           <Response>
-            <ResText>답장하기</ResText>
+            <ResText onClick={openModal}>답장하기</ResText>
+            <LetterModal show={showModal} onClose={closeModal} />
           </Response>
         </BottomSection>
         <LetterImage src="/assets/char3.png" />

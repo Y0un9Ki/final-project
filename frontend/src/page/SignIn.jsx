@@ -1,10 +1,11 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Header from "../components/Header";
 import LetterTextField from "../components/LetterTextField";
 import InputField from "../components/InputField";
 import { gsap } from "gsap";
 import Topbar from "../components/Topbar";
+import LetterModal from "../components/LetterModal";
 
 const SignIn = () => {
   const infoTextRefs = useRef([]);
