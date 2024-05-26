@@ -31,7 +31,7 @@ const SignUp = () => {
       <Topbar />
       <ContentSection>
         <LetteringTitle ref={(el) => (infoTitleRefs.current[0] = el)}>
-          <ContentLogo src="assets/usericon.png" />
+          <ContentLogo src="/assets/usericon.png" />
           회원가입
         </LetteringTitle>
         <LetteringTitle ref={(el) => (infoTitleRefs.current[1] = el)}>
@@ -56,7 +56,7 @@ const SignUp = () => {
         <InputField placeholder="서울특별시 영등포구 영등포로" type="text" />
         <LetterTextField />
         <LoginButton>
-          <Iconlogo src="assets/signicon.png" alt="hand icon" />
+          <Iconlogo src="/assets/signicon.png" alt="hand icon" />
           <BtnText>회원가입</BtnText>
         </LoginButton>
       </Body>

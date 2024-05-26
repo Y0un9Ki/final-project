@@ -31,7 +31,7 @@ const SignIn = () => {
       <Topbar />
       <ContentSection>
         <LetteringTitle ref={(el) => (infoTitleRefs.current[0] = el)}>
-          <ContentLogo src="assets/usericon.png" />
+          <ContentLogo src="/assets/usericon.png" />
           로그인
         </LetteringTitle>
         <LetteringTitle ref={(el) => (infoTitleRefs.current[1] = el)}>
@@ -48,11 +48,11 @@ const SignIn = () => {
         <InputField placeholder="************" type="password" />
         <LetterTextField />
         <LoginButton>
-          <Iconlogo src="assets/signicon.png" alt="hand icon" />
+          <Iconlogo src="/assets/signicon.png" alt="hand icon" />
           <BtnText>로그인</BtnText>
         </LoginButton>
         <KakaoLoginButton>
-          <Iconlogo src="assets/kakaoicon.png" alt="Kakao logo" />
+          <Iconlogo src="/assets/kakaoicon.png" alt="Kakao logo" />
           <BtnText>카카오 로그인</BtnText>
         </KakaoLoginButton>
       </Body>

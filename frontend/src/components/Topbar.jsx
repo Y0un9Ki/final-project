@@ -22,7 +22,7 @@ const Topbar = () => {
 
   return (
     <Container isScrolled={isScrolled}>
-      <Logo src={"assets/logo.png"} />
+      <Logo src={"/assets/logo.png"} />
     </Container>
   );
 };

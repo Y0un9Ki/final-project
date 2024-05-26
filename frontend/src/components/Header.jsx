@@ -18,7 +18,7 @@ const Header = () => {
   return (
     <>
       <Container>
-        <Logo src={"assets/logo.png"} />
+        <Logo src={"/assets/logo.png"} />
       </Container>
       <TextSection>
         <Text ref={textRef}>오늘 하루는 어때요?</Text>

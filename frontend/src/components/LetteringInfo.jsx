@@ -5,7 +5,7 @@ const LetteringInfo = () => {
   return (
     <Container>
       <ImageSection>
-        <Image src="assets/char2.png" />
+        <Image src="/assets/char2.png" />
       </ImageSection>
       <LetteringSection>
         <>

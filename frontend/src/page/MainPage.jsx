@@ -32,7 +32,7 @@ const MainPage = () => {
       <Topbar />
       <Info>
         <InfoImageSection>
-          <InfoImage src="assets/char.png" />
+          <InfoImage src="/assets/char.png" />
         </InfoImageSection>
         <InfoTextSection>
           <InfoText ref={(el) => (infoTextRefs.current[0] = el)}>
@@ -48,7 +48,7 @@ const MainPage = () => {
       </Info>
       <ContentSection>
         <LetteringTitle ref={(el) => (infoTitleRefs.current[0] = el)}>
-          <ContentLogo src="assets/letteringIcon.png" />
+          <ContentLogo src="/assets/letteringIcon.png" />
           레터링
         </LetteringTitle>
         <LetteringTitle ref={(el) => (infoTitleRefs.current[1] = el)}>
@@ -58,7 +58,7 @@ const MainPage = () => {
       <LetteringInfo />
       <ContentSection>
         <LetteringTitle ref={(el) => (infoTitleRefs.current[2] = el)}>
-          <ContentLogo src="assets/lifeIcon.png" />
+          <ContentLogo src="/assets/lifeIcon.png" />
           라이프
         </LetteringTitle>
         <LetteringTitle ref={(el) => (infoTitleRefs.current[3] = el)}>

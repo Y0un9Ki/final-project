@@ -30,7 +30,7 @@ const Lettering = () => {
       <Topbar />
       <ContentSection>
         <LetteringTitle ref={(el) => (infoTitleRefs.current[0] = el)}>
-          <ContentLogo src="assets/letteringIcon.png" />
+          <ContentLogo src="/assets/letteringIcon.png" />
           레터링
         </LetteringTitle>
         <LetteringTitle ref={(el) => (infoTitleRefs.current[1] = el)}>
@@ -52,7 +52,7 @@ const Lettering = () => {
             <ResText>답장하기</ResText>
           </Response>
         </BottomSection>
-        <LetterImage src="assets/char3.png" />
+        <LetterImage src="/assets/char3.png" />
       </Body>
     </Container>
   );

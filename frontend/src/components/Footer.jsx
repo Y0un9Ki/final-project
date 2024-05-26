@@ -7,19 +7,19 @@ const Footer = () => {
     <FooterContainer>
       <Nav>
         <StyledButton>
-          <NavIcon src="assets/homeicon.png" />
+          <NavIcon src="/assets/homeicon.png" />
           <NavTitle>메인</NavTitle>
         </StyledButton>
         <StyledButton>
-          <NavIcon src="assets/letteringicon.png" />
+          <NavIcon src="/assets/letteringicon.png" />
           <NavTitle>레터링</NavTitle>
         </StyledButton>
         <StyledButton>
-          <NavIcon src="assets/lifeicon.png" />
+          <NavIcon src="/assets/lifeicon.png" />
           <NavTitle>라이프</NavTitle>
         </StyledButton>
         <StyledButton>
-          <NavIcon src="assets/usericon.png" />
+          <NavIcon src="/assets/usericon.png" />
           <NavTitle>로그인</NavTitle>
         </StyledButton>
       </Nav>
