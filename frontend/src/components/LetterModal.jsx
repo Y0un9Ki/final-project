@@ -44,7 +44,7 @@ const LetterModal = ({ show, onClose }) => {
           {[...Array(10)].map((value, index) => {
             return <LetterTextField key={index} />;
           })}
-          <TextInput maxLength="230" placeholder="답장 내용을 입력해주세요!" />
+          <TextInput maxLength="180" placeholder="답장 내용을 입력해주세요!" />
           <ButtonSection>
             <SubmitButton>제출하기</SubmitButton>
             <CloseButton onClick={onClose}>닫기</CloseButton>
