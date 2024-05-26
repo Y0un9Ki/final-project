@@ -8,8 +8,10 @@ from user.models import User
 
 class Question(models.Model):
     id = models.AutoField(primary_key=True, unique=True, null=False)
+    # title = models.TextField(null=False, blank=False)
     content = models.TextField(null=False, blank=False)
-    update_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now_add=True) # auto_now_add 옵션은 인스턴스가 생성이 될 때의 시간이 설정되며 처음 생성 된 후로는 변경되지 않는다.
+    # create_date = models.DateTimeField(auto_now_add=True) # 이걸로 바꿀 예정이다.
     
     def __str__(self):
         return str(self.id) # 이것때문에 안되는 거였어 이거 무조건 블로그 써야되 영기야!!!!
@@ -19,7 +21,7 @@ class Answer(models.Model):
     user = models.ForeignKey(User, related_name='answer', on_delete=models.CASCADE)
     question = models.ForeignKey(Question, related_name='answer', on_delete=models.CASCADE)
     comment = models.TextField(null=True, blank=True)
-    update_date = models.DateTimeField(auto_now=True)
+    update_date = models.DateTimeField(auto_now=True) # auto_now 옵션은 인스턴스가 생성이 될 때 현재 시간이 설정되며 수정이 이루어지면 수정이 된 시간으로 값이 바뀐다.
     receive_point = models.BooleanField(default=False)
     
     def __str__(self):

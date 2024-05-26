@@ -17,19 +17,87 @@ from .models import Question, Answer
 from .serializers import QuestionSerializer, AnswerSerializer
 from .permission import IsOwnerOnly
 from user.models import User
+from .pagination import CustomPagination
 # Create your views here.
 
+# 우리의 latter기능 중에서 질문 ui를 보면 질문지 리스트에는 제목과 생성날짜만 보이게 된다.
+# 그렇기에 질문지 리스트에 대한 get요청이 왔을시에 백앤드에서는 질문지의 제목과 생성일자만 API로 보내줘야 한다.
+# 밑에 코드는 mixins를 이용해서 위에 요구를 만족한 코드이다.
+# pagination_class를 mixins부터는 지원하기에 편하게 코드를 짤 수 있다.
 class QuestionList(mixins.ListModelMixin,
                    generics.GenericAPIView):
     permission_classes = (AllowAny,)
     authentication_classes = [JWTAuthentication]
+    pagination_class = CustomPagination
     # permission_classes = (IsAuthenticated,)
     # authentication_classes = [BasicAuthentication, SessionAuthentication]
     serializer_class = QuestionSerializer
-    queryset = Question.objects.all()
+    queryset = Question.objects.values('content', 'update_date').order_by('update_date')
     
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
+
+# 우리의 latter기능 중에서 질문 ui를 보면 질문지 리스트에는 제목과 생성날짜만 보이게 된다.
+# 그렇기에 질문지 리스트에 대한 get요청이 왔을시에 백앤드에서는 질문지의 제목과 생성일자만 API로 보내줘야 한다.
+# 밑에 코드가 해당되는 코드이다.
+# APIView는 pagination_class를 지원하지 않기에 일일히 다 설정을 해주어야 한다.
+class QuestionListBack(APIView):
+    permission_classes = (AllowAny,)
+    authentication_classes = [JWTAuthentication]
+    
+    def get(self, request, *args, **kwargs):
+        questions = Question.objects.values('content', 'update_date').order_by('update_date')
+        paginator = CustomPagination()
+        result_page = paginator.paginate_queryset(questions, request)
+        serializer = QuestionSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
+        # return Response(questions)
+        
+class QuestionListTest(APIView):
+    permission_classes = (AllowAny,)
+    authentication_classes = [JWTAuthentication]
+    
+    def get(self, request, *args, **kwargs):
+        questions = Question.objects.values('content', 'update_date').order_by('update_date')
+        serializer = QuestionSerializer(questions, many=True)
+        return Response(serializer.data)
+
+    # def get(self, request, *args, **kwargs):
+    #     questions = Question.objects.values('content', 'update_date').order_by('update_date')
+    #     return Response(questions)
+    # 2개의 get함수에 정의를 잘 한번 보자.
+    # 2개의 방법은 데이터를 처리하는 방법에서 차이가 존재한다. 
+    # 첫번째 코드는 serializer로 데이터를 가공해서 응답을 주고
+    # 두번째 코드는 serializer에 가공 없이 원본데이터로 응답을 준다의 차이인데 솔직히 잘 모르겠다.
+#------------------------------------------------------------------------------------------------------
+
+class QuestionListSplit(APIView):
+    permission_classes = (AllowAny,)
+    authentication_classes = [JWTAuthentication]
+    
+    def get(self, request, *args, **kwargs):
+        questions = Question.objects.values('id', 'content', 'update_date').order_by('update_date')
+        serializer = QuestionSerializer(questions, many=True)
+        divided_contents_list = []
+        for item in serializer.data:
+            divided_contents = []
+            content = item['content']
+            # print(content)
+            # print(len(content))
+            if len(content) > 20:
+                start = 0
+                while start < len(content):
+                    divided_contents.append(content[start:start+20])
+                    start +=20
+            else:
+                divided_contents.append(content)
+            divided_contents_list.append({
+        'question_id': item['id'],  # 질문의 고유 식별자 등을 여기에 추가
+        'divided_contents': divided_contents,
+        'question_date': item['update_date']
+    })
+        return Response(divided_contents_list)
+
     
 class QuestionCreate(mixins.CreateModelMixin,
                      generics.GenericAPIView):
@@ -41,26 +109,42 @@ class QuestionCreate(mixins.CreateModelMixin,
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
     
+class QuestionDetail(APIView):
+    permission_classes = (AllowAny,)
+    authentication_classes = [JWTAuthentication]
     
-class QuestionDetail(mixins.UpdateModelMixin,
-                     mixins.DestroyModelMixin,
-                     mixins.RetrieveModelMixin,
-                     generics.GenericAPIView):
-    permission_classes = (IsAdminUser,)
-    authentication_classes=[JWTAuthentication]
-    serializer_class = QuestionSerializer
-    queryset = Question.objects.all()
-    
+    def get_object(self, pk):
+        try:
+            question = Question.objects.get(pk=pk)
+            return question
+        except Question.DoesNotExist: 
+            raise NotFound({'message':'질문이 존재하지 않습니다.'})
         
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
-    
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-    
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
+    def get(self, request, pk, format=None):
+        question = self.get_object(pk)
+        serializer = QuestionSerializer(question)
+        
+        content = serializer.data['content']
+        divided_contents = []
+        
+        if len(content) > 20:
+            start = 0
+            while start < len(content):
+                divided_contents.append(content[start:start+20])
+                start += 20
+        else:
+            divided_contents.append(content)
+        
+        response_data = {
+            'question_id': serializer.data['id'],
+            'question_content': divided_contents,
+            'question_date': serializer.data['update_date']
+        }
+        
+        return Response(response_data)
 
+
+        # return Response(serializer.data)
     
 class AnswerCreate(mixins.CreateModelMixin,
                    generics.GenericAPIView):
@@ -99,6 +183,7 @@ class AnswerCreate(mixins.CreateModelMixin,
     #         user.point=0
     #     user.point += 100
     #     user.save()
+    # 블로그에 정리하기!!!
         
         
 class AnswerDetailQuestion(APIView):
@@ -120,9 +205,25 @@ class AnswerDetailQuestion(APIView):
     def get(self, request, pk, format=None):
         answer=self.get_object(pk)
         self.check_object_permissions(request, answer)
-        
         serializer = AnswerSerializer(answer)
-        return Response(serializer.data)
+        comment = serializer.data['comment']
+        divided_comment = []
+        if len(comment) > 20:
+            start = 0
+            while start < len(comment):
+                divided_comment.append(comment[start:start+20])
+                start += 20
+        else:
+            divided_comment.append(comment)
+        
+        response_data = {
+            'answer_id': serializer.data['id'],
+            'user_id': serializer.data['user'],
+            'question_id': serializer.data['question'],
+            'answer_comment': divided_comment,
+            'answer_date': serializer.data['update_date']
+        }
+        return Response(response_data)
     
     def put(self, request, pk, format=None):
         answer = self.get_object(pk)
@@ -132,12 +233,6 @@ class AnswerDetailQuestion(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# get_queryset()과 get_object()의 차이점 언제 사용하는지 어느 클래스 밑에 상속되어있는 메서드인지 공부해서 블로그 작성하자!!!
-
-# 이것은 해당 유저의 answer을 모두 가지고 오는 API이다.
-# 여기서 알게 된 점은 우리가 단일객체를 들고 올 때에는(self.object.get 즉, get으로 가지고 올 떄) get_object라는 함수를 이용해서 정의를 해줬는데
-# AnswerList는 filter를 이용해서 해당되는 여러개의 객체들을 쿼리셋의 형태로 가지고 오게 된다.
-# 그렇기에 쿼리셋으로 가지고 오게 될때에는 get_queryset을 정의해주어야 한다.
 # 밑에 코드는 APIView를 이용해서 만든 코드
 class AnswerList(APIView):
     # permission_classes = [IsAuthenticated]
@@ -172,17 +267,6 @@ class AnswerList(APIView):
 #             return answer
 #         else:
 #             raise NotFound({'message': '해당하는 데이터가 존재하지 않습니다.'})
-    
-#     def get(self, request, *args, **kwargs):
-#         return self.list(request,*args, **kwargs)
-
-
-# # 필요없다.  
-# class AnswerList(mixins.ListModelMixin,
-#                 generics.GenericAPIView):
-#     permission_classes = (IsAuthenticated,)
-#     serializer_class = AnswerSerializer
-#     queryset = Answer.objects.all()
     
 #     def get(self, request, *args, **kwargs):
 #         return self.list(request,*args, **kwargs)

@@ -24,7 +24,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     location = models.CharField(null=False, max_length=100, help_text={'message' : '사는 곳을 꼭 입력해주세요'})
     number = models.CharField(validators=[number_validator], blank=False, null=False, max_length=20, help_text={'message' : '휴대전화 번호를 정확히 입력해주세요'})
     point = models.PositiveIntegerField(null=True, blank=True, default=0)
-    update_date = models.DateTimeField(auto_now_add=True)
+    # create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
     
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
