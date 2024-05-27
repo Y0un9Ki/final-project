@@ -53,7 +53,7 @@ const SignUp = () => {
             <LetterTextField text="비밀번호를 확인해주세요" />
             <InputField placeholder="************" type="password" />
             <LetterTextField text="생년월일을 입력해주세요" />
-            <InputField placeholder="2024-01-01" type="text" />
+            <InputField placeholder="20240101" type="text" />
             <LetterTextField text="전화번호를 입력해주세요" />
             <InputField placeholder="01012345678" type="text" />
             <LetterTextField text="주소를 입력해주세요" />

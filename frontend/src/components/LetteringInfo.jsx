@@ -67,7 +67,7 @@ const ImageSection = styled.section`
 `;
 
 const Image = styled.img`
-  height: 90%;
+  width: 70%;
 `;
 
 const LetteringSection = styled.section`
