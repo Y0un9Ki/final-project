@@ -52,15 +52,16 @@ class QuestionListBack(APIView):
         serializer = QuestionSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
         # return Response(questions)
-        
-class QuestionListTest(APIView):
-    permission_classes = (AllowAny,)
-    authentication_classes = [JWTAuthentication]
+
+#-----------------------------------------------------------------------------------------------------       
+# class QuestionListTest(APIView):
+#     permission_classes = (AllowAny,)
+#     authentication_classes = [JWTAuthentication]
     
-    def get(self, request, *args, **kwargs):
-        questions = Question.objects.values('content', 'update_date').order_by('update_date')
-        serializer = QuestionSerializer(questions, many=True)
-        return Response(serializer.data)
+#     def get(self, request, *args, **kwargs):
+#         questions = Question.objects.values('content', 'update_date').order_by('update_date')
+#         serializer = QuestionSerializer(questions, many=True)
+#         return Response(serializer.data)
 
     # def get(self, request, *args, **kwargs):
     #     questions = Question.objects.values('content', 'update_date').order_by('update_date')
@@ -71,32 +72,32 @@ class QuestionListTest(APIView):
     # 두번째 코드는 serializer에 가공 없이 원본데이터로 응답을 준다의 차이인데 솔직히 잘 모르겠다.
 #------------------------------------------------------------------------------------------------------
 
-class QuestionListSplit(APIView):
-    permission_classes = (AllowAny,)
-    authentication_classes = [JWTAuthentication]
+# class QuestionListSplit(APIView):
+#     permission_classes = (AllowAny,)
+#     authentication_classes = [JWTAuthentication]
     
-    def get(self, request, *args, **kwargs):
-        questions = Question.objects.values('id', 'content', 'update_date').order_by('update_date')
-        serializer = QuestionSerializer(questions, many=True)
-        divided_contents_list = []
-        for item in serializer.data:
-            divided_contents = []
-            content = item['content']
-            # print(content)
-            # print(len(content))
-            if len(content) > 20:
-                start = 0
-                while start < len(content):
-                    divided_contents.append(content[start:start+20])
-                    start +=20
-            else:
-                divided_contents.append(content)
-            divided_contents_list.append({
-        'question_id': item['id'],  # 질문의 고유 식별자 등을 여기에 추가
-        'divided_contents': divided_contents,
-        'question_date': item['update_date']
-    })
-        return Response(divided_contents_list)
+#     def get(self, request, *args, **kwargs):
+#         questions = Question.objects.values('id', 'content', 'update_date').order_by('update_date')
+#         serializer = QuestionSerializer(questions, many=True)
+#         divided_contents_list = []
+#         for item in serializer.data:
+#             divided_contents = []
+#             content = item['content']
+#             # print(content)
+#             # print(len(content))
+#             if len(content) > 20:
+#                 start = 0
+#                 while start < len(content):
+#                     divided_contents.append(content[start:start+20])
+#                     start +=20
+#             else:
+#                 divided_contents.append(content)
+#             divided_contents_list.append({
+#         'question_id': item['id'],  # 질문의 고유 식별자 등을 여기에 추가
+#         'divided_contents': divided_contents,
+#         'question_date': item['update_date']
+#     })
+#         return Response(divided_contents_list)
 
     
 class QuestionCreate(mixins.CreateModelMixin,
@@ -144,8 +145,28 @@ class QuestionDetail(APIView):
         return Response(response_data)
 
 
-        # return Response(serializer.data)
+class AnswerCreate(APIView):
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = [BasicAuthentication, SessionAuthentication]
     
+    def post(self, request, format=None):
+        serializer = AnswerSerializer(data=request.data)
+        if serializer.is_valid():
+            user=self.request.user
+            last_received_answer = Answer.objects.filter(user=user, receive_point=True).order_by('-update_date').first()
+            if last_received_answer is None or last_received_answer.update_date < timezone.now() - timedelta(days=1):
+                if user.point is None:
+                    user.point = 0
+                user.point += 100
+                user.save()
+                answer = serializer.save(user=user)
+                if answer.receive_point==False:
+                    answer.receive_point=True
+                    answer.save()
+                
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
 class AnswerCreate(mixins.CreateModelMixin,
                    generics.GenericAPIView):
     # permission_classes=(IsAuthenticated,)
@@ -204,7 +225,7 @@ class AnswerDetailQuestion(APIView):
         
     def get(self, request, pk, format=None):
         answer=self.get_object(pk)
-        self.check_object_permissions(request, answer)
+        # self.check_object_permissions(request, answer)
         serializer = AnswerSerializer(answer)
         comment = serializer.data['comment']
         divided_comment = []

@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'rest_framework_simplejwt',
     'latter',
+    'ecommerce',
     'corsheaders',
 ]
 
@@ -153,3 +154,5 @@ SIMPLE_JWT = {
     'TOKEN_TYPE_CLAIM': 'token_type',
 }
 
+# media root
+MEDIA_ROOT = BASE_DIR / 'media'
