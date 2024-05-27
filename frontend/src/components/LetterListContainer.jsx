@@ -1,11 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import axios from "axios";
 
 const LetterListContainer = () => {
+  const [image, setImage] = useState("");
+
+  useEffect(() => {
+    const url = `https://api.unsplash.com/search/photos`;
+
+    axios
+      .get(url, {
+        params: {
+          query: "letter",
+          client_id: "",
+          per_page: 12,
+        },
+      })
+      .then((response) => {
+        if (response.data.results.length > 0) {
+          setImage(
+            response.data.results[Math.floor(Math.random() * 12)].urls.small
+          );
+        }
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching photos:", error);
+      });
+  }, []);
+
   return (
     <Container>
       <ImageSection>
-        <Image />
+        <Image src={image} />
       </ImageSection>
     </Container>
   );
@@ -35,6 +62,14 @@ const ImageSection = styled.section`
   width: 30%;
   height: 80px;
   background-color: #e6e1e1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
-const Image = styled.img``;
+const Image = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+`;

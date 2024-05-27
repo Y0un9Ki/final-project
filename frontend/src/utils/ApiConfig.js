@@ -1,7 +1,3 @@
-import React from "react";
+const API = {};
 
-const ApiConfig = () => {
-  return <div></div>;
-};
-
-export default ApiConfig;
+export default API;
