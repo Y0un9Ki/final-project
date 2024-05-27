@@ -19,6 +19,8 @@ from .permission import IsOwnerOnly
 from user.models import User
 from .pagination import CustomPagination
 # Create your views here.
+# Question API part.
+
 
 # 우리의 latter기능 중에서 질문 ui를 보면 질문지 리스트에는 제목과 생성날짜만 보이게 된다.
 # 그렇기에 질문지 리스트에 대한 get요청이 왔을시에 백앤드에서는 질문지의 제목과 생성일자만 API로 보내줘야 한다.
@@ -27,12 +29,12 @@ from .pagination import CustomPagination
 class QuestionList(mixins.ListModelMixin,
                    generics.GenericAPIView):
     permission_classes = (AllowAny,)
-    authentication_classes = [JWTAuthentication]
+    # authentication_classes = [JWTAuthentication]
     pagination_class = CustomPagination
     # permission_classes = (IsAuthenticated,)
-    # authentication_classes = [BasicAuthentication, SessionAuthentication]
+    authentication_classes = [BasicAuthentication, SessionAuthentication]
     serializer_class = QuestionSerializer
-    queryset = Question.objects.values('content', 'update_date').order_by('update_date')
+    queryset = Question.objects.values('title', 'create_date').order_by('create_date')
     
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
@@ -43,10 +45,11 @@ class QuestionList(mixins.ListModelMixin,
 # APIView는 pagination_class를 지원하지 않기에 일일히 다 설정을 해주어야 한다.
 class QuestionListBack(APIView):
     permission_classes = (AllowAny,)
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [BasicAuthentication, SessionAuthentication]
+    # authentication_classes = [JWTAuthentication]
     
     def get(self, request, *args, **kwargs):
-        questions = Question.objects.values('content', 'update_date').order_by('update_date')
+        questions = Question.objects.values('title', 'create_date').order_by('create_date')
         paginator = CustomPagination()
         result_page = paginator.paginate_queryset(questions, request)
         serializer = QuestionSerializer(result_page, many=True)
@@ -103,7 +106,8 @@ class QuestionListBack(APIView):
 class QuestionCreate(mixins.CreateModelMixin,
                      generics.GenericAPIView):
     permission_classes = (IsAdminUser,)
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [BasicAuthentication, SessionAuthentication]
+    # authentication_classes = [JWTAuthentication]
     serializer_class = QuestionSerializer
     queryset = Question.objects.all()
     
@@ -112,7 +116,8 @@ class QuestionCreate(mixins.CreateModelMixin,
     
 class QuestionDetail(APIView):
     permission_classes = (AllowAny,)
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [BasicAuthentication, SessionAuthentication]
+    # authentication_classes = [JWTAuthentication]
     
     def get_object(self, pk):
         try:
@@ -145,27 +150,30 @@ class QuestionDetail(APIView):
         return Response(response_data)
 
 
-class AnswerCreate(APIView):
-    permission_classes = (IsAuthenticated,)
-    authentication_classes = [BasicAuthentication, SessionAuthentication]
+# Answer API part.
+
+# APIView로 짠 AnswerCreate
+# class AnswerCreate(APIView):
+#     permission_classes = (IsAuthenticated,)
+#     authentication_classes = [BasicAuthentication, SessionAuthentication]
     
-    def post(self, request, format=None):
-        serializer = AnswerSerializer(data=request.data)
-        if serializer.is_valid():
-            user=self.request.user
-            last_received_answer = Answer.objects.filter(user=user, receive_point=True).order_by('-update_date').first()
-            if last_received_answer is None or last_received_answer.update_date < timezone.now() - timedelta(days=1):
-                if user.point is None:
-                    user.point = 0
-                user.point += 100
-                user.save()
-                answer = serializer.save(user=user)
-                if answer.receive_point==False:
-                    answer.receive_point=True
-                    answer.save()
+#     def post(self, request, format=None):
+#         serializer = AnswerSerializer(data=request.data)
+#         if serializer.is_valid():
+#             user=self.request.user
+#             last_received_answer = Answer.objects.filter(user=user, receive_point=True).order_by('-update_date').first()
+#             if last_received_answer is None or last_received_answer.update_date < timezone.now() - timedelta(days=1):
+#                 if user.point is None:
+#                     user.point = 0
+#                 user.point += 100
+#                 user.save()
+#                 answer = serializer.save(user=user)
+#                 if answer.receive_point==False:
+#                     answer.receive_point=True
+#                     answer.save()
                 
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 class AnswerCreate(mixins.CreateModelMixin,
                    generics.GenericAPIView):
@@ -194,17 +202,6 @@ class AnswerCreate(mixins.CreateModelMixin,
                 answer.save()
                 
         serializer.save(user=user)
-        
-    # def perform_create(self, serializer):
-    #     serializer.save(user=self.request.user)
-    #     # 사용자가 answer를 만들면은 사용자의 point가 자동으로 증가하는 로직을 구현한 것
-    #     # 하지만 이것의 문제는 답장을 계속 만들면 무조건 포인트가 증가한다는 것이다.
-    #     user = self.request.user
-    #     if user.point is None:
-    #         user.point=0
-    #     user.point += 100
-    #     user.save()
-    # 블로그에 정리하기!!!
         
         
 class AnswerDetailQuestion(APIView):
@@ -291,30 +288,3 @@ class AnswerList(APIView):
     
 #     def get(self, request, *args, **kwargs):
 #         return self.list(request,*args, **kwargs)
-
-# 필요없다.
-class AnswerOwnerList(APIView):
-    permission_classes = (IsOwnerOnly,)
-    authentication_classes = [JWTAuthentication]
-    def get_object(self, email):
-        try:
-            user = User.objects.get(email=email)
-            return Answer.objects.filter(user = user)
-        except User.DoesNotExist:
-            raise NotFound({'message': '이 요청은 존재하지 않는 요청입니다.'}) # ==> 예외처리 시에는 꼭 DRF에서 지원하는 예외처리 클래스를 사용하자(PermissionDenied, NotFound, ValidationError 등)
-        
-    def get(self, request, email, format=None): # ==> get은 클라이언트로부터 온 요청이기에 email이 변수로 들어간 것은 우리가 urls.py에서 <str:email>로 설정해서 요청이 email로 들어오기 때문에 email이 되어야 한다.
-                                                #     만약 urls.py에서 <int:pk>로 되어있었다면 get에는 pk의 변수가 들어가야 한다. (블로그에 작성하기!!!)
-        answer = self.get_object(email)
-        
-        for answers in answer:
-            self.check_object_permissions(request, answers)
-        # 1. 위에 for구문의 2줄은 이걸 쓰지 않으면 내가 만들어 놓은 권한이 작동을 하지 않는다.
-        # 1. 위에 for구문의 코드 2줄을 작성해야만이 내가 설정한 권한이 잘 작동을 한다.
-        # --> 1.질문에 대한 답 : 우리는 AnswerOwnerList class에서 get_object 함수 안에 filter라는 ORM을 사용하여 단일 객체가 아닌 Answer 모델의 객체들의 쿼리셋을 즉, 여러 Answer의 객체를 들고왔다.
-        #                    그렇기에 우리는 for문을 통해서 filter로 불러와진 Answer의 쿼리셋을 벗겨내주고 Answer의 모델 하나하나에 permission을 적용하기 위해서 for구문을 사용했다.
-        #                    이 부분도 블로그 작성하자!!!!!
-        # 2. 그리고 권한클래스에도 IsAuthenticated를 같이 써줘야 IsOwnerOnly가 작동을 한다 왜그런걸까?
-        # --> 2.질문에 대한 답은 permission.py에 정리해놨다. 이거보고 블로그 작성하기
-        serializer = AnswerSerializer(answer, many=True)
-        return Response(serializer.data)
