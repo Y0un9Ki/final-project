@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
+import IconButton from "@mui/material/IconButton";
 
 const Footer = () => {
   const navigate = useNavigate();
@@ -13,32 +14,32 @@ const Footer = () => {
           onClick={() => {
             navigate("/");
           }}
+          startIcon={<NavIcon src="/assets/homeicon.png" />}
         >
-          <NavIcon src="/assets/homeicon.png" />
           <NavTitle>메인</NavTitle>
         </StyledButton>
         <StyledButton
           onClick={() => {
             navigate("/letterlist");
           }}
+          startIcon={<NavIcon src="/assets/letteringicon.png" />}
         >
-          <NavIcon src="/assets/letteringicon.png" />
           <NavTitle>레터링</NavTitle>
         </StyledButton>
         <StyledButton
           onClick={() => {
             navigate("/lifelist");
           }}
+          startIcon={<NavIcon src="/assets/lifeicon.png" />}
         >
-          <NavIcon src="/assets/lifeicon.png" />
           <NavTitle>라이프</NavTitle>
         </StyledButton>
         <StyledButton
           onClick={() => {
             navigate("/signin");
           }}
+          startIcon={<NavIcon src="/assets/usericon.png" />}
         >
-          <NavIcon src="/assets/usericon.png" />
           <NavTitle>로그인</NavTitle>
         </StyledButton>
       </Nav>
@@ -59,9 +60,6 @@ const FooterContainer = styled.footer`
   text-align: center;
   box-sizing: border-box;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-  @media (max-width: 600px) {
-    padding: 10px 5px;
-  }
 `;
 
 const Nav = styled.nav`
@@ -89,6 +87,7 @@ const NavIcon = styled.img`
 `;
 
 const NavTitle = styled.p`
+  font-size: 14px;
   padding-left: 10px;
   color: black;
 `;

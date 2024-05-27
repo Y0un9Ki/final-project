@@ -6,10 +6,12 @@ import InputField from "../components/InputField";
 import { gsap } from "gsap";
 import Topbar from "../components/Topbar";
 import Grow from "@mui/material/Grow";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const infoTextRefs = useRef([]);
   const infoTitleRefs = useRef([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     gsap.from(infoTextRefs.current, {
@@ -43,7 +45,6 @@ const SignUp = () => {
         <div>
           <Body>
             <LetterTextField text="👋 만나서 반가워요" />
-            <LetterTextField text="🙌 오늘 하루도 화이팅!" />
             <LetterTextField />
             <LetterTextField text="사용하실 아이디를 입력해주세요" />
             <InputField placeholder="HowAreYou@email.com" type="text" />
@@ -65,6 +66,16 @@ const SignUp = () => {
               <Iconlogo src="/assets/signicon.png" alt="hand icon" />
               <BtnText>회원가입</BtnText>
             </LoginButton>
+            <SignupFooter>
+              <Text>이미 가입하셨나요?</Text>
+              <SignText
+                onClick={() => {
+                  navigate("/signin");
+                }}
+              >
+                로그인 하기
+              </SignText>
+            </SignupFooter>
           </Body>
         </div>
       </Grow>
@@ -140,4 +151,27 @@ const LetteringTitle = styled.p`
 const ContentLogo = styled.img`
   width: 24px;
   margin-right: 10px;
+`;
+
+const SignupFooter = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Text = styled.p`
+  font-size: 14px;
+  margin: 4px;
+  cursor: pointer;
+`;
+
+const SignText = styled.p`
+  font-size: 14px;
+  margin: 4px;
+  cursor: pointer;
+  color: #aaa;
+  transition: color 0.3s ease;
+  &:hover {
+    color: #000;
+  }
 `;

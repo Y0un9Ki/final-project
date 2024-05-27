@@ -21,6 +21,14 @@ const Container = styled.div`
   border-radius: 6px;
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  cursor: pointer;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 6px 6px 15px rgba(0, 0, 0, 0.2);
+  }
 `;
 
 const ImageSection = styled.section`

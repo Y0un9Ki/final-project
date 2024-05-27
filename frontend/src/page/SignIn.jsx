@@ -7,10 +7,12 @@ import { gsap } from "gsap";
 import Topbar from "../components/Topbar";
 import LetterModal from "../components/LetterModal";
 import Grow from "@mui/material/Grow";
+import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
   const infoTextRefs = useRef([]);
   const infoTitleRefs = useRef([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     gsap.from(infoTextRefs.current, {
@@ -51,6 +53,7 @@ const SignIn = () => {
             <LetterTextField text="비밀번호를 입력해주세요" />
             <InputField placeholder="************" type="password" />
             <LetterTextField />
+
             <LoginButton>
               <Iconlogo src="/assets/signicon.png" alt="hand icon" />
               <BtnText>로그인</BtnText>
@@ -59,6 +62,16 @@ const SignIn = () => {
               <Iconlogo src="/assets/kakaoicon.png" alt="Kakao logo" />
               <BtnText>카카오 로그인</BtnText>
             </KakaoLoginButton>
+            <SignupFooter>
+              <Text>회원이 아니신가요?</Text>
+              <SignText
+                onClick={() => {
+                  navigate("/signup");
+                }}
+              >
+                회원가입 하기
+              </SignText>
+            </SignupFooter>
           </Body>
         </div>
       </Grow>
@@ -141,4 +154,27 @@ const LetteringTitle = styled.p`
 const ContentLogo = styled.img`
   width: 24px;
   margin-right: 10px;
+`;
+
+const SignupFooter = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Text = styled.p`
+  font-size: 14px;
+  margin: 4px;
+  cursor: pointer;
+`;
+
+const SignText = styled.p`
+  font-size: 14px;
+  margin: 4px;
+  cursor: pointer;
+  color: #aaa;
+  transition: color 0.3s ease;
+  &:hover {
+    color: #000;
+  }
 `;

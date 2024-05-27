@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { gsap } from "gsap";
 import Topbar from "../components/Topbar";
@@ -11,6 +11,10 @@ import Grow from "@mui/material/Grow";
 const MainPage = () => {
   const infoTextRefs = useRef([]);
   const infoTitleRefs = useRef([]);
+  const [showModal, setShowModal] = useState(false);
+
+  const openModal = () => setShowModal(true);
+  const closeModal = () => setShowModal(false);
 
   useEffect(() => {
     gsap.from(infoTextRefs.current, {
@@ -87,7 +91,7 @@ export default MainPage;
 
 const Container = styled.div`
   margin: auto;
-  padding-bottom: 20px;
+  padding-bottom: 60px;
   max-width: 600px;
   min-height: 100vh;
   background-color: #f4f4f4;

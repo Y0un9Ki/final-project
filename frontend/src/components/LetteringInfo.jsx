@@ -1,27 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import Grow from "@mui/material/Grow";
+import LoginCheckModal from "./LoginCheckModal";
 
 const LetteringInfo = () => {
+  const [showModal, setShowModal] = useState(false);
+
+  const openModal = () => setShowModal(true);
+  const closeModal = () => setShowModal(false);
   return (
-    <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
-      <div>
-        <Container>
-          <ImageSection>
-            <Image src="/assets/char2.png" />
-          </ImageSection>
-          <LetteringSection>
-            <>
-              <Text delay="0.5s">편지가 도착했어요!</Text>
-              <Text delay="1.5s">당신의 이야기를 들려주세요!</Text>
-              <Text delay="2.5s">행복한 하루가 되길 응원할게요!</Text>
-              <Text delay="3.5s">화이팅! 😄</Text>
-            </>
-            <Response>답장하기</Response>
-          </LetteringSection>
-        </Container>
-      </div>
-    </Grow>
+    <>
+      <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+        <div>
+          <Container>
+            <ImageSection>
+              <Image src="/assets/char2.png" />
+            </ImageSection>
+            <LetteringSection>
+              <>
+                <Text delay="0.5s">편지가 도착했어요!</Text>
+                <Text delay="1.5s">당신의 이야기를 들려주세요!</Text>
+                <Text delay="2.5s">행복한 하루가 되길 응원할게요!</Text>
+                <Text delay="3.5s">화이팅! 😄</Text>
+              </>
+              <Response onClick={openModal}>답장하기</Response>
+            </LetteringSection>
+          </Container>
+        </div>
+      </Grow>
+      <LoginCheckModal show={showModal} onClose={closeModal} />
+    </>
   );
 };
 
@@ -40,6 +48,13 @@ const Container = styled.div`
   border-radius: 12px;
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.3s ease;
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 6px 6px 15px rgba(0, 0, 0, 0.2);
+  }
 `;
 
 const ImageSection = styled.section`
