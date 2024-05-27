@@ -31,9 +31,7 @@ const LetterListContainer = () => {
 
   return (
     <Container>
-      <ImageSection>
-        <Image src={image} />
-      </ImageSection>
+      <ImageSection>{image && <Image src={image} />}</ImageSection>
     </Container>
   );
 };
