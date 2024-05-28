@@ -7,6 +7,8 @@ import IconButton from "@mui/material/IconButton";
 const Footer = () => {
   const navigate = useNavigate();
 
+  const token = localStorage.getItem("AuthToken");
+
   return (
     <FooterContainer>
       <Nav>
@@ -34,14 +36,25 @@ const Footer = () => {
         >
           <NavTitle>라이프</NavTitle>
         </StyledButton>
-        <StyledButton
-          onClick={() => {
-            navigate("/signin");
-          }}
-          startIcon={<NavIcon src="/assets/usericon.png" />}
-        >
-          <NavTitle>로그인</NavTitle>
-        </StyledButton>
+        {!token ? (
+          <StyledButton
+            onClick={() => {
+              navigate("/signin");
+            }}
+            startIcon={<NavIcon src="/assets/usericon.png" />}
+          >
+            <NavTitle>로그인</NavTitle>
+          </StyledButton>
+        ) : (
+          <StyledButton
+            onClick={() => {
+              navigate("/mypage");
+            }}
+            startIcon={<NavIcon src="/assets/usericon.png" />}
+          >
+            <NavTitle>마이페이지</NavTitle>
+          </StyledButton>
+        )}
       </Nav>
     </FooterContainer>
   );

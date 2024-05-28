@@ -8,6 +8,7 @@ import Topbar from "../components/Topbar";
 import LetterModal from "../components/LetterModal";
 import Grow from "@mui/material/Grow";
 import { useNavigate } from "react-router-dom";
+import { API } from "../utils/ApiConfig";
 
 const SignIn = () => {
   const infoTextRefs = useRef([]);
@@ -23,9 +24,28 @@ const SignIn = () => {
     setInputValue({ ...inputValue, [name]: value });
   };
 
-  console.log(inputValue);
+  const loginHandler = () => {
+    fetch(`${API.signin}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: inputValue.email,
+        password: inputValue.password,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.message === "로그인에 성공하였습니다") {
+          localStorage.setItem("AuthToken", res.access);
+        }
+        console.log(res.message);
+      });
+  };
 
   useEffect(() => {
+    if (localStorage.getItem("AuthToken")) {
+      navigate("/");
+    }
     gsap.from(infoTextRefs.current, {
       duration: 1,
       y: 20,
@@ -79,7 +99,7 @@ const SignIn = () => {
 
             <LoginButton>
               <Iconlogo src="/assets/signicon.png" alt="hand icon" />
-              <BtnText>로그인</BtnText>
+              <BtnText onClick={loginHandler}>로그인</BtnText>
             </LoginButton>
             <KakaoLoginButton>
               <Iconlogo src="/assets/kakaoicon.png" alt="Kakao logo" />

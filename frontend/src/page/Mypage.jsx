@@ -5,12 +5,47 @@ import Topbar from "../components/Topbar";
 import LetterTextField from "../components/LetterTextField";
 import { gsap } from "gsap";
 import Grow from "@mui/material/Grow";
+import { API } from "../utils/ApiConfig";
 
 const Mypage = () => {
   const infoTextRefs = useRef([]);
   const infoTitleRefs = useRef([]);
+  const token = localStorage.getItem("AuthToken");
+  const [data, setData] = useState("");
+
+  const formattingDate = (dateStr) => {
+    const date = new Date(dateStr);
+    return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
+  };
+
+  const formattingNumber = (phoneNumber) => {
+    const cleaned = ("" + phoneNumber).replace(/\D/g, "");
+    const match = cleaned.match(/^(\d{3})(\d{4})(\d{4})$/);
+    if (match) {
+      return match[1] + " - " + match[2] + " - " + match[3];
+    }
+    return phoneNumber;
+  };
 
   useEffect(() => {
+    fetch(`${API.mypage}`, {
+      headers: {
+        Authorization: `JWT ${token}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setData(data);
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+
     gsap.from(infoTextRefs.current, {
       duration: 1,
       y: 20,
@@ -54,19 +89,19 @@ const Mypage = () => {
             <LetterTextField />
             <TopSection>
               <LetterTextField text="보유 포인트" />
-              <LetterTextField text="15,000" />
+              <LetterTextField text={!data?.point ? 0 : data?.point} />
             </TopSection>
             <LetterTextField />
             <LetterTextField text="아이디" />
-            <LetterTextField />
+            <LetterTextField text={data?.email} />
             <LetterTextField text="이름" />
-            <LetterTextField />
+            <LetterTextField text={data?.username} />
             <LetterTextField text="생년월일" />
-            <LetterTextField />
+            <LetterTextField text={formattingDate(data?.birthday)} />
             <LetterTextField text="전화번호" />
-            <LetterTextField />
+            <LetterTextField text={formattingNumber(data?.number)} />
             <LetterTextField text="주소" />
-            <LetterTextField />
+            <LetterTextField text={data?.location} />
             <LetterTextField />
             <EditButton>
               <Iconlogo src="/assets/editicon.png" alt="hand icon" />

@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const LetterListContainer = () => {
+const LetterListContainer = ({ title, date }) => {
   const [image, setImage] = useState("");
+  const navigate = useNavigate();
+
+  const formattingDate = (dateStr) => {
+    const date = new Date(dateStr);
+    return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
+  };
 
   useEffect(() => {
     const url = `https://api.unsplash.com/search/photos`;
-
     const ACCESS_KEY = process.env.REACT_APP_ACCESS_KEY;
     console.log(ACCESS_KEY);
     axios
@@ -32,8 +38,16 @@ const LetterListContainer = () => {
   }, []);
 
   return (
-    <Container>
+    <Container
+      onClick={() => {
+        navigate(`/lettering`);
+      }}
+    >
       <ImageSection>{image && <Image src={image} />}</ImageSection>
+      <TextSection>
+        <Title>{title}</Title>
+        <SubTitle>{formattingDate(date)}</SubTitle>
+      </TextSection>
     </Container>
   );
 };
@@ -72,4 +86,28 @@ const Image = styled.img`
   height: 100%;
   object-fit: cover;
   object-position: center;
+`;
+
+const TextSection = styled.section`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 70%;
+  height: 80px;
+`;
+
+const Title = styled.p`
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
+  font-size: 18px;
+  height: 50px;
+`;
+
+const SubTitle = styled.p`
+  display: flex;
+  color: #777;
+  margin-left: 24px;
+  font-size: 14px;
+  height: 30px;
 `;

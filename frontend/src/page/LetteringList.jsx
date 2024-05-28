@@ -5,12 +5,31 @@ import LetterListContainer from "../components/LetterListContainer";
 import { gsap } from "gsap";
 import Pagination from "@mui/material/Pagination";
 import Grow from "@mui/material/Grow";
+import { API } from "../utils/ApiConfig";
 
 const LetteringList = () => {
   const infoTextRefs = useRef([]);
   const infoTitleRefs = useRef([]);
-
+  const token = localStorage.getItem("AuthToken");
   useEffect(() => {
+    fetch(`${API.letterList}`, {
+      headers: {
+        Authorization: `JWT ${token}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+
     gsap.from(infoTextRefs.current, {
       duration: 1,
       y: 20,

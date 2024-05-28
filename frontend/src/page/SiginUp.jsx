@@ -17,6 +17,7 @@ const SignUp = () => {
     email: "",
     password: "",
     password2: "",
+    username: "",
     birthday: "",
     phoneNumber: "",
     location: "",
@@ -25,6 +26,22 @@ const SignUp = () => {
   const onChangeInput = (e) => {
     const { name, value } = e.target;
     setInputValue({ ...inputValue, [name]: value });
+  };
+
+  const signupHandler = () => {
+    fetch(`${API.signup}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: inputValue.email,
+        password: inputValue.password,
+        password2: inputValue.password2,
+        username: inputValue.username,
+        birthday: inputValue.birthday,
+        number: inputValue.phoneNumber,
+        location: inputValue.location,
+      }),
+    }).then((res) => res.json());
   };
 
   useEffect(() => {
@@ -84,6 +101,14 @@ const SignUp = () => {
               value={inputValue.password2}
               changeHandler={onChangeInput}
             />
+            <LetterTextField text="이름을 입력해주세요" />
+            <InputField
+              placeholder="홍길동"
+              type="text"
+              name="username"
+              value={inputValue.username}
+              changeHandler={onChangeInput}
+            />
             <LetterTextField text="생년월일을 입력해주세요" />
             <InputField
               placeholder="20240101"
@@ -111,7 +136,7 @@ const SignUp = () => {
             <LetterTextField />
             <LoginButton>
               <Iconlogo src="/assets/signicon.png" alt="hand icon" />
-              <BtnText>회원가입</BtnText>
+              <BtnText onClick={signupHandler}>회원가입</BtnText>
             </LoginButton>
             <SignupFooter>
               <Text>이미 가입하셨나요?</Text>
