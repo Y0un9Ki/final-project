@@ -113,7 +113,7 @@ class QuestionCreate(mixins.CreateModelMixin,
     
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
-    
+
 class QuestionDetail(APIView):
     permission_classes = (AllowAny,)
     # authentication_classes = [BasicAuthentication, SessionAuthentication]
@@ -177,6 +177,91 @@ class QuestionDetail(APIView):
         }
         
         return Response(response_data)
+
+# 이부분 꼭 블로그 써라 영기야!!!!! 제일 중요!!! 
+# 이부분이 무엇이냐면 위에 코드를 수정한 것.
+# 위에 코드의 문제점이 무엇이냐면 user=self.request.user로 잡았다 한들 question에는 user를 볼 수 있는 외래키가 없기에 question의 id가 1인 question에 answer가 생긴다면 
+# 어떤 유저가 요청을 하든 모든 유저에게 question id가 1에 해당하는 다른 유저가 작성한 answer이 보였다. 
+# 즉 우리는 요청을 한 사용자랑 question id가 1인 question에 answer를 작성한 사용자가 같은 answer만을 보여줘야 하는데
+# 요청을 한 사용자랑 question id가 1인 question에 answer를 작성한 사용자가 다름에도 불구하고 다른 사용자의 질문이 보여지는 이슈가 발생
+# 그래서 아래와 같은 코드로 요청을 한 사용자가 만약 특정 question에 질문을 달았을 때 요청을 한 사용자의 질문의 답장을 보여주게 만들었고 
+# 그리고 만약 특정 질문에 답장이 없다면 빈 배열값으로 답장을 주는 문제를 해결했따.
+class QuestionDetailModify(APIView):
+    permission_classes = (AllowAny,)
+    # authentication_classes = [BasicAuthentication, SessionAuthentication]
+    authentication_classes = [JWTAuthentication]
+    
+    def get_object(self, pk):
+        try:
+            question = Question.objects.get(pk=pk)
+            return question
+        except Question.DoesNotExist: 
+            raise NotFound({'message':'질문이 존재하지 않습니다.'})
+        
+    def get(self, request, pk, format=None):
+        question = self.get_object(pk)
+        user = self.request.user
+        serializer = QuestionSerializer(question)
+        content = serializer.data['content']
+        try:
+            answer = Answer.objects.get(question=question, user=user)
+            serializer_answer = AnswerSerializer(answer)
+            print(serializer_answer.data['user'])
+            user_id = serializer_answer.data['user']
+            
+            # user = self.request.user
+            # print(user.id)
+            divided_contents = []
+            if len(content) > 20:
+                start = 0
+                while start < len(content):
+                    divided_contents.append(content[start:start+20])
+                    start += 20
+            else:
+                divided_contents.append(content)
+        
+        
+        
+            comment = serializer_answer.data['comment']
+            print(comment)
+            divided_comments = []
+            
+            if len(comment) > 20:
+                start = 0
+                while start < len(comment):
+                    divided_comments.append(comment[start:start+20])
+                    start += 20
+            else:
+                divided_comments.append(comment)
+        
+        
+        
+            response_data = {
+                'user_id': user_id,
+                'question_id': serializer.data['id'],
+                'question_content': divided_contents,
+                'question_answer': divided_comments,
+            }
+        
+            return Response(response_data)
+        except Answer.DoesNotExist:
+            divided_comments = []
+            divided_contents = []
+            if len(content) > 20:
+                start = 0
+                while start < len(content):
+                    divided_contents.append(content[start:start+20])
+                    start += 20
+            else:
+                divided_contents.append(content)
+            response_data = {
+            'user_id': user.id,
+            'question_id': serializer.data['id'],
+            'question_content': divided_contents,
+            'question_answer': divided_comments,
+            }
+            return Response(response_data)
+
 
 
 # Answer API part.
