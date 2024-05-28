@@ -11,6 +11,8 @@ const LetteringList = () => {
   const infoTextRefs = useRef([]);
   const infoTitleRefs = useRef([]);
   const token = localStorage.getItem("AuthToken");
+  const [data, setData] = useState();
+
   useEffect(() => {
     fetch(`${API.letterList}`, {
       headers: {
@@ -24,7 +26,7 @@ const LetteringList = () => {
         return res.json();
       })
       .then((data) => {
-        console.log(data);
+        setData(data);
       })
       .catch((error) => {
         console.error("There was a problem with the fetch operation:", error);
@@ -58,6 +60,21 @@ const LetteringList = () => {
         </LetteringTitle>
       </ContentSection>
       <ListSection>
+        {data.results?.map((value, index) => {
+          <Grow
+            key={index}
+            in={true}
+            style={{ transformOrigin: "0 0 2" }}
+            timeout={700}
+          >
+            <div>
+              <LetterListContainer
+                title={value.title}
+                date={value.create_date}
+              />
+            </div>
+          </Grow>;
+        })}
         {[...Array(7)].map((_, index) => (
           <Grow
             key={index}
