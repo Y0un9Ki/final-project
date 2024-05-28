@@ -8,11 +8,13 @@ const LetterListContainer = () => {
   useEffect(() => {
     const url = `https://api.unsplash.com/search/photos`;
 
+    const ACCESS_KEY = process.env.REACT_APP_ACCESS_KEY;
+    console.log(ACCESS_KEY);
     axios
       .get(url, {
         params: {
           query: "letter",
-          client_id: "",
+          client_id: `${ACCESS_KEY}`,
           per_page: 12,
         },
       })
