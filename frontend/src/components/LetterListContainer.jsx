@@ -3,7 +3,7 @@ import styled from "styled-components";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const LetterListContainer = ({ title, date }) => {
+const LetterListContainer = ({ id, title, date }) => {
   const [image, setImage] = useState("");
   const navigate = useNavigate();
 
@@ -40,7 +40,7 @@ const LetterListContainer = ({ title, date }) => {
   return (
     <Container
       onClick={() => {
-        navigate(`/lettering`);
+        navigate(`/lettering`, { state: id });
       }}
     >
       <ImageSection>{image && <Image src={image} />}</ImageSection>

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { gsap } from "gsap";
 import LetterTextField from "./LetterTextField";
 
-const LetterModal = ({ show, onClose, value, onChange }) => {
+const LetterModal = ({ show, onClose, value, onChange, onClick }) => {
   const modalRef = useRef(null);
   const overlayRef = useRef(null);
 
@@ -53,7 +53,7 @@ const LetterModal = ({ show, onClose, value, onChange }) => {
           <ButtonSection>
             <SubmitButton>
               <Iconlogo src="/assets/editicon.png" />
-              <BtnText>제출하기</BtnText>
+              <BtnText onClick={onClick}>제출하기</BtnText>
             </SubmitButton>
             <CloseButton onClick={onClose}>닫기</CloseButton>
           </ButtonSection>

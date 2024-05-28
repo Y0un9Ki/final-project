@@ -4,23 +4,55 @@ import Topbar from "../components/Topbar";
 import LetterTextField from "../components/LetterTextField";
 import { gsap } from "gsap";
 import LetterModal from "../components/LetterModal";
+import { API } from "../utils/ApiConfig";
+import { useLocation } from "react-router-dom";
 
 const Lettering = () => {
   const infoTextRefs = useRef([]);
   const infoTitleRefs = useRef([]);
   const [showModal, setShowModal] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const [data, setData] = useState("");
+  const location = useLocation();
+  const id = location.state;
+  const token = localStorage.getItem("AuthToken");
 
   const onChangeHandler = (e) => {
     setInputValue(e.target.value);
   };
 
-  console.log(inputValue);
-
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
 
+  const answerHandler = () => {
+    fetch(`${API.addAnswer}`, {
+      headers: {
+        Authorization: `JWT ${token}`,
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({
+        comment: inputValue,
+        question: data.question_id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+      });
+  };
+
   useEffect(() => {
+    fetch(`${API.letterList}${id}`, {
+      headers: {
+        Authorization: `JWT ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setData(data);
+      });
+
     gsap.from(infoTextRefs.current, {
       duration: 1,
       y: 20,
@@ -51,26 +83,56 @@ const Lettering = () => {
       </ContentSection>
       <Body>
         <LetterTextField text="👋 만나서 반가워요" />
-        <LetterTextField text="매일 당신에게 편지를 보내려해요" />
-        <LetterTextField text="앞으로 만들어나갈 우리 이야기를 위해" />
-        <LetterTextField text="다짐하는 글을 부탁해요!" />
+        {data &&
+          data.question_content?.map((quesData, i) => {
+            return (
+              <>
+                <LetterTextField key={i} text={quesData} />
+              </>
+            );
+          })}
+        <LetterTextField text="오늘 하루도 화이팅 👊" />
         {[...Array(4)].map((value, index) => {
           return <LetterTextField key={index} />;
         })}
         <BottomSection>
           <LetterTextField />
           <Response>
-            <ResText onClick={openModal}>답장하기</ResText>
+            {data.question_answer?.length === 0 ? (
+              <ResText onClick={openModal}>답장하기</ResText>
+            ) : null}
             <LetterModal
               show={showModal}
               onClose={closeModal}
               value={inputValue}
               onChange={onChangeHandler}
+              onClick={answerHandler}
             />
           </Response>
         </BottomSection>
         <LetterImage src="/assets/char3.png" />
       </Body>
+      {data.question_answer?.length > 0 ? (
+        <Body>
+          <LetterTextField text="👋 안녕하세요!" />
+          {data &&
+            data.question_answer?.map((ansData, i) => {
+              return (
+                <>
+                  <LetterTextField key={i} text={ansData} />
+                </>
+              );
+            })}
+          <LetterTextField text="편지 고마워요! 👊" />
+          {[...Array(4)].map((value, index) => {
+            return <LetterTextField key={index} />;
+          })}
+          <BottomSection>
+            <LetterTextField />
+          </BottomSection>
+          <LetterImage src="/assets/char4.png" />
+        </Body>
+      ) : null}
     </Container>
   );
 };

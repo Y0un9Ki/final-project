@@ -129,6 +129,7 @@ class QuestionDetail(APIView):
     def get(self, request, pk, format=None):
         question = self.get_object(pk)
         serializer = QuestionSerializer(question)
+        print(serializer.data)
         
         content = serializer.data['content']
         divided_contents = []
@@ -141,10 +142,34 @@ class QuestionDetail(APIView):
         else:
             divided_contents.append(content)
         
+        if len(serializer.data['answer'])==0:
+            divided_comments = []
+            response_data = {
+            'question_id': serializer.data['id'],
+            'question_content': divided_contents,
+            'question_answer': divided_comments,
+        }
+            return Response(response_data)
+        else:
+        
+            comment = serializer.data['answer'][0]['comment']
+            divided_comments = []
+            
+
+            if len(comment) > 20:
+                start = 0
+                while start < len(comment):
+                    divided_comments.append(comment[start:start+20])
+                    start += 20
+            else:
+                divided_comments.append(comment)
+        
+        
+        
         response_data = {
             'question_id': serializer.data['id'],
             'question_content': divided_contents,
-            'question_date': serializer.data['update_date']
+            'question_answer': divided_comments,
         }
         
         return Response(response_data)
@@ -189,6 +214,7 @@ class AnswerCreate(mixins.CreateModelMixin,
 # 그래서 답장을 작성한 후에 포인트를 받았다면 다시 포인트를 받기 위해서는 하루뒤에 작성을 해야만 포인트를 다시 받을 수 있게 로직을 짯다.
     def perform_create(self, serializer):
         user=self.request.user
+        print(user)
         last_received_answer = Answer.objects.filter(user=user, receive_point=True).order_by('-update_date').first()
         if last_received_answer is None or last_received_answer.update_date < timezone.now() - timedelta(days=1):
             if user.point is None:

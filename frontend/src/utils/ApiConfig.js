@@ -11,7 +11,7 @@ const API = {
   //질문지리스트
   letterList: `${URL}:${PORT}/latter/question/`,
   // 답장 생성
-  addAnswer: `${URL}:${PORT}/latter/create/`,
+  addAnswer: `${URL}:${PORT}/latter/answer/create/`,
   // 질문 답글 상세보기
   answer: `${URL}:${PORT}/latter/detail/`,
   // 모든 라이프리스트

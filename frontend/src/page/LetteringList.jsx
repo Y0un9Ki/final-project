@@ -12,9 +12,15 @@ const LetteringList = () => {
   const infoTitleRefs = useRef([]);
   const token = localStorage.getItem("AuthToken");
   const [data, setData] = useState();
+  const [page, setPage] = useState(0);
+  const [requestPage, setRequestPage] = useState(1);
+
+  const handleChange = (e, v) => {
+    setRequestPage(v);
+  };
 
   useEffect(() => {
-    fetch(`${API.letterList}`, {
+    fetch(`${API.letterList}?page=${requestPage}`, {
       headers: {
         Authorization: `JWT ${token}`,
       },
@@ -27,6 +33,7 @@ const LetteringList = () => {
       })
       .then((data) => {
         setData(data);
+        setPage(Math.ceil(data.count / 7));
       })
       .catch((error) => {
         console.error("There was a problem with the fetch operation:", error);
@@ -46,7 +53,7 @@ const LetteringList = () => {
       stagger: 0.7,
       ease: "power3.out",
     });
-  }, []);
+  }, [requestPage]);
   return (
     <Container>
       <Topbar />
@@ -60,36 +67,33 @@ const LetteringList = () => {
         </LetteringTitle>
       </ContentSection>
       <ListSection>
-        {data.results?.map((value, index) => {
-          <Grow
-            key={index}
-            in={true}
-            style={{ transformOrigin: "0 0 2" }}
-            timeout={700}
-          >
-            <div>
-              <LetterListContainer
-                title={value.title}
-                date={value.create_date}
-              />
-            </div>
-          </Grow>;
-        })}
-        {[...Array(7)].map((_, index) => (
-          <Grow
-            key={index}
-            in={true}
-            style={{ transformOrigin: "0 0 2" }}
-            timeout={700}
-          >
-            <div>
-              <LetterListContainer />
-            </div>
-          </Grow>
-        ))}
+        {data &&
+          data.results?.map((listdata) => {
+            return (
+              <Grow
+                key={listdata.id}
+                in={true}
+                style={{ transformOrigin: "0 0 2" }}
+                timeout={700}
+              >
+                <div>
+                  <LetterListContainer
+                    id={listdata.id}
+                    title={listdata.title}
+                    date={listdata.create_date}
+                  />
+                </div>
+              </Grow>
+            );
+          })}
       </ListSection>
       <PageSection>
-        <Pagination count={10} shape="rounded" />
+        <Pagination
+          count={page}
+          shape="rounded"
+          page={requestPage}
+          onChange={handleChange}
+        />
       </PageSection>
     </Container>
   );
