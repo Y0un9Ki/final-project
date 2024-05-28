@@ -7,9 +7,9 @@ from user.models import User
 # Create your models here.
 
 class Question(models.Model):
-    id = models.AutoField(primary_key=True, unique=True, null=False, blank=True)
-    title = models.TextField(null=False, blank=True)
-    content = models.TextField(null=False, blank=True) 
+    id = models.AutoField(primary_key=True, unique=True, null=False, blank=False)
+    title = models.TextField(null=False, blank=False)
+    content = models.TextField(null=False, blank=False) 
     # 여기서 null인자는 데이터 베이스에 null값으로 들어가도 되는지를 물어보는 것이며, blank는 해당 필드가 폼 입력 시 비어있어도 되는지에 대해서 물어보는 것이다.
     # 그렇기에 만약 Question이라는 모델 필드중에서 선택적으로 필드를 가지고 와야 할때에 응답을 줄 때에는 선택한 필드를 제외하고는 응답 폼에서 blank로 들어가게 된다.
     # 그렇기에 blank가 False로 지정 되어있다면 에러가 뜨게된다.
@@ -25,11 +25,11 @@ class Question(models.Model):
         return str(self.id) # 이것때문에 안되는 거였어 이거 무조건 블로그 써야되 영기야!!!!
     
 class Answer(models.Model):
-    id = models.AutoField(primary_key=True, unique=True, null=False, blank=True)
-    user = models.ForeignKey(User, related_name='answer', on_delete=models.CASCADE, blank=True)
-    question = models.ForeignKey(Question, related_name='answer', on_delete=models.CASCADE, blank=True)
-    comment = models.TextField(null=True, blank=True)
-    receive_point = models.BooleanField(default=False, blank=True)
+    id = models.AutoField(primary_key=True, unique=True, null=False, blank=False)
+    user = models.ForeignKey(User, related_name='answer', on_delete=models.CASCADE, blank=False)
+    question = models.ForeignKey(Question, related_name='answer', on_delete=models.CASCADE, blank=False)
+    comment = models.TextField(null=True, blank=False)
+    receive_point = models.BooleanField(default=False, blank=False)
     
     update_date = models.DateTimeField(auto_now=True) # auto_now 옵션은 인스턴스가 생성이 될 때 현재 시간이 설정되며 수정이 이루어지면 수정이 된 시간으로 값이 바뀐다.
     

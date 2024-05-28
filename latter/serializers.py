@@ -18,6 +18,11 @@ class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
         fields = ['id', 'title', 'content', 'create_date', 'update_date']
+        
+class QuestionListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Question
+        fields = ['title', 'create_date']
 
 
         

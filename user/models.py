@@ -20,10 +20,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4, verbose_name='Public identifier')
     email = models.EmailField(unique=True, error_messages={'unique': '이미 존재하는 이메일 입니다. 다른 이메일을 작성해주세요'}, blank=False, null=False)
     username = models.CharField(unique=False, null=False, max_length=20, validators=[username_validator])
-    birthday = models.DateField(null=False, blank=True)
-    location = models.CharField(null=False, max_length=100, help_text={'message' : '사는 곳을 꼭 입력해주세요'})
+    birthday = models.DateField(null=False, blank=False)
+    location = models.CharField(null=False, blank=False, max_length=100, help_text={'message' : '사는 곳을 꼭 입력해주세요'})
     number = models.CharField(validators=[number_validator], blank=False, null=False, max_length=20, help_text={'message' : '휴대전화 번호를 정확히 입력해주세요'})
-    point = models.PositiveIntegerField(null=True, blank=True, default=0)
+    point = models.IntegerField(default=0)
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
     

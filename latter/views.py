@@ -14,7 +14,7 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework_simplejwt.authentication import JWTAuthentication
 # 앱내에 import
 from .models import Question, Answer
-from .serializers import QuestionSerializer, AnswerSerializer
+from .serializers import QuestionSerializer, AnswerSerializer, QuestionListSerializer
 from .permission import IsOwnerOnly
 from user.models import User
 from .pagination import CustomPagination
@@ -33,8 +33,8 @@ class QuestionList(mixins.ListModelMixin,
     pagination_class = CustomPagination
     permission_classes = (IsAuthenticated,)
     # authentication_classes = [BasicAuthentication, SessionAuthentication]
-    serializer_class = QuestionSerializer
-    queryset = Question.objects.values('title', 'create_date').order_by('create_date')
+    serializer_class = QuestionListSerializer
+    queryset = Question.objects.all().order_by('create_date')
     
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
@@ -214,32 +214,45 @@ class AnswerDetailQuestion(APIView):
             user = self.request.user  # 프론트에서 전달된 JWT 토큰을 사용하여 사용자를 식별하는 코드이다. 프론트엔드에서 JWT토큰을 header로 보내주면 서버에서 JWT토큰을 받아서 user를 식별한다.
             answer = Answer.objects.get(question=question, user=user)
             return answer
-
-        except (Question.DoesNotExist, Answer.DoesNotExist):
+        except Question.DoesNotExist:
             raise NotFound({'message': '해당하는 데이터가 존재하지 않습니다.'})
+        except Answer.DoesNotExist:
+            return None
         
     def get(self, request, pk, format=None):
         answer=self.get_object(pk)
         # self.check_object_permissions(request, answer)
-        serializer = AnswerSerializer(answer)
-        comment = serializer.data['comment']
-        divided_comment = []
-        if len(comment) > 20:
-            start = 0
-            while start < len(comment):
-                divided_comment.append(comment[start:start+20])
-                start += 20
-        else:
-            divided_comment.append(comment)
-        
-        response_data = {
-            'answer_id': serializer.data['id'],
-            'user_id': serializer.data['user'],
-            'question_id': serializer.data['question'],
-            'answer_comment': divided_comment,
-            'answer_date': serializer.data['update_date']
-        }
-        return Response(response_data)
+        if answer is not None:
+            serializer = AnswerSerializer(answer)
+            comment = serializer.data['comment']
+            divided_comment = []
+
+            if len(comment) > 20:
+                start = 0
+                while start < len(comment):
+                    divided_comment.append(comment[start:start+20])
+                    start += 20
+            else:
+                divided_comment.append(comment)
+                
+            response_data = {
+                'answer_id': serializer.data['id'],
+                'user_id': serializer.data['user'],
+                'question_id': serializer.data['question'],
+                'answer_comment': divided_comment,
+                'answer_date': serializer.data['update_date']
+            }
+            return Response(response_data)
+        else: # answer가 존재하지 않는 경우 없는 값으로 보내준다.
+            response_data = {
+                'answer_id': None,
+                'user_id': None,
+                'question_id': None,
+                'answer_comment': None,
+                'answer_date': None
+            }
+            
+            return Response(response_data)
     
     def put(self, request, pk, format=None):
         answer = self.get_object(pk)
