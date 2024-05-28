@@ -88,16 +88,12 @@ const LetteringList = () => {
           })}
       </ListSection>
       <PageSection>
-<<<<<<< HEAD
         <Pagination
           count={page}
           shape="rounded"
           page={requestPage}
           onChange={handleChange}
         />
-=======
-        <Pagination count={data.count} shape="rounded" />
->>>>>>> 5902a88 (WIP : fix API)
       </PageSection>
     </Container>
   );
