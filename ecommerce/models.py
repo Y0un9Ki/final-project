@@ -8,7 +8,7 @@ class Category(models.Model):
     name = models.CharField(max_length=20, unique=True, null=True, blank=True)
     
     def __str__(self):
-        return str(self.id)
+        return str(self.name)
     
 class Performance(models.Model):
     id = models.AutoField(primary_key=True, unique=True, null=False, blank=True)
