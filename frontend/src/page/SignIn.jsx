@@ -13,6 +13,17 @@ const SignIn = () => {
   const infoTextRefs = useRef([]);
   const infoTitleRefs = useRef([]);
   const navigate = useNavigate();
+  const [inputValue, setInputValue] = useState({
+    email: "",
+    password: "",
+  });
+
+  const onChangeInput = (e) => {
+    const { name, value } = e.target;
+    setInputValue({ ...inputValue, [name]: value });
+  };
+
+  console.log(inputValue);
 
   useEffect(() => {
     gsap.from(infoTextRefs.current, {
@@ -49,9 +60,21 @@ const SignIn = () => {
             <LetterTextField text="🙌 오늘 하루도 화이팅!" />
             <LetterTextField />
             <LetterTextField text="아이디를 입력해주세요" />
-            <InputField placeholder="HowAreYou@email.com" type="text" />
+            <InputField
+              placeholder="HowAreYou@email.com"
+              type="text"
+              value={inputValue.email}
+              name="email"
+              changeHandler={onChangeInput}
+            />
             <LetterTextField text="비밀번호를 입력해주세요" />
-            <InputField placeholder="************" type="password" />
+            <InputField
+              placeholder="************"
+              type="password"
+              value={inputValue.password}
+              name="password"
+              changeHandler={onChangeInput}
+            />
             <LetterTextField />
 
             <LoginButton>

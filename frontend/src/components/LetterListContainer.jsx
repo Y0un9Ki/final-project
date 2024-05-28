@@ -15,13 +15,13 @@ const LetterListContainer = () => {
         params: {
           query: "letter",
           client_id: `${ACCESS_KEY}`,
-          per_page: 12,
+          per_page: 30,
         },
       })
       .then((response) => {
         if (response.data.results.length > 0) {
           setImage(
-            response.data.results[Math.floor(Math.random() * 12)].urls.small
+            response.data.results[Math.floor(Math.random() * 30)].urls.small
           );
         }
         console.log(response.data);

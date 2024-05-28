@@ -1,8 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 
-const InputField = ({ placeholder, type }) => {
-  return <StyledInput type={type} placeholder={placeholder} />;
+const InputField = ({ placeholder, type, changeHandler, value, name }) => {
+  return (
+    <StyledInput
+      type={type}
+      placeholder={placeholder}
+      name={name}
+      value={value}
+      onChange={changeHandler}
+    />
+  );
 };
 
 export default InputField;

@@ -12,6 +12,21 @@ const SignUp = () => {
   const infoTextRefs = useRef([]);
   const infoTitleRefs = useRef([]);
   const navigate = useNavigate();
+  const [inputValue, setInputValue] = useState({
+    email: "",
+    password: "",
+    password2: "",
+    birthday: "",
+    phoneNumber: "",
+    location: "",
+  });
+
+  console.log(inputValue);
+
+  const onChangeInput = (e) => {
+    const { name, value } = e.target;
+    setInputValue({ ...inputValue, [name]: value });
+  };
 
   useEffect(() => {
     gsap.from(infoTextRefs.current, {
@@ -47,19 +62,52 @@ const SignUp = () => {
             <LetterTextField text="👋 만나서 반가워요" />
             <LetterTextField />
             <LetterTextField text="사용하실 아이디를 입력해주세요" />
-            <InputField placeholder="HowAreYou@email.com" type="text" />
+            <InputField
+              placeholder="HowAreYou@email.com"
+              type="text"
+              name="email"
+              value={inputValue.email}
+              changeHandler={onChangeInput}
+            />
             <LetterTextField text="사용하실 비밀번호를 입력해주세요" />
-            <InputField placeholder="************" type="password" />
+            <InputField
+              placeholder="************"
+              type="password"
+              name="password"
+              value={inputValue.password}
+              changeHandler={onChangeInput}
+            />
             <LetterTextField text="비밀번호를 확인해주세요" />
-            <InputField placeholder="************" type="password" />
+            <InputField
+              placeholder="************"
+              type="password"
+              name="password2"
+              value={inputValue.password2}
+              changeHandler={onChangeInput}
+            />
             <LetterTextField text="생년월일을 입력해주세요" />
-            <InputField placeholder="20240101" type="text" />
+            <InputField
+              placeholder="20240101"
+              type="text"
+              name="birthday"
+              value={inputValue.birthday}
+              changeHandler={onChangeInput}
+            />
             <LetterTextField text="전화번호를 입력해주세요" />
-            <InputField placeholder="01012345678" type="text" />
+            <InputField
+              placeholder="01012345678"
+              type="text"
+              name="phoneNumber"
+              value={inputValue.phoneNumber}
+              changeHandler={onChangeInput}
+            />
             <LetterTextField text="주소를 입력해주세요" />
             <InputField
               placeholder="서울특별시 영등포구 영등포로"
               type="text"
+              name="location"
+              value={inputValue.location}
+              changeHandler={onChangeInput}
             />
             <LetterTextField />
             <LoginButton>

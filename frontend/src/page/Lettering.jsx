@@ -9,6 +9,13 @@ const Lettering = () => {
   const infoTextRefs = useRef([]);
   const infoTitleRefs = useRef([]);
   const [showModal, setShowModal] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+
+  const onChangeHandler = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  console.log(inputValue);
 
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
@@ -54,7 +61,12 @@ const Lettering = () => {
           <LetterTextField />
           <Response>
             <ResText onClick={openModal}>답장하기</ResText>
-            <LetterModal show={showModal} onClose={closeModal} />
+            <LetterModal
+              show={showModal}
+              onClose={closeModal}
+              value={inputValue}
+              onChange={onChangeHandler}
+            />
           </Response>
         </BottomSection>
         <LetterImage src="/assets/char3.png" />

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { gsap } from "gsap";
 import LetterTextField from "./LetterTextField";
 
-const LetterModal = ({ show, onClose }) => {
+const LetterModal = ({ show, onClose, value, onChange }) => {
   const modalRef = useRef(null);
   const overlayRef = useRef(null);
 
@@ -33,7 +33,7 @@ const LetterModal = ({ show, onClose }) => {
         ease: "power3.in",
       });
     }
-  }, [show, onClose]);
+  }, [show]);
 
   return (
     <>
@@ -44,7 +44,12 @@ const LetterModal = ({ show, onClose }) => {
           {[...Array(10)].map((value, index) => {
             return <LetterTextField key={index} />;
           })}
-          <TextInput maxLength="200" placeholder="답장 내용을 입력해주세요!" />
+          <TextInput
+            maxLength="200"
+            placeholder="답장 내용을 입력해주세요!"
+            value={value}
+            onChange={onChange}
+          />
           <ButtonSection>
             <SubmitButton>
               <Iconlogo src="/assets/editicon.png" />
