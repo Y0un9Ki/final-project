@@ -5,16 +5,37 @@ import LetterTextField from "../components/LetterTextField";
 import { gsap } from "gsap";
 import LifeReserveModal from "../components/LifeReserveModal";
 import Grow from "@mui/material/Grow";
+import { useLocation } from "react-router-dom";
+import { API } from "../utils/ApiConfig";
 
 const LifeDetail = () => {
   const infoTextRefs = useRef([]);
   const infoTitleRefs = useRef([]);
   const [showModal, setShowModal] = useState(false);
+  const [data, setData] = useState();
+  const location = useLocation();
+  const id = location.state;
+  const token = localStorage.getItem("AuthToken");
 
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
 
+  const formattingDate = (dateStr) => {
+    const date = new Date(dateStr);
+    return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
+  };
+
   useEffect(() => {
+    fetch(`${API.lifeDetail}${id}`, {
+      headers: {
+        Authorization: `JWT ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setData(data);
+      });
+
     gsap.from(infoTextRefs.current, {
       duration: 1,
       y: 20,
@@ -46,15 +67,15 @@ const LifeDetail = () => {
       <Body>
         <LetterTextField text="당신을 위한 공연을 준비했어요 👏" />
         <LetterTextField text="공연 제목" />
-        <LetterTextField />
+        <LetterTextField text={data?.name} />
         <LetterTextField text="등장인물 및 배우" />
-        <LetterTextField />
+        <LetterTextField text={data?.character} />
         <LetterTextField text="포인트" />
-        <LetterTextField />
+        <LetterTextField text={data?.price} />
         <LetterTextField text="상영날짜" />
-        <LetterTextField />
+        <LetterTextField text={formattingDate(data?.startdate)} />
         <LetterTextField text="장소 및 위치" />
-        <LetterTextField />
+        <LetterTextField text={data?.venue} />
         {[...Array(4)].map((value, index) => {
           return <LetterTextField key={index} />;
         })}

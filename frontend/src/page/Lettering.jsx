@@ -32,6 +32,7 @@ const Lettering = () => {
       },
       method: "POST",
       body: JSON.stringify({
+        user: data.user_id,
         comment: inputValue,
         question: data.question_id,
       }),

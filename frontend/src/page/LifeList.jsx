@@ -8,17 +8,46 @@ import LifeListContainer from "../components/LifeListContainer";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { styled as muiStyled } from "@mui/material/styles";
+import { API } from "../utils/ApiConfig";
 
 const LifeList = () => {
   const [value, setValue] = useState(0);
   const infoTextRefs = useRef([]);
   const infoTitleRefs = useRef([]);
+  const [page, setPage] = useState(0);
+  const [requestPage, setRequestPage] = useState(1);
+  const [data, setData] = useState();
+  const token = localStorage.getItem("AuthToken");
+
+  const pageChange = (e, v) => {
+    setRequestPage(v);
+  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   useEffect(() => {
+    fetch(`${API.totalLifeList}?page=${requestPage}`, {
+      headers: {
+        Authorization: `JWT ${token}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setData(data);
+        setPage(Math.ceil(data.count / 5));
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+
     gsap.from(infoTextRefs.current, {
       duration: 1,
       y: 20,
@@ -61,21 +90,36 @@ const LifeList = () => {
         </StyleTabs>
       </Tapbar>
       <ListSection>
-        {[...Array(5)].map((_, index) => (
-          <Grow
-            key={index}
-            in={true}
-            style={{ transformOrigin: "0 0 2" }}
-            timeout={700}
-          >
-            <div>
-              <LifeListContainer />
-            </div>
-          </Grow>
-        ))}
+        {data &&
+          data.results?.map((listdata) => {
+            return (
+              <Grow
+                key={listdata.id}
+                in={true}
+                style={{ transformOrigin: "0 0 2" }}
+                timeout={700}
+              >
+                <div>
+                  <LifeListContainer
+                    id={listdata.id}
+                    dateStr={listdata.startdate}
+                    title={listdata.name}
+                    subtitle={listdata.subname}
+                    price={listdata.price}
+                    category={listdata.category}
+                  />
+                </div>
+              </Grow>
+            );
+          })}
       </ListSection>
       <PageSection>
-        <Pagination count={10} shape="rounded" />
+        <Pagination
+          count={page}
+          shape="rounded"
+          page={requestPage}
+          onChange={pageChange}
+        />
       </PageSection>
     </Container>
   );

@@ -7,16 +7,36 @@ import LifeInfo from "../components/LifeInfo";
 import Header from "../components/Header";
 import LifeListContainer from "../components/LifeListContainer";
 import Grow from "@mui/material/Grow";
+import { API } from "../utils/ApiConfig";
 
 const MainPage = () => {
   const infoTextRefs = useRef([]);
   const infoTitleRefs = useRef([]);
   const [showModal, setShowModal] = useState(false);
+  const [data, setData] = useState();
+  const token = localStorage.getItem("AuthToken");
 
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
 
   useEffect(() => {
+    fetch(`${API.totalLifeList}?page=1`, {
+      headers: {
+        Authorization: `JWT ${token}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setData(data);
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
     gsap.from(infoTextRefs.current, {
       duration: 1,
       y: 20,
@@ -71,18 +91,28 @@ const MainPage = () => {
           우리 같이 만나요! 👊
         </LetteringTitle>
       </ContentSection>
-      {[...Array(3)].map((_, index) => (
-        <Grow
-          key={index}
-          in={true}
-          style={{ transformOrigin: "0 0 0" }}
-          timeout={1000}
-        >
-          <div>
-            <LifeListContainer />
-          </div>
-        </Grow>
-      ))}
+      {data &&
+        data.results?.map((listdata) => {
+          return (
+            <Grow
+              key={listdata.id}
+              in={true}
+              style={{ transformOrigin: "0 0 2" }}
+              timeout={700}
+            >
+              <div>
+                <LifeListContainer
+                  id={listdata.id}
+                  dateStr={listdata.startdate}
+                  title={listdata.name}
+                  subtitle={listdata.subname}
+                  price={listdata.price}
+                  category={listdata.category}
+                />
+              </div>
+            </Grow>
+          );
+        })}
     </Container>
   );
 };

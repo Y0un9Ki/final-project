@@ -14,7 +14,7 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework_simplejwt.authentication import JWTAuthentication
 # 앱내에 import
 from .models import Question, Answer
-from .serializers import QuestionSerializer, AnswerSerializer, QuestionListSerializer
+from .serializers import QuestionSerializer, AnswerSerializer, QuestionListSerializer, AnswerCommentSerializer
 from .permission import IsOwnerOnly
 from user.models import User
 from .pagination import CustomPagination
@@ -132,6 +132,8 @@ class QuestionDetail(APIView):
         print(serializer.data)
         
         content = serializer.data['content']
+        user = self.request.user
+        print(user.id)
         divided_contents = []
         
         if len(content) > 20:
@@ -145,6 +147,7 @@ class QuestionDetail(APIView):
         if len(serializer.data['answer'])==0:
             divided_comments = []
             response_data = {
+            'user_id': user.id,
             'question_id': serializer.data['id'],
             'question_content': divided_contents,
             'question_answer': divided_comments,
@@ -167,6 +170,7 @@ class QuestionDetail(APIView):
         
         
         response_data = {
+            'user_id': user.id,
             'question_id': serializer.data['id'],
             'question_content': divided_contents,
             'question_answer': divided_comments,
@@ -225,8 +229,9 @@ class AnswerCreate(mixins.CreateModelMixin,
             if answer.receive_point==False:
                 answer.receive_point=True
                 answer.save()
-                
-        serializer.save(user=user)
+        
+        else:       
+            serializer.save(user=user)
         
         
 class AnswerDetailQuestion(APIView):

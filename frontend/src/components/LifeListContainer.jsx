@@ -2,13 +2,25 @@ import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
-const LifeListContainer = () => {
+const LifeListContainer = ({
+  id,
+  title,
+  dateStr,
+  category,
+  subtitle,
+  price,
+}) => {
   const navigate = useNavigate();
+
+  const formattingDate = (dateStr) => {
+    const date = new Date(dateStr);
+    return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
+  };
 
   return (
     <Container
       onClick={() => {
-        navigate("/lifedetail");
+        navigate("/lifedetail", { state: id });
       }}
     >
       <ImageSection>
@@ -16,14 +28,14 @@ const LifeListContainer = () => {
       </ImageSection>
       <TextSection>
         <CategorySection>
-          <CatItem>D - 4 </CatItem>
-          <CatItem>공연 </CatItem>
+          <CatItem>{formattingDate(dateStr)}</CatItem>
+          <CatItem>{category}</CatItem>
         </CategorySection>
-        <TitleSection>공연 제목</TitleSection>
-        <SubTitleSection>공연 부 제목</SubTitleSection>
+        <TitleSection>{title}</TitleSection>
+        <SubTitleSection>{subtitle}</SubTitleSection>
         <PointSection>
           <PointIcon src="/assets/pointicon.png" />
-          12,000
+          {price}
         </PointSection>
       </TextSection>
     </Container>
