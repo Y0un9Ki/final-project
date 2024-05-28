@@ -18,57 +18,6 @@ from .serializers import PerformanceSerializer, CategorySerializer, ImageSeriali
 from .models import Performance, Category, Image
 from .pagination import CustomPagination
 # Create your views here.
-class PerformanceRead(APIView):
-    permission_classes = [IsAuthenticated]
-    # authentication_classes = [JWTAuthentication]
-    authentication_classes = [BasicAuthentication, SessionAuthentication]
-    
-    def dictfetchall(cursor):
-        "Return all rows from a cursor as a dict"
-        columns = [col[0] for col in cursor.description]
-        return [
-            dict(zip(columns, row))
-            for row in cursor.fetchall()
-        ]
-    
-    def get(self, request, *args, **kwargs):
-        def dictfetchall(cursor):
-            "Return all rows from a cursor as a dict"
-            columns = [col[0] for col in cursor.description]
-            return [
-                dict(zip(columns, row))
-                for row in cursor.fetchall()
-            ]
-        
-        with connections['default'].cursor() as cursor:
-            cursor.execute('''
-                SELECT p.id, p.name, c.name as category_name, p.subname, p.character, p.price, p.startdate, p.venue, p.create_date, p.update_date
-                FROM ecommerce_performance p
-                LEFT JOIN ecommerce_category c ON p.category_id = c.id
-            ''')
-            performances_data = dictfetchall(cursor)
-
-        # performances = []
-        # for performance_data in performances_data:
-        #     category = Category(name=performance_data[2])  # 카테고리 인스턴스 생성
-        #     performance = Performance(
-        #         id=performance_data[0],
-        #         name=performance_data[1],
-        #         category=category,  # 카테고리 인스턴스 할당
-        #         subname=performance_data[3],
-        #         character=performance_data[4],
-        #         price=performance_data[5],
-        #         startdate=performance_data[6],
-        #         venue=performance_data[7],
-        #         create_date=performance_data[8],
-        #         update_date=performance_data[9]
-        #     )
-        #     performances.append(performance)
-        # print(performances_data)
-        # serializer = PerformanceSerializer(performances, many=True)
-        
-        return JsonResponse({'performances': performances_data})
-        # return Response(serializer.data)
 
 class PerformanceList(mixins.ListModelMixin,
                       generics.GenericAPIView):
@@ -84,8 +33,8 @@ class PerformanceList(mixins.ListModelMixin,
     # 따라서, 대부분의 필드에 대해 null=False와 함께 blank=True를 설정하여 데이터베이스 수준에서는 필수 필드이지만 폼 입력 시에는 비어 있어도 되는 유연한 모델을 만들어줄 수 있습니다.
     # 블로그 정리하기!!!
     permission_classes = [IsAuthenticated]
-    # authentication_classes = [JWTAuthentication]
-    authentication_classes = [BasicAuthentication, SessionAuthentication]
+    authentication_classes = [JWTAuthentication]
+    # authentication_classes = [BasicAuthentication, SessionAuthentication]
     pagination_class = CustomPagination
     
     def get(self, request, *args, **kwargs):
@@ -96,8 +45,8 @@ class PerformanceCreate(mixins.CreateModelMixin,
     serializer_class = PerformanceSerializer
     queryset = Performance.objects.all()
     permission_classes = [IsAdminUser]
-    authentication_classes = [BasicAuthentication, SessionAuthentication]
-    #authentication_classes = [JWTAuthentication]
+    # authentication_classes = [BasicAuthentication, SessionAuthentication]
+    authentication_classes = [JWTAuthentication]
     
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
@@ -105,8 +54,8 @@ class PerformanceCreate(mixins.CreateModelMixin,
 
 class PerformanceCategoryDetail(APIView):
     permission_classes = [IsAuthenticated]
-    authentication_classes = [BasicAuthentication, SessionAuthentication]
-    #authentication_classes = [JWTAuthentication]
+    # authentication_classes = [BasicAuthentication, SessionAuthentication]
+    authentication_classes = [JWTAuthentication]
     
     def get_queryset(self, pk, format=None):
         try:
@@ -121,8 +70,10 @@ class PerformanceCategoryDetail(APIView):
         
     def get(self, request, pk, format=None):
         perfomance = self.get_queryset(pk)
-        serializer = PerformanceSerializer(perfomance, many=True)
-        return Response(serializer.data)
+        paginator = CustomPagination()
+        result_page = paginator.paginate_queryset(perfomance, request)
+        serializer = PerformanceSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
         
 
 class PerformanceDetail(mixins.RetrieveModelMixin,
@@ -131,8 +82,8 @@ class PerformanceDetail(mixins.RetrieveModelMixin,
     # queryset = Performance.objects.values('id', 'image', 'name', 'character', 'price', 'startdate', 'venue')
     queryset = Performance.objects.all()
     permission_classes = [IsAuthenticated]
-    authentication_classes = [BasicAuthentication, SessionAuthentication]
-    #authentication_classes = [JWTAuthentication]
+    # authentication_classes = [BasicAuthentication, SessionAuthentication]
+    authentication_classes = [JWTAuthentication]
     
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
@@ -144,8 +95,8 @@ class PerformanceModify(mixins.RetrieveModelMixin,
     serializer_class = PerformanceSerializer
     queryset = Performance.objects.all()
     permission_classes = [IsAdminUser]
-    authentication_classes = [BasicAuthentication, SessionAuthentication]
-    # authentication_classes = [JWTAuthentication]
+    # authentication_classes = [BasicAuthentication, SessionAuthentication]
+    authentication_classes = [JWTAuthentication]
     
     def get(self,request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
@@ -162,8 +113,8 @@ class CategoryList(mixins.CreateModelMixin,
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
     permission_classes = [IsAdminUser]
-    authentication_classes = [BasicAuthentication, SessionAuthentication]
-    # authentication_classes = [JWTAuthentication]
+    # authentication_classes = [BasicAuthentication, SessionAuthentication]
+    authentication_classes = [JWTAuthentication]
     
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
@@ -177,8 +128,8 @@ class CategoryDetail(mixins.UpdateModelMixin,
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
     permission_classes = [IsAdminUser]
-    authentication_classes = [BasicAuthentication, SessionAuthentication]
-    # authentication_classes = [JWTAuthentication]
+    # authentication_classes = [BasicAuthentication, SessionAuthentication]
+    authentication_classes = [JWTAuthentication]
     
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
@@ -186,14 +137,14 @@ class CategoryDetail(mixins.UpdateModelMixin,
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
     
-class ImageList(mixins.CreateModelMixin,
+class ImageCreate(mixins.CreateModelMixin,
                 mixins.ListModelMixin,
                 generics.GenericAPIView):
     serializer_class = ImageSerializer
     queryset = Image.objects.all()
     permission_classes = [IsAdminUser]
-    authentication_classes = [BasicAuthentication, SessionAuthentication]
-    # authentication_classes = [JWTAuthentication]
+    # authentication_classes = [BasicAuthentication, SessionAuthentication]
+    authentication_classes = [JWTAuthentication]
     
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
@@ -207,8 +158,8 @@ class ImageDetail(mixins.UpdateModelMixin,
     serializer_class = ImageSerializer
     queryset = Image.objects.all()
     permission_classes = [IsAdminUser]
-    authentication_classes = [BasicAuthentication, SessionAuthentication]
-    # authentication_classes = [JWTAuthentication]
+    # authentication_classes = [BasicAuthentication, SessionAuthentication]
+    authentication_classes = [JWTAuthentication]
     
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)

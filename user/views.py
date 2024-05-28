@@ -13,8 +13,8 @@ from .serializers import UserLoginSerializer, UserRegistrationSerializer, UserSe
 
 class UserOwnList(APIView):
     permission_classes = [IsAuthenticated]
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
-    # authentication_classes = [JWTAuthentication]
+    # authentication_classes = [SessionAuthentication, BasicAuthentication]
+    authentication_classes = [JWTAuthentication]
         
     def get(self, request, format=None):
         user = self.request.user

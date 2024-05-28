@@ -28,11 +28,11 @@ from .pagination import CustomPagination
 # pagination_class를 mixins부터는 지원하기에 편하게 코드를 짤 수 있다.
 class QuestionList(mixins.ListModelMixin,
                    generics.GenericAPIView):
-    permission_classes = (AllowAny,)
-    # authentication_classes = [JWTAuthentication]
+    # permission_classes = (AllowAny,)
+    authentication_classes = [JWTAuthentication]
     pagination_class = CustomPagination
-    # permission_classes = (IsAuthenticated,)
-    authentication_classes = [BasicAuthentication, SessionAuthentication]
+    permission_classes = (IsAuthenticated,)
+    # authentication_classes = [BasicAuthentication, SessionAuthentication]
     serializer_class = QuestionSerializer
     queryset = Question.objects.values('title', 'create_date').order_by('create_date')
     
@@ -43,17 +43,17 @@ class QuestionList(mixins.ListModelMixin,
 # 그렇기에 질문지 리스트에 대한 get요청이 왔을시에 백앤드에서는 질문지의 제목과 생성일자만 API로 보내줘야 한다.
 # 밑에 코드가 해당되는 코드이다.
 # APIView는 pagination_class를 지원하지 않기에 일일히 다 설정을 해주어야 한다.
-class QuestionListBack(APIView):
-    permission_classes = (AllowAny,)
-    authentication_classes = [BasicAuthentication, SessionAuthentication]
-    # authentication_classes = [JWTAuthentication]
+# class QuestionListBack(APIView):
+#     permission_classes = (AllowAny,)
+#     # authentication_classes = [BasicAuthentication, SessionAuthentication]
+#     authentication_classes = [JWTAuthentication]
     
-    def get(self, request, *args, **kwargs):
-        questions = Question.objects.values('title', 'create_date').order_by('create_date')
-        paginator = CustomPagination()
-        result_page = paginator.paginate_queryset(questions, request)
-        serializer = QuestionSerializer(result_page, many=True)
-        return paginator.get_paginated_response(serializer.data)
+#     def get(self, request, *args, **kwargs):
+#         questions = Question.objects.values('title', 'create_date').order_by('create_date')
+#         paginator = CustomPagination()
+#         result_page = paginator.paginate_queryset(questions, request)
+#         serializer = QuestionSerializer(result_page, many=True)
+#         return paginator.get_paginated_response(serializer.data)
         # return Response(questions)
 
 #-----------------------------------------------------------------------------------------------------       
@@ -106,8 +106,8 @@ class QuestionListBack(APIView):
 class QuestionCreate(mixins.CreateModelMixin,
                      generics.GenericAPIView):
     permission_classes = (IsAdminUser,)
-    authentication_classes = [BasicAuthentication, SessionAuthentication]
-    # authentication_classes = [JWTAuthentication]
+    # authentication_classes = [BasicAuthentication, SessionAuthentication]
+    authentication_classes = [JWTAuthentication]
     serializer_class = QuestionSerializer
     queryset = Question.objects.all()
     
@@ -116,8 +116,8 @@ class QuestionCreate(mixins.CreateModelMixin,
     
 class QuestionDetail(APIView):
     permission_classes = (AllowAny,)
-    authentication_classes = [BasicAuthentication, SessionAuthentication]
-    # authentication_classes = [JWTAuthentication]
+    # authentication_classes = [BasicAuthentication, SessionAuthentication]
+    authentication_classes = [JWTAuthentication]
     
     def get_object(self, pk):
         try:
@@ -177,10 +177,9 @@ class QuestionDetail(APIView):
         
 class AnswerCreate(mixins.CreateModelMixin,
                    generics.GenericAPIView):
-    # permission_classes=(IsAuthenticated,)
-    # authentication_classes = [JWTAuthentication]
-    permission_classes = (IsAuthenticated,)
-    authentication_classes = [BasicAuthentication, SessionAuthentication]
+    permission_classes=(IsAuthenticated,)
+    authentication_classes = [JWTAuthentication]
+    # authentication_classes = [BasicAuthentication, SessionAuthentication]
     serializer_class = AnswerSerializer
     queryset = Answer.objects.all()
 
@@ -205,10 +204,9 @@ class AnswerCreate(mixins.CreateModelMixin,
         
         
 class AnswerDetailQuestion(APIView):
-    # permission_classes = [IsAuthenticated]
-    # authentication_classes = [JWTAuthentication]
+    authentication_classes = [JWTAuthentication]
     permission_classes = (IsAuthenticated,)
-    authentication_classes = [BasicAuthentication, SessionAuthentication]
+    # authentication_classes = [BasicAuthentication, SessionAuthentication]
     
     def get_object(self, pk):
         try:
@@ -253,10 +251,9 @@ class AnswerDetailQuestion(APIView):
 
 # 밑에 코드는 APIView를 이용해서 만든 코드
 class AnswerList(APIView):
-    # permission_classes = [IsAuthenticated]
-    # authentication_classes = [JWTAuthentication]
+    authentication_classes = [JWTAuthentication]
     permission_classes = (IsAuthenticated,)
-    authentication_classes = [BasicAuthentication, SessionAuthentication]
+    # authentication_classes = [BasicAuthentication, SessionAuthentication]
     
     def get_queryset(self):
         user = self.request.user

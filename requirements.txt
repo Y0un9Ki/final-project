@@ -4,7 +4,6 @@ django-cors-headers==4.3.1
 django-phonenumber-field==7.3.0
 djangorestframework==3.15.1
 djangorestframework-simplejwt==5.3.1
-mysqlclient==2.2.4
 phonenumbers==8.13.36
 pillow==10.3.0
 PyJWT==2.8.0
