@@ -7,6 +7,7 @@ import { gsap } from "gsap";
 import Topbar from "../components/Topbar";
 import Grow from "@mui/material/Grow";
 import { useNavigate } from "react-router-dom";
+import { API } from "../utils/ApiConfig";
 
 const SignUp = () => {
   const infoTextRefs = useRef([]);
@@ -20,8 +21,6 @@ const SignUp = () => {
     phoneNumber: "",
     location: "",
   });
-
-  console.log(inputValue);
 
   const onChangeInput = (e) => {
     const { name, value } = e.target;
