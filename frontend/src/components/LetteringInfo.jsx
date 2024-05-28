@@ -2,12 +2,16 @@ import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import Grow from "@mui/material/Grow";
 import LoginCheckModal from "./LoginCheckModal";
+import { useNavigate } from "react-router-dom";
 
 const LetteringInfo = () => {
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
+  const token = localStorage.getItem("AuthToken");
 
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
+
   return (
     <>
       <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
@@ -23,7 +27,17 @@ const LetteringInfo = () => {
                 <Text delay="2.5s">행복한 하루가 되길 응원할게요!</Text>
                 <Text delay="3.5s">화이팅! 😄</Text>
               </>
-              <Response onClick={openModal}>답장하기</Response>
+              <Response
+                onClick={
+                  !token
+                    ? openModal
+                    : () => {
+                        navigate("/letterlist");
+                      }
+                }
+              >
+                답장하기
+              </Response>
             </LetteringSection>
           </Container>
         </div>
