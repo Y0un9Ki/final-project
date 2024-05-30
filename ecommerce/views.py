@@ -14,24 +14,15 @@ from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
 # 앱 내 import
-from .serializers import PerformanceSerializer, CategorySerializer, ImageSerializer, PerformanceDetailSerializer, PerformanceListSerializer
-from .models import Performance, Category, Image
+from .serializers import PerformanceSerializer, CategorySerializer, ImageSerializer, PerformanceDetailSerializer, PerformanceListSerializer, ReservationSerializer
+from .models import Performance, Category, Image, Reservation
 from .pagination import CustomPagination
 # Create your views here.
 
 class PerformanceList(mixins.ListModelMixin,
                       generics.GenericAPIView):
     serializer_class = PerformanceListSerializer
-    queryset = Performance.objects.all()
-    # 지금 위에 상황에서 사용되는 것이다. Performance.objects.values()로 선택적인 Performance의 필드를 가지고 오고 있다. 
-    # 하지만 Performance 모델의 필드들은 모두 blank=True이기에 에러가 뜨지 않을 것이다. 밑에는 설명이다.
-    # 여기서 null인자는 데이터 베이스에 null값으로 들어가도 되는지를 물어보는 것이며, blank는 해당 필드가 폼 입력 시 비어있어도 되는지에 대해서 물어보는 것이다.
-    # 그렇기에 만약 Question이라는 모델 필드중에서 선택적으로 필드를 가지고 와야 할때에 응답을 줄 때에는 선택한 필드를 제외하고는 응답 폼에서 blank로 들어가게 된다.
-    # 그렇기에 blank가 False로 지정 되어있다면 에러가 뜨게된다. ==> 문제 발견함 : 이렇게 되면 만약 꼭 작성 해야 하는 필드인데 작성이 안되면 에러 메세지가 뜬다. 그냥 무조건 blank, null은 True로 잡아주자.
-    # 만약 모델 중에 선택적으로 필드를 가지고 와야 하는 상황이 생긴다면 웬만하면 blank=True라는 인자를 잡아주자!!! 
-    # 만약 데이터베이스 수준에서 해당 필드가 비어 있을 수 없도록 하고 싶다면 null=False로 설정해야 합니다. 이 설정은 데이터베이스에 해당 필드가 null이 아니어야 한다는 것을 의미합니다.
-    # 따라서, 대부분의 필드에 대해 null=False와 함께 blank=True를 설정하여 데이터베이스 수준에서는 필수 필드이지만 폼 입력 시에는 비어 있어도 되는 유연한 모델을 만들어줄 수 있습니다.
-    # 블로그 정리하기!!!
+    queryset = Performance.objects.all().order_by('startdate')
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
     # authentication_classes = [BasicAuthentication, SessionAuthentication]
@@ -39,6 +30,31 @@ class PerformanceList(mixins.ListModelMixin,
     
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
+    
+# 메인페이지에 보면 공연리스트가 3개만 보여지는 부분이 있는데 그것에 해당하는 API를 만드는중
+# 즉 공연리스트를 3개만 뽑아서 보내줘야 한다.
+class PerformanceMainList(APIView):
+    permission_classes = [AllowAny]
+    # authentication_classes = [BasicAuthentication, SessionAuthentication]
+    authentication_classes = [JWTAuthentication]
+    
+    def get(self, request, format=None):
+        performance = Performance.objects.all().order_by('startdate')
+        print(123, performance)
+        serializer = PerformanceListSerializer(performance, many=True)
+        # print(1111, serializer.data)
+        
+        print(len(serializer.data))
+        if len(serializer.data)<=3:
+            return Response(serializer.data)
+        
+        serializer_list = []
+        for i in serializer.data:
+            serializer_list.append(i)
+            # print(serializer_list)
+            if len(serializer_list)==3:
+                return Response(serializer_list)
+    
     
 class PerformanceCreate(mixins.CreateModelMixin,
                         generics.GenericAPIView):
@@ -69,9 +85,9 @@ class PerformanceCategoryDetail(APIView):
             raise NotFound({'message': '찾으시는 카테고리가 없습니다.'})
         
     def get(self, request, pk, format=None):
-        perfomance = self.get_queryset(pk)
+        performance = self.get_queryset(pk)
         paginator = CustomPagination()
-        result_page = paginator.paginate_queryset(perfomance, request)
+        result_page = paginator.paginate_queryset(performance, request)
         serializer = PerformanceSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
         
@@ -79,7 +95,6 @@ class PerformanceCategoryDetail(APIView):
 class PerformanceDetail(mixins.RetrieveModelMixin,
                         generics.GenericAPIView):
     serializer_class = PerformanceDetailSerializer
-    # queryset = Performance.objects.values('id', 'image', 'name', 'character', 'price', 'startdate', 'venue')
     queryset = Performance.objects.all()
     permission_classes = [IsAuthenticated]
     # authentication_classes = [BasicAuthentication, SessionAuthentication]
@@ -166,3 +181,57 @@ class ImageDetail(mixins.UpdateModelMixin,
     
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+
+class ReservationCreate(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = (IsAuthenticated,)
+    
+    def post(self, request, pk, format=None):
+        try:
+            performance = Performance.objects.get(pk=pk)
+            user=self.request.user
+            user_point = user.point
+            performance_price = performance.price
+            serializer = ReservationSerializer(data=request.data)
+            if serializer.is_valid():
+                if user_point >= performance_price:
+                    user.point = user_point - performance_price
+                    user.save()
+                    serializer.save(user=user, performance=performance)
+                    
+                    response_data = {
+                        'user_id': serializer.data['user'],
+                        'performance_id': serializer.data['performance'],
+                        'performance_name': performance.name,
+                        'message': '예약에 성공하셨습니다.'
+                    }
+                else:
+                    response_data = {
+                        'user_id': user.id,
+                        'message': '포인트가 부족해요ㅠㅠ'   
+                    }
+                
+                return Response(response_data, status=status.HTTP_200_OK)
+            else:
+                Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                
+        except Performance.DoesNotExist:
+            raise NotFound({'message':'해당 공연은 존재하지 않습니다.'})
+            
+class ReservationList(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = (IsAuthenticated,)
+    
+    def get_queryset(self, format=None):
+        user = self.request.user
+        reservation = Reservation.objects.filter(user=user)
+        if reservation.exists():
+            return reservation
+        else:
+            raise NotFound({'message': '해당 유저의 예약은 없습니다.'})
+        
+    
+    def get(self, request, format=None):
+        reservation = self.get_queryset()
+        serializer = ReservationSerializer(reservation, many=True)
+        return Response(serializer.data)

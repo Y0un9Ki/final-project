@@ -1,6 +1,8 @@
 # django 라이브러리
 from django.db import models
 from django.utils import timezone
+# 앱내의 import
+from user.models import User
 
 # Create your models here.
 class Category(models.Model):
@@ -34,4 +36,7 @@ class Image(models.Model):
     def __str__(self):
         return str(self.performance)
     
-    
+class Reservation(models.Model):
+    id = models.AutoField(primary_key=True, unique=True, null=False, blank=False)
+    user = models.ForeignKey(User, related_name='reservation', on_delete=models.CASCADE)
+    performance = models.ForeignKey(Performance, related_name='reservation', on_delete=models.CASCADE)

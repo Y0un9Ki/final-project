@@ -6,11 +6,13 @@ from rest_framework import serializers, exceptions
 from rest_framework_simplejwt.tokens import RefreshToken
 # 앱 내에 import
 from .models import User
+from ecommerce.serializers import ReservationSerializer
 
 class UserSerializer(serializers.ModelSerializer):
+    reservation = ReservationSerializer(many=True) # 이때 reservation라는 변수명은 Reservation 모델에서 만들어 놓은 related_name을 따라야 한다.
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ['id', 'email', 'username', 'birthday', 'location', 'number', 'point', 'reservation']
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
