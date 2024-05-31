@@ -92,7 +92,7 @@ const MainPage = () => {
         </LetteringTitle>
       </ContentSection>
       {data &&
-        data.results?.map((listdata) => {
+        data?.map((listdata) => {
           return (
             <Grow
               key={listdata.id}
