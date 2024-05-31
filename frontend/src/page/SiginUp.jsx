@@ -8,6 +8,7 @@ import Topbar from "../components/Topbar";
 import Grow from "@mui/material/Grow";
 import { useNavigate } from "react-router-dom";
 import { API } from "../utils/ApiConfig";
+import Alert from "@mui/material/Alert";
 
 const SignUp = () => {
   const infoTextRefs = useRef([]);
@@ -22,6 +23,7 @@ const SignUp = () => {
     phoneNumber: "",
     location: "",
   });
+  const [alertMessage, setAlertMessage] = useState(null);
 
   const isButtonEnabled =
     inputValue.email.length > 0 &&
@@ -50,7 +52,17 @@ const SignUp = () => {
         number: inputValue.phoneNumber,
         location: inputValue.location,
       }),
-    }).then((res) => res.json());
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.message === "회원가입에 성공하였습니다") {
+          setAlertMessage({ type: "success", text: data.message });
+          setTimeout(() => navigate("/signin"), 3000);
+        } else {
+          const errorKey = Object.keys(data)[0];
+          setAlertMessage({ type: "error", text: data[errorKey][0] });
+        }
+      });
   };
 
   useEffect(() => {
@@ -69,6 +81,7 @@ const SignUp = () => {
       ease: "power3.out",
     });
   }, []);
+
   return (
     <Container>
       <Topbar />
@@ -143,10 +156,18 @@ const SignUp = () => {
               changeHandler={onChangeInput}
             />
             <LetterTextField />
-            <LoginButton disabled={!isButtonEnabled}>
+            <LoginButton disabled={!isButtonEnabled} onClick={signupHandler}>
               <Iconlogo src="/assets/signicon.png" alt="hand icon" />
-              <BtnText onClick={signupHandler}>회원가입</BtnText>
+              <BtnText>회원가입</BtnText>
             </LoginButton>
+            {alertMessage && (
+              <Alert
+                severity={alertMessage.type}
+                onClose={() => setAlertMessage(null)}
+              >
+                {alertMessage.text}
+              </Alert>
+            )}
             <SignupFooter>
               <Text>이미 가입하셨나요?</Text>
               <SignText
@@ -204,6 +225,11 @@ const LoginButton = styled.button`
   &:hover {
     background-color: #d1cdcd;
   }
+
+  &:disabled {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+  }
 `;
 
 const Iconlogo = styled.img`
@@ -218,7 +244,6 @@ const BtnText = styled.section`
 const ContentSection = styled.section`
   display: flex;
   flex-direction: column;
-
   height: 30px;
 `;
 

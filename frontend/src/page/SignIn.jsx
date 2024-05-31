@@ -40,19 +40,10 @@ const SignIn = () => {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res.email);
-      })
-      .then((res) => {
         if (res.message === "로그인에 성공하였습니다") {
           localStorage.setItem("AuthToken", res.access);
           navigate("/");
-        } else if (
-          res.email &&
-          res.email[0] === "유효한 이메일 주소를 입력하십시오."
-        ) {
-          setErrorMessage("유효한 이메일을 입력해주세요.");
-        }
-        setErrorMessage(res.message);
+        } else setErrorMessage(res.message);
       });
   };
 
