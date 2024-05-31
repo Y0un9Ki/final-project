@@ -22,7 +22,7 @@ class QuestionSerializer(serializers.ModelSerializer):
     # content = serializers.CharField(required=False)
     class Meta:
         model = Question
-        fields = ['id', 'content', 'answer']
+        fields = ['id', 'title', 'content', 'answer']
         
 class QuestionListSerializer(serializers.ModelSerializer):
     class Meta:
