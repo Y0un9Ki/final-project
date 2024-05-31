@@ -3,7 +3,7 @@
 // const PORT = 8000;
 
 //deploy API
-const URL = "34.47.95.16";
+const URL = "http://34.47.95.16";
 const PORT = 8000;
 
 const API = {
