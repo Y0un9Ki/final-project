@@ -7,6 +7,7 @@ import { gsap } from "gsap";
 import Topbar from "../components/Topbar";
 import LetterModal from "../components/LetterModal";
 import Grow from "@mui/material/Grow";
+import Alert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
 import { API } from "../utils/ApiConfig";
 
@@ -18,6 +19,10 @@ const SignIn = () => {
     email: "",
     password: "",
   });
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const isButtonEnabled =
+    inputValue.email.length > 0 && inputValue.password.length > 0;
 
   const onChangeInput = (e) => {
     const { name, value } = e.target;
@@ -37,8 +42,10 @@ const SignIn = () => {
       .then((res) => {
         if (res.message === "로그인에 성공하였습니다") {
           localStorage.setItem("AuthToken", res.access);
+          navigate("/");
+        } else {
+          setErrorMessage(res.message);
         }
-        console.log(res.message);
       });
   };
 
@@ -61,6 +68,7 @@ const SignIn = () => {
       ease: "power3.out",
     });
   }, []);
+
   return (
     <Container>
       <Topbar />
@@ -76,6 +84,11 @@ const SignIn = () => {
       <Grow in={true} style={{ transformOrigin: "0 2 2" }} timeout={700}>
         <div>
           <Body>
+            {errorMessage && (
+              <Grow in={true} timeout={2000}>
+                <Alert severity="error">{errorMessage}</Alert>
+              </Grow>
+            )}
             <LetterTextField text="👋 만나서 반가워요" />
             <LetterTextField text="🙌 오늘 하루도 화이팅!" />
             <LetterTextField />
@@ -97,9 +110,9 @@ const SignIn = () => {
             />
             <LetterTextField />
 
-            <LoginButton>
+            <LoginButton onClick={loginHandler} disabled={!isButtonEnabled}>
               <Iconlogo src="/assets/signicon.png" alt="hand icon" />
-              <BtnText onClick={loginHandler}>로그인</BtnText>
+              <BtnText>로그인</BtnText>
             </LoginButton>
             <KakaoLoginButton>
               <Iconlogo src="/assets/kakaoicon.png" alt="Kakao logo" />

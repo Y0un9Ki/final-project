@@ -23,6 +23,15 @@ const SignUp = () => {
     location: "",
   });
 
+  const isButtonEnabled =
+    inputValue.email.length > 0 &&
+    inputValue.password.length > 0 &&
+    inputValue.password2.length > 0 &&
+    inputValue.username.length > 0 &&
+    inputValue.birthday.length > 0 &&
+    inputValue.phoneNumber.length > 0 &&
+    inputValue.location.length > 0;
+
   const onChangeInput = (e) => {
     const { name, value } = e.target;
     setInputValue({ ...inputValue, [name]: value });
@@ -134,7 +143,7 @@ const SignUp = () => {
               changeHandler={onChangeInput}
             />
             <LetterTextField />
-            <LoginButton>
+            <LoginButton disabled={!isButtonEnabled}>
               <Iconlogo src="/assets/signicon.png" alt="hand icon" />
               <BtnText onClick={signupHandler}>회원가입</BtnText>
             </LoginButton>
