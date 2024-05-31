@@ -40,6 +40,9 @@ const SignIn = () => {
     })
       .then((res) => res.json())
       .then((res) => {
+        console.log(res.email);
+      })
+      .then((res) => {
         if (res.message === "로그인에 성공하였습니다") {
           localStorage.setItem("AuthToken", res.access);
           navigate("/");

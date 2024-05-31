@@ -26,8 +26,8 @@ class QuestionList(mixins.ListModelMixin,
     # permission_classes = (AllowAny,)
     authentication_classes = [JWTAuthentication]
     pagination_class = CustomPagination
-    permission_classes = (IsAuthenticated,)
-    # authentication_classes = [BasicAuthentication, SessionAuthentication]
+    # permission_classes = (IsAuthenticated,)
+    authentication_classes = [BasicAuthentication, SessionAuthentication]
     serializer_class = QuestionListSerializer
     queryset = Question.objects.all().order_by('create_date')
     

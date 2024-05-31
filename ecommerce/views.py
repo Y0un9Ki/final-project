@@ -36,7 +36,7 @@ class PerformanceList(mixins.ListModelMixin,
 class PerformanceMainList(APIView):
     permission_classes = [AllowAny]
     # authentication_classes = [BasicAuthentication, SessionAuthentication]
-    authentication_classes = [JWTAuthentication]
+    # authentication_classes = [JWTAuthentication]
     
     def get(self, request, format=None):
         performance = Performance.objects.all().order_by('startdate')
