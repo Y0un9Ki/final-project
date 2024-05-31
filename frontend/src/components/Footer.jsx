@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
+import LoginCheckModal from "./LoginCheckModal";
 
 const Footer = () => {
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
-
   const token = localStorage.getItem("AuthToken");
+
+  const openModal = () => setShowModal(true);
+  const closeModal = () => setShowModal(false);
 
   return (
     <FooterContainer>
@@ -21,17 +25,25 @@ const Footer = () => {
           <NavTitle>메인</NavTitle>
         </StyledButton>
         <StyledButton
-          onClick={() => {
-            navigate("/letterlist");
-          }}
+          onClick={
+            !token
+              ? openModal
+              : () => {
+                  navigate("/letterlist");
+                }
+          }
           startIcon={<NavIcon src="/assets/letteringicon.png" />}
         >
           <NavTitle>레터링</NavTitle>
         </StyledButton>
         <StyledButton
-          onClick={() => {
-            navigate("/lifelist");
-          }}
+          onClick={
+            !token
+              ? openModal
+              : () => {
+                  navigate("/lifelist");
+                }
+          }
           startIcon={<NavIcon src="/assets/lifeicon.png" />}
         >
           <NavTitle>라이프</NavTitle>
@@ -56,6 +68,7 @@ const Footer = () => {
           </StyledButton>
         )}
       </Nav>
+      <LoginCheckModal show={showModal} onClose={closeModal} />
     </FooterContainer>
   );
 };
