@@ -1,17 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import Button from "@mui/material/Button";
-import { useNavigate } from "react-router-dom";
-import IconButton from "@mui/material/IconButton";
-import LoginCheckModal from "./LoginCheckModal";
+import { useNavigate, useLocation } from "react-router-dom";
 
-const Footer = () => {
-  const [showModal, setShowModal] = useState(false);
+const Footer = ({ openModal }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const token = localStorage.getItem("AuthToken");
 
-  const openModal = () => setShowModal(true);
-  const closeModal = () => setShowModal(false);
+  const isSignInOrSignUp =
+    location.pathname === "/signin" || location.pathname === "/signup";
 
   return (
     <FooterContainer>
@@ -26,25 +24,31 @@ const Footer = () => {
         </StyledButton>
         <StyledButton
           onClick={
-            !token
-              ? openModal
-              : () => {
-                  navigate("/letterlist");
-                }
+            isSignInOrSignUp
+              ? null
+              : !token
+                ? openModal
+                : () => {
+                    navigate("/letterlist");
+                  }
           }
           startIcon={<NavIcon src="/assets/letteringicon.png" />}
+          disabled={isSignInOrSignUp}
         >
           <NavTitle>레터링</NavTitle>
         </StyledButton>
         <StyledButton
           onClick={
-            !token
-              ? openModal
-              : () => {
-                  navigate("/lifelist");
-                }
+            isSignInOrSignUp
+              ? null
+              : !token
+                ? openModal
+                : () => {
+                    navigate("/lifelist");
+                  }
           }
           startIcon={<NavIcon src="/assets/lifeicon.png" />}
+          disabled={isSignInOrSignUp}
         >
           <NavTitle>라이프</NavTitle>
         </StyledButton>
@@ -68,7 +72,6 @@ const Footer = () => {
           </StyledButton>
         )}
       </Nav>
-      <LoginCheckModal show={showModal} onClose={closeModal} />
     </FooterContainer>
   );
 };

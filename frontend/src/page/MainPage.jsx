@@ -8,16 +8,15 @@ import Header from "../components/Header";
 import LifeListContainer from "../components/LifeListContainer";
 import Grow from "@mui/material/Grow";
 import { API } from "../utils/ApiConfig";
+import LoginCheckModal from "../components/LoginCheckModal";
 
-const MainPage = () => {
+const MainPage = ({ closeModal, showModal }) => {
   const infoTextRefs = useRef([]);
   const infoTitleRefs = useRef([]);
-  const [showModal, setShowModal] = useState(false);
   const [data, setData] = useState();
   const token = localStorage.getItem("AuthToken");
 
-  const openModal = () => setShowModal(true);
-  const closeModal = () => setShowModal(false);
+  console.log(showModal);
 
   useEffect(() => {
     fetch(`${API.mainLifeList}`, {
@@ -113,7 +112,7 @@ const MainPage = () => {
             </Grow>
           );
         })}
-      <></>
+      <LoginCheckModal show={showModal} onClose={closeModal} />
     </Container>
   );
 };
