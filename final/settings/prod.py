@@ -143,3 +143,8 @@ SIMPLE_JWT = {
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
     'TOKEN_TYPE_CLAIM': 'token_type',
 }
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),  # 리액트 앱의 정적 파일들이 위치한 경로
+    # 다른 정적 파일들이 위치한 경로들...
+]
