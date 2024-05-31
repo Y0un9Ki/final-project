@@ -43,9 +43,13 @@ const SignIn = () => {
         if (res.message === "로그인에 성공하였습니다") {
           localStorage.setItem("AuthToken", res.access);
           navigate("/");
-        } else {
-          setErrorMessage(res.message);
+        } else if (
+          res.email &&
+          res.email[0] === "유효한 이메일 주소를 입력하십시오."
+        ) {
+          setErrorMessage("유효한 이메일을 입력해주세요.");
         }
+        setErrorMessage(res.message);
       });
   };
 
@@ -84,11 +88,6 @@ const SignIn = () => {
       <Grow in={true} style={{ transformOrigin: "0 2 2" }} timeout={700}>
         <div>
           <Body>
-            {errorMessage && (
-              <Grow in={true} timeout={2000}>
-                <Alert severity="error">{errorMessage}</Alert>
-              </Grow>
-            )}
             <LetterTextField text="👋 만나서 반가워요" />
             <LetterTextField text="🙌 오늘 하루도 화이팅!" />
             <LetterTextField />
@@ -109,7 +108,11 @@ const SignIn = () => {
               changeHandler={onChangeInput}
             />
             <LetterTextField />
-
+            {errorMessage && (
+              <Grow in={true} timeout={1500}>
+                <Alert severity="error">{errorMessage}</Alert>
+              </Grow>
+            )}
             <LoginButton onClick={loginHandler} disabled={!isButtonEnabled}>
               <Iconlogo src="/assets/signicon.png" alt="hand icon" />
               <BtnText>로그인</BtnText>
