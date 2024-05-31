@@ -6,12 +6,16 @@ import LetterTextField from "../components/LetterTextField";
 import { gsap } from "gsap";
 import Grow from "@mui/material/Grow";
 import { API } from "../utils/ApiConfig";
+import LogoutModal from "../components/LogoutModal";
 
 const Mypage = () => {
+  const [showModal, setShowModal] = useState(false);
   const infoTextRefs = useRef([]);
   const infoTitleRefs = useRef([]);
   const token = localStorage.getItem("AuthToken");
   const [data, setData] = useState("");
+  const openModal = () => setShowModal(true);
+  const closeModal = () => setShowModal(false);
 
   const formattingDate = (dateStr) => {
     const date = new Date(dateStr);
@@ -107,9 +111,14 @@ const Mypage = () => {
               <Iconlogo src="/assets/editicon.png" alt="hand icon" />
               <BtnText>회원정보 변경</BtnText>
             </EditButton>
+            <SignOutButton onClick={openModal}>
+              <Iconlogo src="/assets/user_empty.png" alt="hand icon" />
+              <BtnText>로그아웃</BtnText>
+            </SignOutButton>
           </Body>
         </div>
       </Grow>
+      <LogoutModal show={showModal} onClose={closeModal} />
     </Container>
   );
 };
@@ -173,6 +182,26 @@ const EditButton = styled.button`
 
   &:hover {
     background-color: #d1cdcd;
+  }
+`;
+
+const SignOutButton = styled.button`
+  width: 100%;
+  padding: 8px 28px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 5px;
+  background-color: #e46c68;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #f53c36;
   }
 `;
 
