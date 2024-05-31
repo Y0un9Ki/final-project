@@ -14,6 +14,8 @@ const API = {
   addAnswer: `${URL}:${PORT}/latter/answer/create/`,
   // 질문 답글 상세보기
   answer: `${URL}:${PORT}/latter/detail/`,
+  // 메인페이지 라이프리스트
+  mainLifeList: `${URL}:${PORT}/ecommerce/performance/mainlist/`,
   // 모든 라이프리스트
   totalLifeList: `${URL}:${PORT}/ecommerce/performance/`,
   // 카테고리 별 라이프

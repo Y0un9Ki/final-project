@@ -20,7 +20,7 @@ const MainPage = () => {
   const closeModal = () => setShowModal(false);
 
   useEffect(() => {
-    fetch(`${API.totalLifeList}?page=1`, {
+    fetch(`${API.mainLifeList}?page=1`, {
       headers: {
         Authorization: `JWT ${token}`,
       },
