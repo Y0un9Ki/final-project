@@ -5,7 +5,7 @@ import LetterTextField from "../components/LetterTextField";
 import { gsap } from "gsap";
 import LetterModal from "../components/LetterModal";
 import { API } from "../utils/ApiConfig";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Lettering = () => {
   const infoTextRefs = useRef([]);
@@ -16,6 +16,7 @@ const Lettering = () => {
   const location = useLocation();
   const id = location.state;
   const token = localStorage.getItem("AuthToken");
+  const navigate = useNavigate("");
 
   const onChangeHandler = (e) => {
     setInputValue(e.target.value);
@@ -38,8 +39,8 @@ const Lettering = () => {
       }),
     })
       .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
+      .then(() => {
+        navigate("/letterlist");
       });
   };
 

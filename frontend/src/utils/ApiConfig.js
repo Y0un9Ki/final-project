@@ -1,4 +1,4 @@
-const URL = "http://localhost";
+const URL = "http://34.47.95.16";
 const PORT = 8000;
 
 const API = {

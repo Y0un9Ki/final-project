@@ -34,6 +34,8 @@ const ReserveList = () => {
     return phoneNumber;
   };
 
+  console.log("123", data);
+
   useEffect(() => {
     fetch(`${API.reserve}`, {
       headers: {
