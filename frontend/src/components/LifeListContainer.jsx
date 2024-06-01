@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import LoginCheckModal from "./LoginCheckModal";
+import { Category } from "../utils/Category";
+import { DdayCal } from "../utils/DdayCal";
+import axios from "axios";
 
 const LifeListContainer = ({
   id,
@@ -11,34 +15,70 @@ const LifeListContainer = ({
   price,
 }) => {
   const navigate = useNavigate();
+  const token = localStorage.getItem("AuthToken");
+  const [showModal, setShowModal] = useState(false);
+  const [image, setImage] = useState("");
+
+  const openModal = () => setShowModal(true);
+  const closeModal = () => setShowModal(false);
 
   const formattingDate = (dateStr) => {
     const date = new Date(dateStr);
     return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
   };
 
+  useEffect(() => {
+    const url = `https://api.unsplash.com/search/photos`;
+    const ACCESS_KEY = process.env.REACT_APP_ACCESS_KEY;
+    console.log(ACCESS_KEY);
+    axios
+      .get(url, {
+        params: {
+          query: "festival",
+          client_id: `${ACCESS_KEY}`,
+          per_page: 30,
+        },
+      })
+      .then((response) => {
+        if (response.data.results.length > 0) {
+          setImage(
+            response.data.results[Math.floor(Math.random() * 30)].urls.small
+          );
+        }
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching photos:", error);
+      });
+  }, []);
+
   return (
-    <Container
-      onClick={() => {
-        navigate("/lifedetail", { state: id });
-      }}
-    >
-      <ImageSection>
-        <Image />
-      </ImageSection>
-      <TextSection>
-        <CategorySection>
-          <CatItem>{formattingDate(dateStr)}</CatItem>
-          <CatItem>{category}</CatItem>
-        </CategorySection>
-        <TitleSection>{title}</TitleSection>
-        <SubTitleSection>{subtitle}</SubTitleSection>
-        <PointSection>
-          <PointIcon src="/assets/pointicon.png" />
-          {price}
-        </PointSection>
-      </TextSection>
-    </Container>
+    <>
+      <Container
+        onClick={
+          !token
+            ? openModal
+            : () => {
+                navigate("/lifedetail", { state: id });
+              }
+        }
+      >
+        <ImageSection>{image && <Image src={image} />}</ImageSection>
+        <TextSection>
+          <CategorySection>
+            <CatItem>{DdayCal(formattingDate(dateStr))}</CatItem>
+            <CatItem>{Category[category]}</CatItem>
+          </CategorySection>
+          <TitleSection>{title}</TitleSection>
+          <SubTitleSection>{subtitle}</SubTitleSection>
+          <PointSection>
+            <PointIcon src="/assets/pointicon.png" />
+            {price}
+          </PointSection>
+        </TextSection>
+      </Container>
+      <LoginCheckModal show={showModal} onClose={closeModal} />
+    </>
   );
 };
 
@@ -68,7 +108,12 @@ const ImageSection = styled.section`
   background-color: #e6e1e1;
 `;
 
-const Image = styled.img``;
+const Image = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+`;
 
 const TextSection = styled.section`
   display: flex;
