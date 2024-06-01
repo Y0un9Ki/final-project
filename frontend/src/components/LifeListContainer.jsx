@@ -18,6 +18,7 @@ const LifeListContainer = ({
   const token = localStorage.getItem("AuthToken");
   const [showModal, setShowModal] = useState(false);
   const [image, setImage] = useState("");
+  const [imageList, setImageList] = useState([]);
 
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
@@ -41,11 +42,20 @@ const LifeListContainer = ({
       })
       .then((response) => {
         if (response.data.results.length > 0) {
-          setImage(
-            response.data.results[Math.floor(Math.random() * 30)].urls.small
-          );
+          const allImages = response.data.results;
+
+          const selectedImages = [];
+          const selectedIndexes = new Set();
+          while (selectedIndexes.size < 7) {
+            const randomIndex = Math.floor(Math.random() * allImages.length);
+            if (!selectedIndexes.has(randomIndex)) {
+              selectedIndexes.add(randomIndex);
+              selectedImages.push(allImages[randomIndex].urls.small);
+            }
+          }
+          setImage(selectedImages[0]);
+          setImageList(selectedImages);
         }
-        console.log(response.data);
       })
       .catch((error) => {
         console.error("Error fetching photos:", error);
@@ -59,7 +69,9 @@ const LifeListContainer = ({
           !token
             ? openModal
             : () => {
-                navigate("/lifedetail", { state: id });
+                navigate("/lifedetail", {
+                  state: { id: id, image: imageList },
+                });
               }
         }
       >

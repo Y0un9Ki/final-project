@@ -4,9 +4,9 @@ import Topbar from "../components/Topbar";
 import LetterTextField from "../components/LetterTextField";
 import { gsap } from "gsap";
 import LifeReserveModal from "../components/LifeReserveModal";
-import Grow from "@mui/material/Grow";
 import { useLocation } from "react-router-dom";
 import { API } from "../utils/ApiConfig";
+import Slick from "../components/Slick";
 
 const LifeDetail = () => {
   const infoTextRefs = useRef([]);
@@ -14,8 +14,10 @@ const LifeDetail = () => {
   const [showModal, setShowModal] = useState(false);
   const [data, setData] = useState();
   const location = useLocation();
-  const id = location.state;
+  const { id, image } = location.state || {};
   const token = localStorage.getItem("AuthToken");
+
+  console.log(location);
 
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
@@ -65,17 +67,26 @@ const LifeDetail = () => {
         </LetteringTitle>
       </ContentSection>
       <Body>
-        <LetterTextField text="당신을 위한 공연을 준비했어요 👏" />
-        <LetterTextField text="공연 제목" />
-        <LetterTextField text={data?.name} />
+        <TitleField>당신을 위한 공연을 준비했어요 👏</TitleField>
+        <Slick imageList={image} />
+        <TextWrap>
+          <LetterTextField text="공연 제목" />
+          <LetterTextField text={data?.name} />
+        </TextWrap>
+        <TextWrap>
+          <LetterTextField text="포인트" />
+          <LetterTextField text={data?.price} />
+        </TextWrap>
         <LetterTextField text="등장인물 및 배우" />
         <LetterTextField text={data?.character} />
-        <LetterTextField text="포인트" />
-        <LetterTextField text={data?.price} />
-        <LetterTextField text="상영날짜" />
-        <LetterTextField text={formattingDate(data?.startdate)} />
-        <LetterTextField text="장소 및 위치" />
-        <LetterTextField text={data?.venue} />
+        <TextWrap>
+          <LetterTextField text="상영날짜" />
+          <LetterTextField text={formattingDate(data?.startdate)} />
+        </TextWrap>
+        <TextWrap>
+          <LetterTextField text="장소 및 위치" />
+          <LetterTextField text={data?.venue} />
+        </TextWrap>
         {[...Array(4)].map((value, index) => {
           return <LetterTextField key={index} />;
         })}
@@ -117,6 +128,14 @@ const Body = styled.div`
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
+const TitleField = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-top: 4px;
+  min-height: 32px;
+`;
+
 const BottomSection = styled.div`
   display: flex;
 `;
@@ -136,6 +155,10 @@ const LetterImage = styled.img`
   right: 28px;
   bottom: 78px;
   height: 160px;
+`;
+
+const TextWrap = styled.div`
+  display: flex;
 `;
 
 const ContentSection = styled.section`
