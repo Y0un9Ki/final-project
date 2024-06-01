@@ -57,7 +57,7 @@ const SignUp = () => {
       .then((data) => {
         if (data.message === "회원가입에 성공하였습니다") {
           setAlertMessage({ type: "success", text: data.message });
-          setTimeout(() => navigate("/signin"), 3000);
+          setTimeout(() => navigate("/signin"), 1000);
         } else {
           const errorKey = Object.keys(data)[0];
           setAlertMessage({ type: "error", text: data[errorKey][0] });

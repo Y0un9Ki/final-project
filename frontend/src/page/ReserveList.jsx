@@ -9,7 +9,7 @@ import { API } from "../utils/ApiConfig";
 import LogoutModal from "../components/LogoutModal";
 import { useNavigate } from "react-router-dom";
 
-const Mypage = () => {
+const ReserveList = () => {
   const [showModal, setShowModal] = useState(false);
   const infoTextRefs = useRef([]);
   const infoTitleRefs = useRef([]);
@@ -35,7 +35,7 @@ const Mypage = () => {
   };
 
   useEffect(() => {
-    fetch(`${API.mypage}`, {
+    fetch(`${API.reserve}`, {
       headers: {
         Authorization: `JWT ${token}`,
       },
@@ -74,10 +74,7 @@ const Mypage = () => {
       <ContentSection>
         <LetteringTitle ref={(el) => (infoTitleRefs.current[0] = el)}>
           <ContentLogo src="/assets/usericon.png" />
-          {data?.username}님! 안녕하세요!
-        </LetteringTitle>
-        <LetteringTitle ref={(el) => (infoTitleRefs.current[1] = el)}>
-          How Are You에 오신걸 환영해요!
+          {data?.username}님이 예약하신 현황이에요!
         </LetteringTitle>
       </ContentSection>
       <Grow in={true} style={{ transformOrigin: "0 0 2" }} timeout={700}>
@@ -94,60 +91,24 @@ const Mypage = () => {
               </ImageSection>
             </TopSection>
             <LetterTextField />
-            <TopSection>
-              <LetterTextField text="보유 포인트" />
-              <LetterTextField
-                text={
-                  !data?.point ? (
-                    <Wrap>
-                      0
-                      <Iconlogo src="/assets/pointicon.png" />
-                    </Wrap>
-                  ) : (
-                    <Wrap>
-                      {data?.point}
-                      <Iconlogo src="/assets/pointicon.png" />
-                    </Wrap>
-                  )
-                }
-              />
-              <LetterText
-                onClick={() => {
-                  navigate("/reserveList");
-                }}
-              >
-                예약 현황
-              </LetterText>
-            </TopSection>
             <LetterTextField />
-            <LetterTextField text="아이디" />
-            <LetterTextField text={data?.email} />
-            <LetterTextField text="이름" />
-            <LetterTextField text={data?.username} />
-            <LetterTextField text="생년월일" />
-            <LetterTextField text={formattingDate(data?.birthday)} />
-            <LetterTextField text="전화번호" />
-            <LetterTextField text={formattingNumber(data?.number)} />
-            <LetterTextField text="주소" />
-            <LetterTextField text={data?.location} />
             <LetterTextField />
-            <EditButton>
-              <Iconlogo src="/assets/editicon.png" alt="hand icon" />
-              <BtnText>회원정보 변경</BtnText>
-            </EditButton>
-            <SignOutButton onClick={openModal}>
+            <NavButton
+              onClick={() => {
+                navigate("/mypage");
+              }}
+            >
               <Iconlogo src="/assets/user_empty.png" alt="hand icon" />
-              <BtnText>로그아웃</BtnText>
-            </SignOutButton>
+              <BtnText>마이페이지</BtnText>
+            </NavButton>
           </Body>
         </div>
       </Grow>
-      <LogoutModal show={showModal} onClose={closeModal} />
     </Container>
   );
 };
 
-export default Mypage;
+export default ReserveList;
 
 const Container = styled.div`
   display: flex;
@@ -163,7 +124,7 @@ const Container = styled.div`
 
 const Body = styled.div`
   width: 320px;
-  margin: 50px auto;
+  margin: 20px auto;
   padding: 20px;
   border-radius: 10px;
   background-color: #fff;
@@ -206,7 +167,7 @@ const ProfileImg = styled.img`
   width: 100px;
 `;
 
-const EditButton = styled.button`
+const NavButton = styled.button`
   width: 100%;
   padding: 8px 28px;
   margin: 10px 0;

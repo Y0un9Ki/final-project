@@ -9,6 +9,7 @@ import Lettering from "./page/Lettering";
 import LetteringList from "./page/LetteringList";
 import LifeList from "./page/LifeList";
 import LifeDetail from "./page/LifeDetail";
+import ReserveList from "./page/ReserveList";
 
 const Router = () => {
   return (
@@ -18,6 +19,7 @@ const Router = () => {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SiginUp />} />
         <Route path="/mypage" element={<Mypage />} />
+        <Route path="/reserveList" element={<ReserveList />} />
         <Route path="/letterlist" element={<LetteringList />} />
         <Route path="/lettering" element={<Lettering />} />
         <Route path="/lifelist" element={<LifeList />} />

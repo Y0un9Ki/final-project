@@ -1,9 +1,4 @@
-//localhost API
-// const URL = "http://localhost";
-// const PORT = 8000;
-
-//deploy API
-const URL = "http://34.47.95.16";
+const URL = "http://localhost";
 const PORT = 8000;
 
 const API = {
@@ -13,6 +8,8 @@ const API = {
   signup: `${URL}:${PORT}/user/register/`,
   // 마이페이지
   mypage: `${URL}:${PORT}/user/mypage`,
+  // 예약 현황 리스트
+  reserve: `${URL}:${PORT}/ecommerce/reservation`,
   //질문지리스트
   letterList: `${URL}:${PORT}/latter/question/`,
   // 답장 생성
