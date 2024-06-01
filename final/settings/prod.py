@@ -40,9 +40,9 @@ from .base import INSTALLED_APPS
 INSTALLED_APPS = INSTALLED_APPS
 
 # CORS 설정 - whitelist 에 추가된 주소 접근 허용
-# CORS_ORIGIN_WHITELIST = ['*']
-# CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_WHITELIST = ['http://localhost:3000', 'http://34.47.95.16:3000']
+CORS_ALLOW_CREDENTIALS = True
+# CORS_ORIGIN_ALLOW_ALL = True
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware', # cors 에러를 해결하기 위한 설정
@@ -127,10 +127,6 @@ USE_TZ = False
 
 STATIC_URL = 'static/'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),  # 리액트 앱의 정적 파일들이 위치한 경로
-    # 다른 정적 파일들이 위치한 경로들...
-]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
