@@ -33,6 +33,26 @@ class QuestionList(mixins.ListModelMixin,
     
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
+    
+class QuestionDetail(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAdminUser]
+    
+    def get_object(self, pk):
+        try:
+            question = Question.objects.get(pk=pk)
+            return question
+        except Question.DoesNotExist:
+            raise NotFound({'message': '해당 질문이 존재 하지 않습니다.'})
+        
+    def put(self, request, pk, format=None):
+        question = self.get_object(pk)
+        serializer = QuestionSerializer(question, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # 우리의 latter기능 중에서 질문 ui를 보면 질문지 리스트에는 제목과 생성날짜만 보이게 된다.
 # 그렇기에 질문지 리스트에 대한 get요청이 왔을시에 백앤드에서는 질문지의 제목과 생성일자만 API로 보내줘야 한다.
@@ -62,71 +82,71 @@ class QuestionCreate(mixins.CreateModelMixin,
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
-class QuestionDetail(APIView):
-    permission_classes = (AllowAny,)
-    # authentication_classes = [BasicAuthentication, SessionAuthentication]
-    authentication_classes = [JWTAuthentication]
+# class QuestionDetail(APIView):
+#     permission_classes = (AllowAny,)
+#     # authentication_classes = [BasicAuthentication, SessionAuthentication]
+#     authentication_classes = [JWTAuthentication]
     
-    def get_object(self, pk):
-        try:
-            question = Question.objects.get(pk=pk)
-            return question
-        except Question.DoesNotExist: 
-            raise NotFound({'message':'질문이 존재하지 않습니다.'})
+#     def get_object(self, pk):
+#         try:
+#             question = Question.objects.get(pk=pk)
+#             return question
+#         except Question.DoesNotExist: 
+#             raise NotFound({'message':'질문이 존재하지 않습니다.'})
         
-    def get(self, request, pk, format=None):
-        question = self.get_object(pk)
-        serializer = QuestionSerializer(question)
-        print(serializer.data)
+#     def get(self, request, pk, format=None):
+#         question = self.get_object(pk)
+#         serializer = QuestionSerializer(question)
+#         print(serializer.data)
         
-        content = serializer.data['content']
-        print(content)
-        user = self.request.user
-        print(user.id)
-        divided_contents = []
+#         content = serializer.data['content']
+#         print(content)
+#         user = self.request.user
+#         print(user.id)
+#         divided_contents = []
         
-        if len(content) > 20:
-            start = 0
-            while start < len(content):
-                divided_contents.append(content[start:start+20])
-                start += 20
-        else:
-            divided_contents.append(content)
+#         if len(content) > 20:
+#             start = 0
+#             while start < len(content):
+#                 divided_contents.append(content[start:start+20])
+#                 start += 20
+#         else:
+#             divided_contents.append(content)
         
-        if len(serializer.data['answer'])==0:
-            divided_comments = []
-            response_data = {
-            'user_id': user.id,
-            'question_id': serializer.data['id'],
-            'question_content': divided_contents,
-            'question_answer': divided_comments,
-        }
-            return Response(response_data)
-        else:
+#         if len(serializer.data['answer'])==0:
+#             divided_comments = []
+#             response_data = {
+#             'user_id': user.id,
+#             'question_id': serializer.data['id'],
+#             'question_content': divided_contents,
+#             'question_answer': divided_comments,
+#         }
+#             return Response(response_data)
+#         else:
         
-            comment = serializer.data['answer'][0]['comment']
-            print(comment)
-            divided_comments = []
+#             comment = serializer.data['answer'][0]['comment']
+#             print(comment)
+#             divided_comments = []
             
 
-            if len(comment) > 20:
-                start = 0
-                while start < len(comment):
-                    divided_comments.append(comment[start:start+20])
-                    start += 20
-            else:
-                divided_comments.append(comment)
+#             if len(comment) > 20:
+#                 start = 0
+#                 while start < len(comment):
+#                     divided_comments.append(comment[start:start+20])
+#                     start += 20
+#             else:
+#                 divided_comments.append(comment)
         
         
         
-        response_data = {
-            'user_id': user.id,
-            'question_id': serializer.data['id'],
-            'question_content': divided_contents,
-            'question_answer': divided_comments,
-        }
+#         response_data = {
+#             'user_id': user.id,
+#             'question_id': serializer.data['id'],
+#             'question_content': divided_contents,
+#             'question_answer': divided_comments,
+#         }
         
-        return Response(response_data)
+#         return Response(response_data)
 
 # 이부분 꼭 블로그 써라 영기야!!!!! 제일 중요!!! 
 # 이부분이 무엇이냐면 위에 코드를 수정한 것.
