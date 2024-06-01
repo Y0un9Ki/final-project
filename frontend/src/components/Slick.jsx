@@ -62,7 +62,7 @@ const StyledSlider = styled(Slider)`
 `;
 
 const SlideImage = styled.img`
-  width: 100%;
+  width: 280px;
   height: 200px;
   object-fit: cover;
   border-radius: 10px;
