@@ -48,4 +48,18 @@ const Bubble = styled.div`
     border-bottom: 0;
     margin-bottom: -5px;
   }
+
+  @media (max-width: 500px) {
+    bottom: 35px;
+    left: -20px;
+    width: 80px;
+    height: 30px;
+    font-size: 8px;
+
+    &:after {
+      border: 10px solid transparent;
+      border-top-color: #938888;
+      margin-bottom: -15px;
+    }
+  }
 `;
