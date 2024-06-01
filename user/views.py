@@ -10,7 +10,7 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from .models import User
 from ecommerce.models import Reservation
 from ecommerce.serializers import ReservationSerializer
-from .serializers import UserLoginSerializer, UserRegistrationSerializer, UserSerializer
+from .serializers import UserLoginSerializer, UserRegistrationSerializer, UserSerializer, UserModifySerializer
 # Create your views here.
 
 class UserOwnList(APIView):
@@ -34,6 +34,35 @@ class UserOwnList(APIView):
             'reservation': serializer.data['reservation']
         }
         return Response(response_data)
+    
+class UserModify(APIView):
+    permission_classes = [IsAuthenticated]
+    # authentication_classes = [SessionAuthentication, BasicAuthentication]
+    authentication_classes = [JWTAuthentication]
+    
+    def put(self, request, format=None):
+        user = self.request.user
+        serializer = UserModifySerializer(user, data=request.data)
+        serializer_reservation = UserSerializer(user)
+        if serializer.is_valid():
+            serializer.save()
+        
+            response_data = {
+                'id': serializer.data['id'],
+                'email': serializer.data['email'],
+                'username': serializer.data['username'],
+                'birthday': serializer.data['birthday'],
+                'location': serializer.data['location'],
+                'number': user.number,
+                'point': user.point,
+                'reservation': serializer_reservation.data['reservation']
+            }
+            response_data1 = {
+                'message': '회원정보 변경에 성공하셨습니다.'
+            }
+            return Response(response_data1)
+        else:
+            return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
 
 # 아래에 코드는 처음으로 마이페이지를 불러오는 view를 짠건데 이렇게 짤 필요가 없다.
 # 왜냐하면 User 모델은 이미 인증된 사용자의 정보를 제공하기에 굳이 get_object()써서 사용자를 조회해서 가져 올 필요가 없다.

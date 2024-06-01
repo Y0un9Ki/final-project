@@ -191,6 +191,9 @@ class ReservationCreate(APIView):
             performance = Performance.objects.get(pk=pk)
             user=self.request.user
             user_point = user.point
+            if user.point is None:
+                user.point = 0
+                user.save()
             performance_price = performance.price
             serializer = ReservationSerializer(data=request.data)
             if serializer.is_valid():
@@ -206,9 +209,10 @@ class ReservationCreate(APIView):
                         'message': '예약에 성공하셨습니다.'
                     }
                 else:
+                    point = performance_price - user_point
                     response_data = {
                         'user_id': user.id,
-                        'message': '포인트가 부족해요ㅠㅠ'   
+                        'message': f'{point}포인트가 부족해요ㅠㅠ'
                     }
                 
                 return Response(response_data, status=status.HTTP_200_OK)
@@ -228,7 +232,10 @@ class ReservationList(APIView):
         if reservation.exists():
             return reservation
         else:
-            raise NotFound({'message': '해당 유저의 예약은 없습니다.'})
+            response_data = {
+                'reservation': []
+            }
+            return Response(response_data)
         
     
     def get(self, request, format=None):

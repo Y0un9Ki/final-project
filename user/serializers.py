@@ -13,6 +13,11 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'email', 'username', 'birthday', 'location', 'number', 'point', 'reservation']
+        
+class UserModifySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'email', 'username', 'birthday', 'location', 'number']
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
