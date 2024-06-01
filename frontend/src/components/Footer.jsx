@@ -31,6 +31,7 @@ const Footer = () => {
           <NavTitle>레터링{!token && <FloatingBubble />}</NavTitle>
         </StyledButton>
         <StyledButton
+          disabled={!token}
           onClick={() => {
             navigate("/lifelist");
           }}
