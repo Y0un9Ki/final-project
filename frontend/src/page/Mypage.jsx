@@ -71,7 +71,7 @@ const Mypage = () => {
       <ContentSection>
         <LetteringTitle ref={(el) => (infoTitleRefs.current[0] = el)}>
           <ContentLogo src="/assets/usericon.png" />
-          USER 님!
+          {data?.username}님! 안녕하세요!
         </LetteringTitle>
         <LetteringTitle ref={(el) => (infoTitleRefs.current[1] = el)}>
           How Are You에 오신걸 환영해요!
@@ -93,7 +93,22 @@ const Mypage = () => {
             <LetterTextField />
             <TopSection>
               <LetterTextField text="보유 포인트" />
-              <LetterTextField text={!data?.point ? 0 : data?.point} />
+              <LetterTextField
+                text={
+                  !data?.point ? (
+                    <Wrap>
+                      0
+                      <Iconlogo src="/assets/pointicon.png" />
+                    </Wrap>
+                  ) : (
+                    <Wrap>
+                      {data?.point}
+                      <Iconlogo src="/assets/pointicon.png" />
+                    </Wrap>
+                  )
+                }
+              />
+              <LetterText>asdf</LetterText>
             </TopSection>
             <LetterTextField />
             <LetterTextField text="아이디" />
@@ -156,6 +171,15 @@ const LetterSection = styled.div`
   width: 55%;
 `;
 
+const LetterText = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-top: 4px;
+  border-bottom: 1px solid #ddd;
+  min-height: 32px;
+`;
+
 const ImageSection = styled.div`
   display: flex;
   align-items: center;
@@ -206,7 +230,8 @@ const SignOutButton = styled.button`
 `;
 
 const Iconlogo = styled.img`
-  width: 28px;
+  margin-left: 4px;
+  width: 20px;
 `;
 
 const BtnText = styled.section`
@@ -217,7 +242,6 @@ const BtnText = styled.section`
 const ContentSection = styled.section`
   display: flex;
   flex-direction: column;
-
   height: 30px;
 `;
 
@@ -231,4 +255,9 @@ const LetteringTitle = styled.p`
 const ContentLogo = styled.img`
   width: 24px;
   margin-right: 10px;
+`;
+
+const Wrap = styled.div`
+  display: flex;
+  align-items: center;
 `;

@@ -11,17 +11,10 @@ import LifeList from "./page/LifeList";
 import LifeDetail from "./page/LifeDetail";
 
 const Router = () => {
-  const [showModal, setShowModal] = useState(false);
-  const openModal = () => setShowModal(true);
-  const closeModal = () => setShowModal(false);
-
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          path="/"
-          element={<MainPage closeModal={closeModal} showModal={showModal} />}
-        />
+        <Route path="/" element={<MainPage />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SiginUp />} />
         <Route path="/mypage" element={<Mypage />} />
@@ -30,7 +23,7 @@ const Router = () => {
         <Route path="/lifelist" element={<LifeList />} />
         <Route path="/lifedetail" element={<LifeDetail />} />
       </Routes>
-      <Footer openModal={openModal} />
+      <Footer />
     </BrowserRouter>
   );
 };

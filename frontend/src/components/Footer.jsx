@@ -1,15 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Button from "@mui/material/Button";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import IconButton from "@mui/material/IconButton";
+import LoginCheckModal from "./LoginCheckModal";
+import FloatingBubble from "./FloatingBubble";
 
-const Footer = ({ openModal }) => {
+const Footer = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const token = localStorage.getItem("AuthToken");
-
-  const isSignInOrSignUp =
-    location.pathname === "/signin" || location.pathname === "/signup";
 
   return (
     <FooterContainer>
@@ -23,34 +22,22 @@ const Footer = ({ openModal }) => {
           <NavTitle>메인</NavTitle>
         </StyledButton>
         <StyledButton
-          onClick={
-            isSignInOrSignUp
-              ? null
-              : !token
-                ? openModal
-                : () => {
-                    navigate("/letterlist");
-                  }
-          }
+          disabled={!token}
+          onClick={() => {
+            navigate("/letterlist");
+          }}
           startIcon={<NavIcon src="/assets/letteringicon.png" />}
-          disabled={isSignInOrSignUp}
         >
-          <NavTitle>레터링</NavTitle>
+          <NavTitle>레터링{!token && <FloatingBubble />}</NavTitle>
         </StyledButton>
         <StyledButton
-          onClick={
-            isSignInOrSignUp
-              ? null
-              : !token
-                ? openModal
-                : () => {
-                    navigate("/lifelist");
-                  }
-          }
+          disabled={!token}
+          onClick={() => {
+            navigate("/lifelist");
+          }}
           startIcon={<NavIcon src="/assets/lifeicon.png" />}
-          disabled={isSignInOrSignUp}
         >
-          <NavTitle>라이프</NavTitle>
+          <NavTitle>라이프{!token && <FloatingBubble />}</NavTitle>
         </StyledButton>
         {!token ? (
           <StyledButton
@@ -116,6 +103,7 @@ const NavIcon = styled.img`
 `;
 
 const NavTitle = styled.p`
+  position: relative;
   font-size: 14px;
   padding-left: 10px;
   color: black;

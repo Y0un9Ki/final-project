@@ -10,13 +10,11 @@ import Grow from "@mui/material/Grow";
 import { API } from "../utils/ApiConfig";
 import LoginCheckModal from "../components/LoginCheckModal";
 
-const MainPage = ({ closeModal, showModal }) => {
+const MainPage = () => {
   const infoTextRefs = useRef([]);
   const infoTitleRefs = useRef([]);
   const [data, setData] = useState();
   const token = localStorage.getItem("AuthToken");
-
-  console.log(showModal);
 
   useEffect(() => {
     fetch(`${API.mainLifeList}`, {
@@ -112,7 +110,6 @@ const MainPage = ({ closeModal, showModal }) => {
             </Grow>
           );
         })}
-      <LoginCheckModal show={showModal} onClose={closeModal} />
     </Container>
   );
 };

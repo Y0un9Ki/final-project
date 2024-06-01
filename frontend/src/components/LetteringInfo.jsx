@@ -3,6 +3,7 @@ import styled, { keyframes } from "styled-components";
 import Grow from "@mui/material/Grow";
 import LoginCheckModal from "./LoginCheckModal";
 import { useNavigate } from "react-router-dom";
+import FloatingBubble from "./FloatingBubble";
 
 const LetteringInfo = () => {
   const [showModal, setShowModal] = useState(false);
