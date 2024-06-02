@@ -4,7 +4,7 @@ import { gsap } from "gsap";
 import LetterTextField from "./LetterTextField";
 import Checkbox from "@mui/material/Checkbox";
 
-const LifeReserveModal = ({ show, onClose }) => {
+const LifeReserveModal = ({ show, onClose, submit }) => {
   const modalRef = useRef(null);
   const overlayRef = useRef(null);
   const [checkedTerms, setCheckedTerms] = useState(false);
@@ -94,7 +94,7 @@ const LifeReserveModal = ({ show, onClose }) => {
             </CheckboxText>
           </CheckBoxField>
           <ButtonSection>
-            <SubmitButton disabled={!isButtonEnabled}>
+            <SubmitButton disabled={!isButtonEnabled} onClick={submit}>
               <Iconlogo src="/assets/ticketicon.png" />
               <BtnText>예약 확정하기</BtnText>
             </SubmitButton>

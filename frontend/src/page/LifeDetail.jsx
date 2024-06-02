@@ -7,6 +7,7 @@ import LifeReserveModal from "../components/LifeReserveModal";
 import { useLocation } from "react-router-dom";
 import { API } from "../utils/ApiConfig";
 import Slick from "../components/Slick";
+import { jwtDecode } from "jwt-decode";
 
 const LifeDetail = () => {
   const infoTextRefs = useRef([]);
@@ -23,6 +24,21 @@ const LifeDetail = () => {
   const formattingDate = (dateStr) => {
     const date = new Date(dateStr);
     return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
+  };
+
+  console.log(jwtDecode(token).user_id);
+
+  const reserveHandler = () => {
+    fetch(`${API.reservation}${id}`, {
+      headers: {
+        method: "POST",
+        Authorization: `JWT ${token}`,
+        body: JSON.stringify({
+          id: jwtDecode(token).user_id,
+          performance: id,
+        }),
+      },
+    });
   };
 
   useEffect(() => {
@@ -97,7 +113,11 @@ const LifeDetail = () => {
         <SubmitButton>
           <Iconlogo src="/assets/ticketicon.png" />
           <BtnText onClick={openModal}>공연 예약하기</BtnText>
-          <LifeReserveModal show={showModal} onClose={closeModal} />
+          <LifeReserveModal
+            show={showModal}
+            onClose={closeModal}
+            submit={reserveHandler}
+          />
         </SubmitButton>
         <LetterImage src="/assets/char4.png" />
       </Body>
