@@ -195,7 +195,13 @@ class ReservationCreate(APIView):
                 user.point = 0
                 user.save()
             performance_price = performance.price
-            serializer = ReservationSerializer(data=request.data)
+            print(request.data)
+            print(request)
+            request_data = {
+                'user': user.id,
+                'performance': pk
+            }
+            serializer = ReservationSerializer(data=request_data)
             if serializer.is_valid():
                 if user_point >= performance_price:
                     user.point = user_point - performance_price
