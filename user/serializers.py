@@ -38,7 +38,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         validated_data.pop('password2','')
-        user = User.objects.create_user(**validated_data) #usermanager에 create_user라는 함수를 만들어 놨다!!!
+        user = User.objects.create_user(**validated_data) # usermanager에 create_user라는 함수를 만들어 놨다!!!
         return user
     
 class UserLoginSerializer(serializers.Serializer):

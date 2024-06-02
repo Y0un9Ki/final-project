@@ -31,8 +31,6 @@ class PerformanceList(mixins.ListModelMixin,
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
     
-# 메인페이지에 보면 공연리스트가 3개만 보여지는 부분이 있는데 그것에 해당하는 API를 만드는중
-# 즉 공연리스트를 3개만 뽑아서 보내줘야 한다.
 class PerformanceMainList(APIView):
     permission_classes = [AllowAny]
     # authentication_classes = [BasicAuthentication, SessionAuthentication]
@@ -240,13 +238,6 @@ class ReservationCreate(APIView):
                     }
                     return Response(response_data)
             except Reservation.DoesNotExist:
-                # 영기야 POST 요청시에 reservation모델이 외래키로 참고하고 있는 (여기서는 reservation은 user랑 performance를 외래키로 참고 하고 있어) 값들의
-                # id값을(user와 performance의 id값) body에 꼭 넣어줘서 POST요청을 보내야만 생성이 되었다.
-                # 이전에도 이런 경험을 했었어!!!
-                # 근데 난 여기서 요청한 user를 식별할 수 있고, 엔드포인트에 performance의 id를
-                # 요청으로 받기에 결국에는 user의 id와 performance의 id를 알 수 있어 그래서 내가 자동으로 넣어주는 과정을 만들었다. 그러면 프론트에서 Post요청시에
-                # body에 아무런 값을 주지 않아도 내가 자동으로 넣어주기에 POST요청시에 reservation을 생성할 수 있어!!!!! 
-                # 아래에 코드야!!! 블로그 작성하자!!!
                 request_data = {
                     'user': user.id,
                     'performance': pk
