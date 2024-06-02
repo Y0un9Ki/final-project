@@ -8,6 +8,7 @@ import Grow from "@mui/material/Grow";
 import { API } from "../utils/ApiConfig";
 import LogoutModal from "../components/LogoutModal";
 import { useNavigate } from "react-router-dom";
+import ReserveContainer from "../components/ReserveContainer";
 
 const ReserveList = () => {
   const infoTextRefs = useRef([]);
@@ -20,17 +21,6 @@ const ReserveList = () => {
     const date = new Date(dateStr);
     return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
   };
-
-  const formattingNumber = (phoneNumber) => {
-    const cleaned = ("" + phoneNumber).replace(/\D/g, "");
-    const match = cleaned.match(/^(\d{3})(\d{4})(\d{4})$/);
-    if (match) {
-      return match[1] + " - " + match[2] + " - " + match[3];
-    }
-    return phoneNumber;
-  };
-
-  console.log("123", data);
 
   useEffect(() => {
     fetch(`${API.reserve}`, {
@@ -47,9 +37,7 @@ const ReserveList = () => {
       .then((data) => {
         setData(data);
       })
-      .catch((error) => {
-        console.error("There was a problem with the fetch operation:", error);
-      });
+      .catch((error) => {});
 
     gsap.from(infoTextRefs.current, {
       duration: 1,
@@ -66,6 +54,7 @@ const ReserveList = () => {
       ease: "power3.out",
     });
   }, []);
+
   return (
     <Container>
       <Topbar />
@@ -89,6 +78,17 @@ const ReserveList = () => {
               </ImageSection>
             </TopSection>
             <LetterTextField />
+            {data &&
+              data?.map((datalist) => {
+                return (
+                  <ReserveContainer
+                    key={datalist.id}
+                    title={datalist.performance_name}
+                    date={formattingDate(datalist.performance_startdate)}
+                    performanceId={datalist.performance}
+                  />
+                );
+              })}
             <LetterTextField />
             <LetterTextField />
             <NavButton

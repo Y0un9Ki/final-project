@@ -15,7 +15,6 @@ const LetterListContainer = ({ id, title, date }) => {
   useEffect(() => {
     const url = `https://api.unsplash.com/search/photos`;
     const ACCESS_KEY = process.env.REACT_APP_ACCESS_KEY;
-    console.log(ACCESS_KEY);
     axios
       .get(url, {
         params: {
@@ -30,11 +29,8 @@ const LetterListContainer = ({ id, title, date }) => {
             response.data.results[Math.floor(Math.random() * 30)].urls.small
           );
         }
-        console.log(response.data);
       })
-      .catch((error) => {
-        console.error("Error fetching photos:", error);
-      });
+      .catch((error) => {});
   }, []);
 
   return (

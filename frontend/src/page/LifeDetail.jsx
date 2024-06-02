@@ -7,6 +7,8 @@ import LifeReserveModal from "../components/LifeReserveModal";
 import { useLocation } from "react-router-dom";
 import { API } from "../utils/ApiConfig";
 import Slick from "../components/Slick";
+import { jwtDecode } from "jwt-decode";
+import ReserveResponseModal from "../components/ReserveResponseModal";
 
 const LifeDetail = () => {
   const infoTextRefs = useRef([]);
@@ -16,6 +18,8 @@ const LifeDetail = () => {
   const location = useLocation();
   const { id, image } = location.state || {};
   const token = localStorage.getItem("AuthToken");
+  const [response, setResponse] = useState(false);
+  const [status, setStatus] = useState(false);
 
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
@@ -23,6 +27,29 @@ const LifeDetail = () => {
   const formattingDate = (dateStr) => {
     const date = new Date(dateStr);
     return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
+  };
+
+  const reserveHandler = () => {
+    fetch(`${API.reservation}${id}/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `JWT ${token}`,
+      },
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((res) => {
+        if (res.message === "예약에 성공하셨습니다.") {
+          setShowModal(false);
+          setResponse(true);
+          setStatus(true);
+        } else {
+          setShowModal(false);
+          setResponse(true);
+          setStatus(false);
+        }
+      });
   };
 
   useEffect(() => {
@@ -97,10 +124,21 @@ const LifeDetail = () => {
         <SubmitButton>
           <Iconlogo src="/assets/ticketicon.png" />
           <BtnText onClick={openModal}>공연 예약하기</BtnText>
-          <LifeReserveModal show={showModal} onClose={closeModal} />
         </SubmitButton>
         <LetterImage src="/assets/char4.png" />
       </Body>
+      <LifeReserveModal
+        show={showModal}
+        onClose={closeModal}
+        submit={reserveHandler}
+      />
+      <ReserveResponseModal
+        show={response}
+        status={status}
+        onClose={() => {
+          setResponse(false);
+        }}
+      />
     </Container>
   );
 };

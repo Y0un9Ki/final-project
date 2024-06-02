@@ -24,5 +24,7 @@ const API = {
   categoryLifeList: `${URL}:${PORT}/ecommerce/performance/category/`,
   // 라이프 상세보기
   lifeDetail: `${URL}:${PORT}/ecommerce/performance/detail/`,
+  // 예약
+  reservation: `${URL}:${PORT}/ecommerce/performance/reserve/`,
 };
 export { API };
