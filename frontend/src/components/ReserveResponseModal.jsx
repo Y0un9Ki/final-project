@@ -2,14 +2,12 @@ import React, { useRef, useEffect, useState } from "react";
 import styled from "styled-components";
 import { gsap } from "gsap";
 import LetterTextField from "./LetterTextField";
-import Checkbox from "@mui/material/Checkbox";
-import ReserveResponseModal from "./ReserveResponseModal";
+import { useNavigate } from "react-router-dom";
 
-const LifeReserveModal = ({ show, onClose, submit }) => {
+const ReserveResponseModal = ({ show, onClose, status }) => {
   const modalRef = useRef(null);
   const overlayRef = useRef(null);
-  const [checkedTerms, setCheckedTerms] = useState(false);
-  const [checkedPrivacy, setCheckedPrivacy] = useState(false);
+  const navigate = useNavigate("");
 
   useEffect(() => {
     if (show) {
@@ -41,65 +39,69 @@ const LifeReserveModal = ({ show, onClose, submit }) => {
       // Enable scroll
       document.body.style.overflow = "auto";
     }
-
-    // Cleanup on component unmount
     return () => {
       document.body.style.overflow = "auto";
     };
   }, [show, onClose]);
-
-  const handleCheckboxChange = (setChecked) => (event) => {
-    setChecked(event.target.checked);
-  };
-
-  const isButtonEnabled = checkedTerms && checkedPrivacy;
 
   return (
     <>
       <Overlay ref={overlayRef} show={show} onClick={onClose} />
       <ModalContainer ref={modalRef} show={show}>
         <ModalContent>
-          <h2>👋 예약전 확인할 정보입니다!</h2>
-          <LetterTextField />
-          <LetterTextField text="본 티켓은 양도 및 판매가 불가능 합니다." />
-          <LetterTextField text="예약 취소 방침을 미리 확인해 주세요." />
-          <LetterTextField />
-          <LetterTextField text="좌석은 임의로 배정됩니다." />
-          <LetterTextField text="예약 확정 시 보유 포인트 만큼 차감됩니다." />
-          <LetterTextField text="티켓 구매 내역은 1년간 보관됩니다." />
-          <LetterTextField />
-          <LetterTextField text="공연 시작 10분 전 부터 입장 가능합니다." />
-          <LetterTextField text="입장 시 본 티켓을 보여주세요." />
-          <LetterTextField text="공연 중 소음을 자제해 주세요." />
-          <LetterTextField text="식음료 여부는 각 공연장 방침을 확인해주세요." />
-          <LetterTextField />
-          <LetterTextField text="즐거운 공연관람 되세요." />
-          <CheckBoxField>
-            <Checkbox
-              onChange={handleCheckboxChange(setCheckedPrivacy)}
-              id="checkprivacy"
-              name="checkprivacy"
-            />
-            <CheckboxText for="checkprivacy">
-              개인정보 수집 내용을 확인했습니다.
-            </CheckboxText>
-          </CheckBoxField>
-          <CheckBoxField>
-            <Checkbox
-              onChange={handleCheckboxChange(setCheckedTerms)}
-              id="checkterm"
-              name="checkterm"
-            />
-            <CheckboxText for="checkterm">
-              이용약관 내용을 확인했습니다.
-            </CheckboxText>
-          </CheckBoxField>
+          {status ? (
+            <>
+              <h2>👋 예약해 주셔서 감사해요</h2>
+              <LetterTextField />
+              <LetterTextField text="예약하신 상품은 마이페이지에서 볼 수 있어요!" />
+              <LetterTextField />
+              <LetterTextField text="✅ 관람 전 시간을 확인해주세요" />
+              <LetterTextField text="✅ 관람 전 장소를 확인해 주세요 👍" />
+              <LetterTextField />
+              <LetterTextField text="예약 현황을 보려면 확인할게요 버튼을 눌러주세요!" />
+              <LetterTextField text="계속 보려면 여기서 볼게요 버튼을 눌러주세요!" />
+              <LetterTextField />
+              <LetterTextField text="즐거운 시간 보내세요! 👋" />
+            </>
+          ) : (
+            <>
+              <h2>🥲 포인트가 부족해요</h2>
+              <LetterTextField />
+              <LetterTextField text="포인트를 쌓고 상품을 예약할 수 있어요!" />
+              <LetterTextField />
+              <LetterTextField text="✅ 포인트는 하루에 한번 쌓을 수 있어요." />
+              <LetterTextField text="✅ 포인트는 500포인트 씩 쌓여요 👍" />
+              <LetterTextField text="✅ 챌린지를 통해 포인트를 쌓을수 있어요" />
+              <LetterTextField />
+              <LetterTextField text="편지를 쓰려면 답장할게요 버튼을 눌러주세요!" />
+              <LetterTextField text="계속 보려면 여기서 볼게요 버튼을 눌러주세요!" />
+            </>
+          )}
           <ButtonSection>
-            <SubmitButton disabled={!isButtonEnabled} onClick={submit}>
-              <Iconlogo src="/assets/ticketicon.png" />
-              <BtnText>예약 확정하기</BtnText>
-            </SubmitButton>
-            <CloseButton onClick={onClose}>닫기</CloseButton>
+            {status ? (
+              <SubmitButton
+                onClick={() => {
+                  navigate("/reserveList");
+                }}
+              >
+                <Iconlogo src="/assets/editicon.png" />
+                <BtnText>확인할게요!</BtnText>
+              </SubmitButton>
+            ) : (
+              <SubmitButton
+                onClick={() => {
+                  navigate("/letterlist");
+                }}
+              >
+                <Iconlogo src="/assets/editicon.png" />
+                <BtnText>답장 할게요!</BtnText>
+              </SubmitButton>
+            )}
+            {status ? (
+              <CloseButton onClick={onClose}>여기서 볼게요!</CloseButton>
+            ) : (
+              <CloseButton onClick={onClose}>여기서 볼게요!</CloseButton>
+            )}
           </ButtonSection>
         </ModalContent>
       </ModalContainer>
@@ -107,7 +109,7 @@ const LifeReserveModal = ({ show, onClose, submit }) => {
   );
 };
 
-export default LifeReserveModal;
+export default ReserveResponseModal;
 
 const Overlay = styled.div`
   display: ${({ show }) => (show ? "block" : "none")};
@@ -118,18 +120,18 @@ const Overlay = styled.div`
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
   transform: translateX(-50%);
-  z-index: 1050;
+  z-index: 1150;
 `;
 
 const ModalContainer = styled.div`
   display: ${({ show }) => (show ? "block" : "none")};
   position: fixed;
-  top: 15%;
+  top: 25%;
   left: 50%;
   width: 400px;
   background: white;
   transform: translate(-50%, -50%);
-  z-index: 1100;
+  z-index: 1200;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 `;
@@ -145,7 +147,7 @@ const ButtonSection = styled.div`
 `;
 
 const SubmitButton = styled.button`
-  width: 250px;
+  width: 50%;
   padding: 8px 28px;
   margin-top: 20px;
   border: none;
@@ -164,7 +166,7 @@ const SubmitButton = styled.button`
 `;
 
 const CloseButton = styled.button`
-  width: 100px;
+  width: 45%;
   margin-top: 20px;
   padding: 10px 20px;
   background-color: #e6e1e1;
@@ -187,18 +189,4 @@ const Iconlogo = styled.img`
 
 const BtnText = styled.section`
   width: 100%;
-`;
-
-const CheckBoxField = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  margin-top: 4px;
-  border-bottom: 1px solid #ddd;
-  min-height: 32px;
-`;
-
-const CheckboxText = styled.label`
-  font-size: 16px;
-  cursor: pointer;
 `;
