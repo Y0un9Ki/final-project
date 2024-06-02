@@ -4,7 +4,7 @@ import Topbar from "../components/Topbar";
 import LetterTextField from "../components/LetterTextField";
 import { gsap } from "gsap";
 import LifeReserveModal from "../components/LifeReserveModal";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { API } from "../utils/ApiConfig";
 import Slick from "../components/Slick";
 import { jwtDecode } from "jwt-decode";
@@ -20,6 +20,7 @@ const LifeDetail = () => {
   const token = localStorage.getItem("AuthToken");
   const [response, setResponse] = useState(false);
   const [status, setStatus] = useState(false);
+  const navigate = useNavigate("");
 
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
@@ -121,10 +122,24 @@ const LifeDetail = () => {
         <BottomSection>
           <LetterTextField />
         </BottomSection>
-        <SubmitButton>
-          <Iconlogo src="/assets/ticketicon.png" />
-          <BtnText onClick={openModal}>공연 예약하기</BtnText>
-        </SubmitButton>
+        {data?.reserved ? (
+          <SubmitButton>
+            <Iconlogo src="/assets/ticketicon.png" />
+            <BtnText
+              onClick={() => {
+                navigate("/reserveList");
+              }}
+            >
+              이미 예약된 공연이에요!
+            </BtnText>
+          </SubmitButton>
+        ) : (
+          <SubmitButton>
+            <Iconlogo src="/assets/ticketicon.png" />
+            <BtnText onClick={openModal}>공연 예약하기</BtnText>
+          </SubmitButton>
+        )}
+
         <LetterImage src="/assets/char4.png" />
       </Body>
       <LifeReserveModal
