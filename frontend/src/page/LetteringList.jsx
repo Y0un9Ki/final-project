@@ -35,9 +35,7 @@ const LetteringList = () => {
         setData(data);
         setPage(Math.ceil(data.count / 7));
       })
-      .catch((error) => {
-        console.error("There was a problem with the fetch operation:", error);
-      });
+      .catch((error) => {});
 
     gsap.from(infoTextRefs.current, {
       duration: 0.5,

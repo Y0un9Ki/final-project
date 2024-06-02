@@ -37,9 +37,7 @@ const ReserveList = () => {
       .then((data) => {
         setData(data);
       })
-      .catch((error) => {
-        console.error("There was a problem with the fetch operation:", error);
-      });
+      .catch((error) => {});
 
     gsap.from(infoTextRefs.current, {
       duration: 1,
