@@ -40,14 +40,14 @@ const LetteringList = () => {
       });
 
     gsap.from(infoTextRefs.current, {
-      duration: 1,
+      duration: 0.5,
       y: 20,
       opacity: 0,
       stagger: 0.7,
       ease: "power3.out",
     });
     gsap.from(infoTitleRefs.current, {
-      duration: 1,
+      duration: 0.5,
       y: 20,
       opacity: 0,
       stagger: 0.7,
@@ -58,11 +58,11 @@ const LetteringList = () => {
     <Container>
       <Topbar />
       <ContentSection>
-        <LetteringTitle ref={(el) => (infoTitleRefs.current[0] = el)}>
+        <LetteringTitle>
           <ContentLogo src="/assets/letteringIcon.png" />
           레터링
         </LetteringTitle>
-        <LetteringTitle ref={(el) => (infoTitleRefs.current[1] = el)}>
+        <LetteringTitle ref={(el) => (infoTitleRefs.current[0] = el)}>
           여러분의 오늘이 궁금해요! 🙌
         </LetteringTitle>
       </ContentSection>

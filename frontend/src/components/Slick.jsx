@@ -13,6 +13,8 @@ const Slick = ({ imageList }) => {
     slidesToShow: 1,
     slidesToScroll: 1,
     waitForAnimate: false,
+    autoplay: true,
+    autoplaySpeed: 3000,
   };
 
   return (

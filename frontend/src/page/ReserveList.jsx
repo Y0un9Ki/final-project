@@ -10,15 +10,11 @@ import LogoutModal from "../components/LogoutModal";
 import { useNavigate } from "react-router-dom";
 
 const ReserveList = () => {
-  const [showModal, setShowModal] = useState(false);
   const infoTextRefs = useRef([]);
   const infoTitleRefs = useRef([]);
   const token = localStorage.getItem("AuthToken");
   const [data, setData] = useState("");
   const navigate = useNavigate("");
-
-  const openModal = () => setShowModal(true);
-  const closeModal = () => setShowModal(false);
 
   const formattingDate = (dateStr) => {
     const date = new Date(dateStr);
@@ -76,7 +72,7 @@ const ReserveList = () => {
       <ContentSection>
         <LetteringTitle ref={(el) => (infoTitleRefs.current[0] = el)}>
           <ContentLogo src="/assets/usericon.png" />
-          {data?.username}님이 예약하신 현황이에요!
+          당신을 위한 공연이에요!
         </LetteringTitle>
       </ContentSection>
       <Grow in={true} style={{ transformOrigin: "0 0 2" }} timeout={700}>
@@ -84,8 +80,8 @@ const ReserveList = () => {
           <Body>
             <TopSection>
               <LetterSection>
-                <LetterTextField text="👋 만나서 반가워요" />
-                <LetterTextField text="🙌 오늘 하루도 화이팅!" />
+                <LetterTextField text="👋 장소를 확인해주세요!" />
+                <LetterTextField text="🙌 날짜를 확인해주세요!" />
                 <LetterTextField />
               </LetterSection>
               <ImageSection>

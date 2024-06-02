@@ -111,26 +111,37 @@ const Mypage = () => {
                   )
                 }
               />
-              <LetterText
-                onClick={() => {
-                  navigate("/reserveList");
-                }}
-              >
-                예약 현황
-              </LetterText>
             </TopSection>
             <LetterTextField />
-            <LetterTextField text="아이디" />
-            <LetterTextField text={data?.email} />
-            <LetterTextField text="이름" />
-            <LetterTextField text={data?.username} />
-            <LetterTextField text="생년월일" />
-            <LetterTextField text={formattingDate(data?.birthday)} />
-            <LetterTextField text="전화번호" />
-            <LetterTextField text={formattingNumber(data?.number)} />
-            <LetterTextField text="주소" />
-            <LetterTextField text={data?.location} />
+            <TextWrap>
+              <LetterTextField text="아이디" />
+              <LetterTextField text={data?.email} />
+            </TextWrap>
+            <TextWrap>
+              <LetterTextField text="이름" />
+              <LetterTextField text={data?.username} />
+            </TextWrap>
+            <TextWrap>
+              <LetterTextField text="생년월일" />
+              <LetterTextField text={formattingDate(data?.birthday)} />
+            </TextWrap>
+            <TextWrap>
+              <LetterTextField text="전화번호" />
+              <LetterTextField text={formattingNumber(data?.number)} />
+            </TextWrap>
+            <TextWrap>
+              <LetterTextField text="주소" />
+              <LetterTextField text={data?.location} />
+            </TextWrap>
             <LetterTextField />
+            <EditButton
+              onClick={() => {
+                navigate("/reserveList");
+              }}
+            >
+              <Iconlogo src="/assets/ticketicon.png" alt="hand icon" />
+              <BtnText>예약현황</BtnText>
+            </EditButton>
             <EditButton>
               <Iconlogo src="/assets/editicon.png" alt="hand icon" />
               <BtnText>회원정보 변경</BtnText>
@@ -194,6 +205,10 @@ const LetterText = styled.div`
     background-color: #ddd;
     border-radius: 8px;
   }
+`;
+
+const TextWrap = styled.div`
+  display: flex;
 `;
 
 const ImageSection = styled.div`

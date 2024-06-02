@@ -17,8 +17,6 @@ const LifeDetail = () => {
   const { id, image } = location.state || {};
   const token = localStorage.getItem("AuthToken");
 
-  console.log(location);
-
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
 
@@ -68,7 +66,10 @@ const LifeDetail = () => {
       </ContentSection>
       <Body>
         <TitleField>당신을 위한 공연을 준비했어요 👏</TitleField>
-        <Slick imageList={image} />
+        <SlickContainer>
+          <Slick imageList={image} />
+        </SlickContainer>
+
         <TextWrap>
           <LetterTextField text="공연 제목" />
           <LetterTextField text={data?.name} />
@@ -138,6 +139,16 @@ const TitleField = styled.div`
 
 const BottomSection = styled.div`
   display: flex;
+`;
+
+const SlickContainer = styled.div`
+  width: 100%;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  padding-top: px;
+  padding-bottom: 3px;
+  background-color: #111;
+  border-radius: 8px;
 `;
 
 const Response = styled.div`

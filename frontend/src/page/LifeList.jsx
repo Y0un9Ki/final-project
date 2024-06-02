@@ -9,6 +9,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { styled as muiStyled } from "@mui/material/styles";
 import { API } from "../utils/ApiConfig";
+import { Category } from "../utils/Category";
 
 const LifeList = () => {
   const [value, setValue] = useState(0);
@@ -18,6 +19,7 @@ const LifeList = () => {
   const [requestPage, setRequestPage] = useState(1);
   const [data, setData] = useState();
   const token = localStorage.getItem("AuthToken");
+  const [categoryNum, setCategoryNum] = useState(0);
 
   const pageChange = (e, v) => {
     setRequestPage(v);
@@ -28,7 +30,14 @@ const LifeList = () => {
   };
 
   useEffect(() => {
-    fetch(`${API.totalLifeList}?page=${requestPage}`, {
+    const categoryRequest = () => {
+      if (categoryNum === 0) {
+        return `${API.totalLifeList}?page=${requestPage}`;
+      } else
+        return `${API.totalLifeList}category/${categoryNum}/?page=${requestPage}`;
+    };
+
+    fetch(categoryRequest(), {
       headers: {
         Authorization: `JWT ${token}`,
       },
@@ -49,29 +58,29 @@ const LifeList = () => {
       });
 
     gsap.from(infoTextRefs.current, {
-      duration: 1,
+      duration: 0.5,
       y: 20,
       opacity: 0,
       stagger: 0.7,
       ease: "power3.out",
     });
     gsap.from(infoTitleRefs.current, {
-      duration: 1,
+      duration: 0.5,
       y: 20,
       opacity: 0,
       stagger: 0.7,
       ease: "power3.out",
     });
-  }, []);
+  }, [categoryNum]);
   return (
     <Container>
       <Topbar />
       <ContentSection>
-        <LetteringTitle ref={(el) => (infoTitleRefs.current[0] = el)}>
+        <LetteringTitle>
           <ContentLogo src="/assets/letteringIcon.png" />
           라이프
         </LetteringTitle>
-        <LetteringTitle ref={(el) => (infoTitleRefs.current[1] = el)}>
+        <LetteringTitle ref={(el) => (infoTitleRefs.current[0] = el)}>
           우리 같이 만나요! 👊
         </LetteringTitle>
       </ContentSection>
@@ -84,9 +93,30 @@ const LifeList = () => {
           aria-label="scrollable prevent tabs example"
           TabIndicatorProps={{ style: { backgroundColor: "#493d26" } }}
         >
-          <StyleTab label="공연" />
-          <StyleTab label="뮤지컬" />
-          <StyleTab label="영화" />
+          <StyleTab
+            label="전체"
+            onClick={() => {
+              setCategoryNum(0);
+            }}
+          />
+          <StyleTab
+            label="공연"
+            onClick={() => {
+              setCategoryNum(1);
+            }}
+          />
+          <StyleTab
+            label="뮤지컬"
+            onClick={() => {
+              setCategoryNum(2);
+            }}
+          />
+          <StyleTab
+            label="영화"
+            onClick={() => {
+              setCategoryNum(3);
+            }}
+          />
         </StyleTabs>
       </Tapbar>
       <ListSection>
