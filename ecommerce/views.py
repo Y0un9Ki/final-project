@@ -229,16 +229,15 @@ class ReservationList(APIView):
     def get_queryset(self, format=None):
         user = self.request.user
         reservation = Reservation.objects.filter(user=user)
-        if reservation.exists():
-            return reservation
-        else:
-            response_data = {
-                'reservation': []
-            }
-            return Response(response_data)
+        return reservation
         
     
     def get(self, request, format=None):
         reservation = self.get_queryset()
         serializer = ReservationSerializer(reservation, many=True)
+        if len(serializer.data)==0:
+            response_data = {
+                'reservation': []
+            }
+            return Response(response_data)
         return Response(serializer.data)
