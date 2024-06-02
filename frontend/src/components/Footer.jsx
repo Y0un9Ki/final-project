@@ -26,7 +26,7 @@ const Footer = () => {
           onClick={() => {
             navigate("/letterlist");
           }}
-          startIcon={<NavIcon src="/assets/letteringicon.png" />}
+          startIcon={<NavIcon src="/assets/letteringicon2.png" />}
         >
           <NavTitle>레터링{!token && <FloatingBubble />}</NavTitle>
         </StyledButton>
@@ -35,7 +35,7 @@ const Footer = () => {
           onClick={() => {
             navigate("/lifelist");
           }}
-          startIcon={<NavIcon src="/assets/lifeicon.png" />}
+          startIcon={<NavIcon src="/assets/lifeicon2.png" />}
         >
           <NavTitle>라이프{!token && <FloatingBubble />}</NavTitle>
         </StyledButton>
