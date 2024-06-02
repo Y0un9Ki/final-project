@@ -292,8 +292,6 @@ class ReservationList(APIView):
         reservation = self.get_queryset()
         serializer = ReservationSerializer(reservation, many=True)
         if len(serializer.data)==0:
-            response_data = {
-                'reservation': []
-            }
+            response_data = []
             return Response(response_data)
         return Response(serializer.data)
