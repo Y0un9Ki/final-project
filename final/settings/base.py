@@ -50,7 +50,7 @@ INSTALLED_APPS = [
 ]
 
 # CORS 설정 - whitelist 에 추가된 주소 접근 허용
-CORS_ORIGIN_WHITELIST = ['http://localhost:3000']
+CORS_ORIGIN_WHITELIST = ['http://localhost:3000', 'http://34.47.95.16:3000']
 CORS_ALLOW_CREDENTIALS = True
 
 MIDDLEWARE = [
