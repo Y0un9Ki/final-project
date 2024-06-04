@@ -85,24 +85,31 @@
 | :--: | :--: |
 | <img src="https://techstack-generator.vercel.app/python-icon.svg" alt="icon" width="65" height="65" /> | <img src="https://techstack-generator.vercel.app/django-icon.svg" alt="icon" width="65" height="65" /> |
 
-### UI 기획
-<a href='https://www.figma.com/design/Qg3wdJlJVE1WRgTVCzR4V0/final-project?node-id=0-1&t=u1lsqSTGFR2GgIft-1'></a>
 
 ### ERD
 <a href = 'https://www.erdcloud.com/d/RhcxMMpFrtyCJX7Qi'><img src="https://cdn-icons-png.flaticon.com/512/11629/11629055.png" width="120"/></a>
 
+
+### UI 기획
+<a href='https://www.figma.com/design/Qg3wdJlJVE1WRgTVCzR4V0/final-project?node-id=0-1&t=u1lsqSTGFR2GgIft-1'>UI기획 보기</a>
+
+
 ### API 명세서
 <a href='https://documenter.getpostman.com/view/33871677/2sA3QwaUiu'>API 명세서</a>
 
+
 ### 기술 블로그
 <a href='https://srilankakim66.tistory.com/91'>기술 블로그</a>
+
 
 ### 사용한 데이터 베이스
 - 개발(로컬) : SQLite3
 - 서버 : MySQL
 
+
 ### 배포
 - GCP(Google cloud plattform)을 이용한 배포
+
 
 ### 주요 라이브러리
 
