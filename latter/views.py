@@ -187,12 +187,13 @@ class AnswerCreate(mixins.CreateModelMixin,
             answer = serializer.save(user=user)
             if answer.receive_point==False:
                 answer.receive_point=True
-                answer.save()
+                # answer.save()
         
         else:       
             serializer.save(user=user)
-        
-        
+
+
+
 class AnswerDetailQuestion(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = (IsAuthenticated,)
