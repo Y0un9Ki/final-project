@@ -143,7 +143,8 @@ class QuestionDetailModify(APIView):
 # APIView로 짠 AnswerCreate
 class AnswerCreate(APIView):
     permission_classes = (IsAuthenticated,)
-    authentication_classes = [BasicAuthentication, SessionAuthentication]
+    authentication_classes = [JWTAuthentication]
+    #authentication_classes = [BasicAuthentication, SessionAuthentication]
     
     def post(self, request, format=None):
         serializer = AnswerSerializer(data=request.data)
