@@ -141,56 +141,59 @@ class QuestionDetailModify(APIView):
 # Answer API part.
 
 # APIView로 짠 AnswerCreate
-# class AnswerCreate(APIView):
-#     permission_classes = (IsAuthenticated,)
-#     authentication_classes = [BasicAuthentication, SessionAuthentication]
+class AnswerCreate(APIView):
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = [BasicAuthentication, SessionAuthentication]
     
-#     def post(self, request, format=None):
-#         serializer = AnswerSerializer(data=request.data)
-#         if serializer.is_valid():
-#             user=self.request.user
-#             last_received_answer = Answer.objects.filter(user=user, receive_point=True).order_by('-update_date').first()
-#             if last_received_answer is None or last_received_answer.update_date < timezone.now() - timedelta(days=1):
-#                 if user.point is None:
-#                     user.point = 0
-#                 user.point += 100
-#                 user.save()
-#                 answer = serializer.save(user=user)
-#                 if answer.receive_point==False:
-#                     answer.receive_point=True
-#                     answer.save()
+    def post(self, request, format=None):
+        serializer = AnswerSerializer(data=request.data)
+        if serializer.is_valid():
+            user=self.request.user
+            last_received_answer = Answer.objects.filter(user=user, receive_point=True).order_by('-update_date').first()
+            if last_received_answer is None or last_received_answer.update_date < timezone.now() - timedelta(days=1):
+                if user.point is None:
+                    user.point = 0
+                user.point += 100
+                user.save()
+                answer = serializer.save(user=user)
+                if answer.receive_point==False:
+                    answer.receive_point=True
+                    answer.save()
                 
-#             return Response(serializer.data)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                serializer.save(user=user)
+                
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-class AnswerCreate(mixins.CreateModelMixin,
-                   generics.GenericAPIView):
-    permission_classes=(IsAuthenticated,)
-    authentication_classes = [JWTAuthentication]
-    # authentication_classes = [BasicAuthentication, SessionAuthentication]
-    serializer_class = AnswerSerializer
-    queryset = Answer.objects.all()
+# class AnswerCreate(mixins.CreateModelMixin,
+#                    generics.GenericAPIView):
+#     permission_classes=(IsAuthenticated,)
+#     authentication_classes = [JWTAuthentication]
+#     # authentication_classes = [BasicAuthentication, SessionAuthentication]
+#     serializer_class = AnswerSerializer
+#     queryset = Answer.objects.all()
 
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
+#     def post(self, request, *args, **kwargs):
+#         return self.create(request, *args, **kwargs)
     
-# 그래서 답장을 작성한 후에 포인트를 받았다면 다시 포인트를 받기 위해서는 하루뒤에 작성을 해야만 포인트를 다시 받을 수 있게 로직을 짯다.
-    def perform_create(self, serializer):
-        user=self.request.user
-        print(user)
-        last_received_answer = Answer.objects.filter(user=user, receive_point=True).order_by('-update_date').first()
-        if last_received_answer is None or last_received_answer.update_date < timezone.now() - timedelta(days=1):
-            if user.point is None:
-                user.point = 0
-            user.point += 500
-            user.save()
-            answer = serializer.save(user=user)
-            if answer.receive_point==False:
-                answer.receive_point=True
-                # answer.save()
+# # 그래서 답장을 작성한 후에 포인트를 받았다면 다시 포인트를 받기 위해서는 하루뒤에 작성을 해야만 포인트를 다시 받을 수 있게 로직을 짯다.
+#     def perform_create(self, serializer):
+#         user=self.request.user
+#         print(user)
+#         last_received_answer = Answer.objects.filter(user=user, receive_point=True).order_by('-update_date').first()
+#         if last_received_answer is None or last_received_answer.update_date < timezone.now() - timedelta(days=1):
+#             if user.point is None:
+#                 user.point = 0
+#             user.point += 500
+#             user.save()
+#             answer = serializer.save(user=user)
+#             if answer.receive_point==False:
+#                 answer.receive_point=True
+#                 answer.save()
         
-        else:       
-            serializer.save(user=user)
+#         else:       
+#             serializer.save(user=user)
 
 
 
