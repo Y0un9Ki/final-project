@@ -61,7 +61,7 @@ const ConfirmModal = ({ show, onClose, onClick }) => {
           <ButtonSection>
             <SubmitButton onClick={onClick}>
               <Iconlogo src="/assets/editicon.png" />
-              <BtnText onClick={onClick}>네 작성할게요!</BtnText>
+              <BtnText>네 작성할게요!</BtnText>
             </SubmitButton>
             <CloseButton onClick={onClose}>닫기</CloseButton>
           </ButtonSection>
