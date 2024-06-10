@@ -12,6 +12,6 @@ urlpatterns = [
     path('question/<int:pk>/', QuestionDetailModify.as_view(), name='질문지 업데이트'),
     path('answer/create/', AnswerCreate.as_view(), name='답장생성'),
     path('answer/', AnswerList.as_view(), name = '답글 리스트보기'),
-    path('answer/detail/<int:pk>/', AnswerDetailQuestion.as_view(), name='답장 상세보기'),
+    path('answer/detail/<int:pk>/', AnswerDetailQuestion.as_view(), name='답장 상세보기'),  
     # path('main/', FirstView.as_view(), SecondView.as_view(), ThirdView.as_view()) 이런식으로 메인 페이지에 여러개의 view를 띄울 수 있다.
 ]
