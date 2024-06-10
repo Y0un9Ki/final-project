@@ -154,7 +154,7 @@ class AnswerCreate(APIView):
             if last_received_answer is None or last_received_answer.update_date < timezone.now() - timedelta(days=1):
                 if user.point is None:
                     user.point = 0
-                user.point += 100
+                user.point += 500
                 user.save()
                 answer = serializer.save(user=user)
                 if answer.receive_point==False:
