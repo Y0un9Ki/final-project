@@ -198,6 +198,65 @@ class AnswerCreate(APIView):
 
 
 
+# class AnswerDetailQuestion(APIView):
+#     authentication_classes = [JWTAuthentication]
+#     permission_classes = (IsAuthenticated,)
+#     # authentication_classes = [BasicAuthentication, SessionAuthentication]
+    
+#     def get_object(self, pk):
+#         try:
+#             question = Question.objects.get(pk=pk)
+#             user = self.request.user
+#             answer = Answer.objects.get(question=question, user=user)
+#             return answer
+#         except Question.DoesNotExist:
+#             raise NotFound({'message': '해당하는 데이터가 존재하지 않습니다.'})
+#         except Answer.DoesNotExist:
+#             return None
+        
+#     def get(self, request, pk, format=None):
+#         answer=self.get_object(pk)
+#         if answer is not None:
+#             serializer = AnswerSerializer(answer)
+#             comment = serializer.data['comment']
+#             divided_comment = []
+
+#             if len(comment) > 20:
+#                 start = 0
+#                 while start < len(comment):
+#                     divided_comment.append(comment[start:start+20])
+#                     start += 20
+#             else:
+#                 divided_comment.append(comment)
+                
+#             response_data = {
+#                 'answer_id': serializer.data['id'],
+#                 'user_id': serializer.data['user'],
+#                 'question_id': serializer.data['question'],
+#                 'answer_comment': divided_comment,
+#                 'answer_date': serializer.data['update_date']
+#             }
+#             return Response(response_data)
+#         else: # answer가 존재하지 않는 경우 없는 값으로 보내준다.
+#             response_data = {
+#                 'answer_id': None,
+#                 'user_id': None,
+#                 'question_id': None,
+#                 'answer_comment': None,
+#                 'answer_date': None
+#             }
+            
+#             return Response(response_data)
+    
+#     def put(self, request, pk, format=None):
+#         answer = self.get_object(pk)
+#         serializer = AnswerSerializer(answer, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# 일단 임시방편!!!
 class AnswerDetailQuestion(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = (IsAuthenticated,)
@@ -207,12 +266,12 @@ class AnswerDetailQuestion(APIView):
         try:
             question = Question.objects.get(pk=pk)
             user = self.request.user
-            answer = Answer.objects.get(question=question, user=user)
+            answer = Answer.objects.filter(question=question, user=user).first()
             return answer
         except Question.DoesNotExist:
             raise NotFound({'message': '해당하는 데이터가 존재하지 않습니다.'})
-        except Answer.DoesNotExist:
-            return None
+        # except Answer.DoesNotExist:
+        #     return None
         
     def get(self, request, pk, format=None):
         answer=self.get_object(pk)
@@ -255,6 +314,8 @@ class AnswerDetailQuestion(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
 
 # 밑에 코드는 APIView를 이용해서 만든 코드
 class AnswerList(APIView):
